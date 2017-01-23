@@ -1,11 +1,11 @@
 package codechicken.wirelessredstone.core;
 
-import codechicken.core.ClientUtils;
+import codechicken.core.ModDescriptionEnhancer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import codechicken.core.CCUpdateChecker;
 import codechicken.lib.packet.PacketCustom;
-import cpw.mods.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod;
 
 import static codechicken.wirelessredstone.core.WirelessRedstoneCore.*;
 
@@ -16,7 +16,7 @@ public class WRCoreClientProxy extends WRCoreProxy
     {
         if(SaveManager.config().getTag("checkUpdates").getBooleanValue(true))
             CCUpdateChecker.updateCheck("WR-CBE", WirelessRedstoneCore.class.getAnnotation(Mod.class).version());
-        ClientUtils.enhanceSupportersList("WR-CBE|Core");
+        ModDescriptionEnhancer.enhanceMod("WR-CBE|Core");
         
         super.init();
 

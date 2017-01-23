@@ -3,25 +3,33 @@ package codechicken.wirelessredstone.core;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class ItemWirelessFreq extends Item
 {
+
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (!player.isSneaking())
-            return false;
+            return EnumActionResult.PASS;
 
         WirelessRedstoneCore.proxy.openItemWirelessGui(player);
-        return true;
+        return EnumActionResult.SUCCESS;
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer entityplayer) {
-        if (entityplayer.isSneaking())
-            WirelessRedstoneCore.proxy.openItemWirelessGui(entityplayer);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+        if (player.isSneaking()) {
+            WirelessRedstoneCore.proxy.openItemWirelessGui(player);
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+        }
 
-        return par1ItemStack;
+        return super.onItemRightClick(itemStack, world, player, hand);
     }
 
     public final void setFreq(EntityPlayer player, int slot, ItemStack stack, int freq) {

@@ -3,6 +3,9 @@ package codechicken.wirelessredstone.addons;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemREP extends Item
@@ -11,14 +14,15 @@ public class ItemREP extends Item
         setMaxStackSize(16);
     }
 
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote)
-            return itemstack;
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 
         if (RedstoneEtherAddons.server().detonateREP(player))
-            return itemstack;
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 
-        RedstoneEtherAddons.server().throwREP(itemstack, world, player);
-        return itemstack;
+        RedstoneEtherAddons.server().throwREP(itemStack, world, player);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
     }
 }

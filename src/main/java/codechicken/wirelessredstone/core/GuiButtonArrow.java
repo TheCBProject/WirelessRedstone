@@ -2,9 +2,11 @@ package codechicken.wirelessredstone.core;
 
 import codechicken.lib.colour.ColourARGB;
 import codechicken.core.gui.GuiCCButton;
-import codechicken.lib.render.CCRenderState;
 
+import codechicken.lib.texture.TextureUtils;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class GuiButtonArrow extends GuiCCButton
 {
@@ -30,15 +32,16 @@ public class GuiButtonArrow extends GuiCCButton
     
     private void drawArrow(int x, int y, int colour)
     {
-        CCRenderState.changeTexture("wrcbe_core:textures/gui/arrow.png");
+        TextureUtils.changeTexture("wrcbe_core:textures/gui/arrow.png");
         
         new ColourARGB(colour).glColour();
-        Tessellator t = Tessellator.instance;
-        t.startDrawingQuads();
-        t.addVertexWithUV(x + 0, y + 8, zLevel, arrowdirection * 0.25, 1);
-        t.addVertexWithUV(x + 8, y + 8, zLevel, (arrowdirection + 1) * 0.25, 1);
-        t.addVertexWithUV(x + 8, y + 0, zLevel, (arrowdirection + 1) * 0.25, 0);
-        t.addVertexWithUV(x + 0, y + 0, zLevel, arrowdirection * 0.25, 0);
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer buffer = t.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x + 0, y + 8, zLevel).tex( arrowdirection * 0.25, 1).endVertex();
+        buffer.pos(x + 8, y + 8, zLevel).tex( (arrowdirection + 1) * 0.25, 1).endVertex();
+        buffer.pos(x + 8, y + 0, zLevel).tex( (arrowdirection + 1) * 0.25, 0).endVertex();
+        buffer.pos(x + 0, y + 0, zLevel).tex( arrowdirection * 0.25, 0).endVertex();
         t.draw();
     }
     

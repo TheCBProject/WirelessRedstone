@@ -2,16 +2,16 @@ package codechicken.wirelessredstone.core;
 
 import java.util.ArrayList;
 
+import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.util.LangProxy;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import org.lwjgl.opengl.GL11;
 
 import codechicken.core.gui.GuiCCButton;
 import codechicken.core.gui.GuiCCTextField;
 import codechicken.core.gui.GuiScreenWidget;
-import codechicken.lib.render.CCRenderState;
 
 public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUseable
 {
@@ -100,7 +100,7 @@ public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUs
     }
 
     public void updateScreen() {
-        if (itile != null && mc.theWorld.getTileEntity(etile.xCoord, etile.yCoord, etile.zCoord) != etile)//tile changed
+        if (itile != null && mc.theWorld.getTileEntity(etile.getPos()) != etile)//tile changed
         {
             mc.currentScreen = null;
             mc.setIngameFocus();
@@ -130,8 +130,8 @@ public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUs
 
     @Override
     public void drawForeground() {
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
 
         if (largeGui) {
             drawCentered(getSetObjectName(), 118, 105 - 100, 0x303030);
@@ -161,8 +161,11 @@ public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUs
             }
         }
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        //TODO These were dissable, but the ones above are too??
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        //GL11.glDisable(GL11.GL_LIGHTING);
+        //GL11.glDisable(GL11.GL_DEPTH_TEST);
     }
 
     private void drawCentered(String s, int x, int y, int colour) {
@@ -312,11 +315,11 @@ public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUs
 
     @Override
     public void drawBackground() {
-        if (largeGui)
-            CCRenderState.changeTexture("wrcbe_core:textures/gui/wirelessLarge.png");
-        else
-            CCRenderState.changeTexture("wrcbe_core:textures/gui/wirelessSmall.png");
-        GL11.glColor4f(1, 1, 1, 1);
+        if (largeGui) {
+            TextureUtils.changeTexture("wrcbe_core:textures/gui/wirelessLarge.png");
+        } else
+            TextureUtils.changeTexture("wrcbe_core:textures/gui/wirelessSmall.png");
+        GlStateManager.color(1, 1, 1, 1);
         drawTexturedModalRect(0, 0, 0, 0, xSize, ySize);
     }
 

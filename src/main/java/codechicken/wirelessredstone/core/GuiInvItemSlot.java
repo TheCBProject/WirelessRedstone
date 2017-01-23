@@ -1,17 +1,16 @@
 package codechicken.wirelessredstone.core;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderItem;
 import org.lwjgl.input.Keyboard;
 
 import codechicken.core.gui.GuiWidget;
 
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 public class GuiInvItemSlot extends GuiWidget
 {
-    private static RenderItem itemRenderer = new RenderItem();
-    
     protected ItemStack[] invitems;
     protected int[] invslotnumbers;
     protected ItemStack[] defaultitems;
@@ -43,8 +42,8 @@ public class GuiInvItemSlot extends GuiWidget
     public void draw(int mousex, int mousey, float frame)
     {
         drawSlotBox(x, y);
-        if(invitems[selecteditem] != null)
-            itemRenderer.renderItemIntoGUI(fontRenderer, renderEngine, invitems[selecteditem], x, y);
+        if(invitems[selecteditem] != null)//TODO Maybe??
+            Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(invitems[selecteditem], x, y);
     }
     
     public void drawSlotBox(int x, int y)

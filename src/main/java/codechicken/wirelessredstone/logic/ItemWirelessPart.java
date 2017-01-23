@@ -6,15 +6,15 @@ import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.JItemMultiPart;
 import codechicken.multipart.TMultiPart;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemWirelessPart extends JItemMultiPart
 {
@@ -24,9 +24,9 @@ public class ItemWirelessPart extends JItemMultiPart
     }
 
     @Override
-    public TMultiPart newPart(ItemStack item, EntityPlayer player, World world, BlockCoord pos, int side, Vector3 vhit) {
-        BlockCoord onPos = pos.copy().offset(side ^ 1);
-        if (!world.isSideSolid(onPos.x, onPos.y, onPos.z, ForgeDirection.getOrientation(side)))
+    public TMultiPart newPart(ItemStack item, EntityPlayer player, World world, BlockPos pos, int side, Vector3 vhit) {
+        BlockPos onPos = pos.offset(EnumFacing.VALUES[side ^ 1]);
+        if (!world.isSideSolid(onPos, EnumFacing.VALUES[side]))
             return null;
 
         WirelessPart part = getPart(item.getItemDamage());
@@ -57,15 +57,15 @@ public class ItemWirelessPart extends JItemMultiPart
         return super.getUnlocalizedName() + "|" + stack.getItemDamage();
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getSpriteNumber() {
-        return 0;
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public int getSpriteNumber() {
+    //    return 0;
+    //}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-        RenderWireless.loadIcons(par1IconRegister);
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public void registerIcons(IIconRegister par1IconRegister) {
+    //    RenderWireless.loadIcons(par1IconRegister);
+    //}
 }

@@ -7,11 +7,11 @@ import codechicken.lib.math.MathHelper;
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourARGB;
 import codechicken.lib.colour.ColourRGBA;
-import codechicken.lib.render.ManagedTextureFX;
-import codechicken.lib.render.TextureUtils;
+import codechicken.lib.texture.ManagedTextureFX;
+import codechicken.lib.texture.TextureUtils;
 import codechicken.wirelessredstone.core.RedstoneEther;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 public class TriangTexManager
@@ -53,7 +53,7 @@ public class TriangTexManager
         processTexture(-1, 0);
     }
     
-    public static IIcon getIconFromDamage(int damage)
+    public static TextureAtlasSprite getIconFromDamage(int damage)
     {
         return textures[getIconIndexFromDamage(damage)].texture;
     }

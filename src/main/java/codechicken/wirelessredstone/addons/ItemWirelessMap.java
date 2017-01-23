@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.addons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,10 +37,10 @@ public class ItemWirelessMap extends ItemMap
     }
 
     @Override
-    public Packet func_150911_c(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    public Packet createMapDataPacket(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
         RedstoneEtherAddons.server().updateSMPMapInfo(world, entityplayer, getMapData(itemstack, world), itemstack.getItemDamage());
-        return super.func_150911_c(itemstack, world, entityplayer);
+        return super.createMapDataPacket(itemstack, world, entityplayer);
     }
 
     @Override

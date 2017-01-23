@@ -3,29 +3,29 @@ package codechicken.wirelessredstone.logic;
 import java.util.Arrays;
 import java.util.Map;
 
+import codechicken.lib.colour.Colour;
 import codechicken.lib.lighting.PlanarLightModel;
 import codechicken.lib.render.*;
-import codechicken.lib.render.uv.MultiIconTransformation;
-import org.lwjgl.opengl.GL11;
+import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.texture.TextureUtils.IIconRegister;
+import codechicken.lib.vec.*;
+import codechicken.lib.vec.uv.MultiIconTransformation;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import codechicken.lib.math.MathHelper;
-import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.lighting.LightModel;
 import codechicken.lib.lighting.LightModel.Light;
-import codechicken.lib.vec.Scale;
-import codechicken.lib.vec.Transformation;
-import codechicken.lib.vec.Translation;
-import codechicken.lib.vec.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import static codechicken.lib.vec.Vector3.*;
 import static codechicken.lib.vec.Rotation.*;
 
-public class RenderWireless
+public class RenderWireless implements IIconRegister
 {
     private static MultiIconTransformation model_icont;
     private static MultiIconTransformation base_icont[] = new MultiIconTransformation[2];
@@ -44,7 +44,7 @@ public class RenderWireless
     private static PlanarLightModel rlm = lm.reducePlanar();
 
     static {
-        Map<String, CCModel> modelMap = CCModel.parseObjModels(
+        Map<String, CCModel> modelMap = CCOBJParser.parseObjModels(
                 new ResourceLocation("wrcbe_logic", "models/models.obj"), 7, null);
         CCModel tstand = setTex(modelMap.get("TStand"), 2);
         CCModel jstand = setTex(tstand.copy(), 1);
@@ -76,73 +76,73 @@ public class RenderWireless
         return model;
     }
 
-    public static void loadIcons(IIconRegister r) {
-        IIcon base = r.registerIcon("wrcbe_logic:base");
-        IIcon on = r.registerIcon("wrcbe_logic:on");
-        IIcon off = r.registerIcon("wrcbe_logic:off");
-        IIcon blaze = r.registerIcon("wrcbe_logic:blaze");
-        IIcon obsidian = r.registerIcon("obsidian");
+    @Override
+    public void registerIcons(TextureMap textureMap) {
+        TextureAtlasSprite base = textureMap.registerSprite(new ResourceLocation("wrcbe_logic:blocks/base"));
+        TextureAtlasSprite on = textureMap.registerSprite(new ResourceLocation("wrcbe_logic:blocks/on"));
+        TextureAtlasSprite off = textureMap.registerSprite(new ResourceLocation("wrcbe_logic:blocks/off"));
+        TextureAtlasSprite blaze = textureMap.registerSprite(new ResourceLocation("wrcbe_logic:blocks/blaze"));
+        TextureAtlasSprite obsidian = TextureUtils.getBlockTexture("obsidian");
 
         model_icont = new MultiIconTransformation(base, blaze, obsidian);
         base_icont[0] = new MultiIconTransformation(base, off, base, base, base, base);
         base_icont[1] = new MultiIconTransformation(base, on, base, base, base, base);
     }
 
-    public static void renderInv(WirelessPart p) {
-        CCRenderState.reset();
-        CCRenderState.useNormals = true;
-        CCRenderState.pullLightmap();
-        CCRenderState.startDrawing(7);
-        CCRenderState.setPipeline(base_icont[0]);
-        BlockRenderer.renderCuboid(WirelessPart.baseBounds(0), 0);
-        models[p.modelId()][0].render(model_icont);
-        CCRenderState.draw();
+    public static void renderInv(CCRenderState ccrs, WirelessPart p) {
+        ccrs.reset();
+        ccrs.pullLightmap();
+        ccrs.startDrawing(7, DefaultVertexFormats.ITEM);
+        ccrs.setPipeline(base_icont[0]);
+        BlockRenderer.renderCuboid(ccrs, WirelessPart.baseBounds(0), 0);
+        models[p.modelId()][0].render(ccrs, model_icont);
+        ccrs.draw();
 
-        renderPearl(zero, p);
+        renderPearl(ccrs, zero, p);
     }
 
-    public static void renderWorld(WirelessPart p) {
-        CCRenderState.setBrightness(p.world(), p.x(), p.y(), p.z());
+    public static void renderWorld(CCRenderState ccrs, WirelessPart p) {
+        ccrs.setBrightness(p.world(), p.pos());
 
         Transformation t = new Translation(p.x(), p.y(), p.z());
-        CCRenderState.setPipeline(p.rotationT().at(center).with(t), base_icont[p.textureSet()], rlm);
-        BlockRenderer.renderCuboid(p.baseRenderBounds, p.baseRenderMask);
-        models[p.modelId()][p.side() << 2 | p.rotation()].render(t, model_icont);
+        ccrs.setPipeline(p.rotationT().at(center).with(t), base_icont[p.textureSet()], rlm);
+        BlockRenderer.renderCuboid(ccrs, p.baseRenderBounds, p.baseRenderMask);
+        models[p.modelId()][p.side() << 2 | p.rotation()].render(ccrs, t, model_icont);
     }
 
     public static void renderFreq(Vector3 pos, TransceiverPart p) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         pos.copy().add(center).translation().glApply();
         p.rotationT().glApply();
 
         renderFreq(p.getFreq());
-        GL11.glRotatef(180, 0, 1, 0);
+        GlStateManager.rotate(180, 0, 1, 0);
         renderFreq(p.getFreq());
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private static void renderFreq(int freq) {
         float scale = 1 / 64F;
 
-        GL11.glPushMatrix();
-        GL11.glRotatef(90, 0, 1, 0);
-        GL11.glRotatef(90, 1, 0, 0);
-        GL11.glTranslated(0, -5 / 16D, 0.374);
-        GL11.glScalef(scale, scale, scale);
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(90, 0, 1, 0);
+        GlStateManager.rotate(90, 1, 0, 0);
+        GlStateManager.translate(0, -5 / 16D, 0.374);
+        GlStateManager.scale(scale, scale, scale);
 
-        FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
         String s = Integer.toString(freq);
-        GL11.glDepthMask(false);
+        GlStateManager.depthMask(false);
         font.drawString(s, -font.getStringWidth(s) / 2, 0, 0);
-        GL11.glDepthMask(true);
+        GlStateManager.depthMask(true);
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
-    public static void renderPearl(Vector3 pos, WirelessPart p) {
-        GL11.glPushMatrix();
+    public static void renderPearl(CCRenderState ccrs, Vector3 pos, WirelessPart p) {
+        GlStateManager.pushMatrix();
 
         pos.translation().glApply();
         p.rotationT().at(center).glApply();
@@ -151,24 +151,24 @@ public class RenderWireless
         new Scale(p.getPearlScale()).glApply();
         float light = 1;
         if (p.tile() != null) {
-            GL11.glRotatef((float) (p.getPearlSpin() * MathHelper.todeg), 0, 1, 0);
+            GlStateManager.rotate((float) (p.getPearlSpin() * MathHelper.todeg), 0, 1, 0);
             light = p.getPearlLight();
         }
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        CCRenderState.reset();
-        CCRenderState.changeTexture("wrcbe_core:textures/hedronmap.png");
-        CCRenderState.pullLightmap();
-        CCRenderState.setColour(new ColourRGBA(light, light, light, 1).rgba());
-        CCRenderState.startDrawing(4);
-        CCModelLibrary.icosahedron4.render();
-        CCRenderState.draw();
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
+        ccrs.reset();
+        TextureUtils.changeTexture("wrcbe_core:textures/hedronmap.png");
+        ccrs.pullLightmap();
+        ccrs.colour = Colour.packRGBA(light, light, light, 1);
+        ccrs.startDrawing(4, DefaultVertexFormats.POSITION_TEX_NORMAL);
+        CCModelLibrary.icosahedron4.render(ccrs);
+        ccrs.draw();
+        GlStateManager.enableLighting();
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
-    public static IIcon getBreakingIcon(int tex) {
+    public static TextureAtlasSprite getBreakingIcon(int tex) {
         return base_icont[tex].icons[1];
     }
 }

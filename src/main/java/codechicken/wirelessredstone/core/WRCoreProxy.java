@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.core;
 
 import codechicken.lib.packet.PacketCustom;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,7 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import codechicken.lib.config.ConfigTag;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static codechicken.wirelessredstone.core.WirelessRedstoneCore.*;
 
@@ -43,7 +43,7 @@ public class WRCoreProxy
     }
 
     private Item createItem(String name) {
-        Item item = new Item().setUnlocalizedName("wrcbe_core:" + name).setTextureName("wrcbe_core:"+name).setCreativeTab(CreativeTabs.tabMaterials);
+        Item item = new Item().setUnlocalizedName("wrcbe_core:" + name).setCreativeTab(CreativeTabs.MATERIALS);
         GameRegistry.registerItem(item, name);
         return item;
     }
@@ -52,7 +52,7 @@ public class WRCoreProxy
         GameRegistry.addRecipe(new ItemStack(obsidianStick, 2),
                 "O",
                 "O",
-                'O', Blocks.obsidian);
+                'O', Blocks.OBSIDIAN);
 
         OreDictionary.registerOre("obsidianRod", new ItemStack(obsidianStick));
         OreDictionary.registerOre("stoneBowl", new ItemStack(stoneBowl));
@@ -66,26 +66,26 @@ public class WRCoreProxy
         GameRegistry.addRecipe(new ItemStack(stoneBowl),
                 "S S",
                 " S ",
-                'S', Blocks.stone);
+                'S', Blocks.STONE);
         GameRegistry.addRecipe(new ItemStack(retherPearl),
                 "rgr",
                 "gpg",
                 "rgr",
-                'r', Items.redstone,
-                'g', Items.glowstone_dust,
-                'p', Items.ender_pearl);
+                'r', Items.REDSTONE,
+                'g', Items.GLOWSTONE_DUST,
+                'p', Items.ENDER_PEARL);
         GameRegistry.addRecipe(new ItemStack(retherPearl),
                 "grg",
                 "rpr",
                 "grg",
-                'r', Items.redstone,
-                'g', Items.glowstone_dust,
-                'p', Items.ender_pearl);
+                'r', Items.REDSTONE,
+                'g', Items.GLOWSTONE_DUST,
+                'p', Items.ENDER_PEARL);
         GameRegistry.addRecipe(new ItemStack(blazeTransceiver),
                 "r",
                 "b",
                 'r', retherPearl,
-                'b', Items.blaze_rod);
+                'b', Items.BLAZE_ROD);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(recieverDish),
                 "t",
                 "b",

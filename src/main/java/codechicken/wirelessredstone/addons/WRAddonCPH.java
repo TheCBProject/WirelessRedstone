@@ -10,7 +10,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.INetHandlerPlayClient;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class WRAddonCPH implements IClientPacketHandler
@@ -64,7 +66,7 @@ public class WRAddonCPH implements IClientPacketHandler
             EntityWirelessTracker tracker = new EntityWirelessTracker(world, 0, (EntityLiving) thrower);
             tracker.setEntityId(entityID);
             world.addEntityToWorld(entityID, tracker);
-            world.playSoundAtEntity(thrower, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+            world.playSound(null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
         }
     }
 

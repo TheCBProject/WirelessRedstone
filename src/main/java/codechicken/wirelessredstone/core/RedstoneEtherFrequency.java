@@ -3,23 +3,22 @@ package codechicken.wirelessredstone.core;
 import java.util.*;
 import java.util.Map.Entry;
 
+import codechicken.lib.util.CommonUtils;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import codechicken.core.CommonUtils;
-import codechicken.lib.vec.BlockCoord;
 
 public class RedstoneEtherFrequency
 {
     public static class DelayedModification
     {
-        public DelayedModification(BlockCoord node, int i)
+        public DelayedModification(BlockPos node, int i)
         {
             coord = node;
             function = i;
         }
-        
-        BlockCoord coord;
+
+        BlockPos coord;
         int function;
     }
     
@@ -31,8 +30,8 @@ public class RedstoneEtherFrequency
             dimension = CommonUtils.getDimension(world2);
         }
         
-        public TreeMap<BlockCoord, Boolean> transmittermap = new TreeMap<BlockCoord, Boolean>();
-        public TreeSet<BlockCoord> receiverset = new TreeSet<BlockCoord>();
+        public TreeMap<BlockPos, Boolean> transmittermap = new TreeMap<BlockPos, Boolean>();
+        public TreeSet<BlockPos> receiverset = new TreeSet<BlockPos>();
         public LinkedList<DelayedModification> temporarySet = new LinkedList<DelayedModification>();
         
 
@@ -94,7 +93,7 @@ public class RedstoneEtherFrequency
         nodetracker.isdirty = false;
     }
     
-    public void addReceiver(World world, BlockCoord node, int dimension)
+    public void addReceiver(World world, BlockPos node, int dimension)
     {
         if(useTemporarySet)
         {
@@ -107,7 +106,7 @@ public class RedstoneEtherFrequency
         
     }
     
-    public void remTransmitter(World world, BlockCoord node, int dimension)
+    public void remTransmitter(World world, BlockPos node, int dimension)
     {
         if(useTemporarySet)
         {
@@ -125,7 +124,7 @@ public class RedstoneEtherFrequency
         }
     }
 
-    public void remReceiver(World world, BlockCoord node, int dimension)
+    public void remReceiver(World world, BlockPos node, int dimension)
     {
         if(useTemporarySet)            
         {
@@ -136,13 +135,13 @@ public class RedstoneEtherFrequency
         nodetrackers.get(dimension).receiverset.remove(node);
     }
     
-    public void loadTransmitter(BlockCoord node, int dimension)
+    public void loadTransmitter(BlockPos node, int dimension)
     {
         nodetrackers.get(dimension).transmittermap.put(node, true);
         incrementActiveTransmitters(dimension);
     }
 
-    public void setTransmitter(World world, BlockCoord node, int dimension, boolean on)
+    public void setTransmitter(World world, BlockPos node, int dimension, boolean on)
     {
         if(useTemporarySet)            
         {
@@ -203,7 +202,7 @@ public class RedstoneEtherFrequency
             DimensionalNodeTracker tracker = entry.getValue();
             
             useTemporarySet = true;
-            for(BlockCoord coord : tracker.receiverset)
+            for(BlockPos coord : tracker.receiverset)
             {
                 updateReceiver(tracker.world, coord, powered);
             }
@@ -230,7 +229,7 @@ public class RedstoneEtherFrequency
         
     }
 
-    public void updateReceiver(World world, BlockCoord node, boolean on)
+    public void updateReceiver(World world, BlockPos node, boolean on)
     {
         TileEntity tileentity = RedstoneEther.getTile(world, node);
         if(tileentity instanceof ITileReceiver)
@@ -292,12 +291,12 @@ public class RedstoneEtherFrequency
         return count;
     }
     
-    public TreeSet<BlockCoord> getReceivers(int dimension)
+    public TreeSet<BlockPos> getReceivers(int dimension)
     {
         return nodetrackers.get(dimension).receiverset;
     }
     
-    public TreeMap<BlockCoord, Boolean> getTransmitters(int dimension)
+    public TreeMap<BlockPos, Boolean> getTransmitters(int dimension)
     {
         return nodetrackers.get(dimension).transmittermap;
     }
@@ -326,9 +325,9 @@ public class RedstoneEtherFrequency
     public void putActiveTransmittersInList(int dimension, ArrayList<FreqCoord> txnodes)
     {
         DimensionalNodeTracker nodetracker = nodetrackers.get(dimension);
-        for(Iterator<BlockCoord> iterator = nodetracker.transmittermap.keySet().iterator(); iterator.hasNext();)
+        for(Iterator<BlockPos> iterator = nodetracker.transmittermap.keySet().iterator(); iterator.hasNext();)
         {
-            BlockCoord node = iterator.next();
+            BlockPos node = iterator.next();
             if(nodetracker.transmittermap.get(node))
                 txnodes.add(new FreqCoord(node, freq));
         }

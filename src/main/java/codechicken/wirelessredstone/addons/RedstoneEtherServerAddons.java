@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import codechicken.core.CommonUtils;
-import codechicken.core.ServerUtils;
 import codechicken.lib.math.MathHelper;
+import codechicken.lib.util.CommonUtils;
+import codechicken.lib.util.ServerUtils;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.FreqCoord;
@@ -19,10 +19,13 @@ import codechicken.wirelessredstone.core.RedstoneEther;
 import codechicken.wirelessredstone.core.RedstoneEther.TXNodeInfo;
 import codechicken.wirelessredstone.core.WirelessTransmittingDevice;
 
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.World;
 
@@ -47,7 +50,7 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
     }
 
     private AddonPlayerInfo getPlayerInfo(EntityPlayer player) {
-        return playerInfos.get(player.getCommandSenderName());
+        return playerInfos.get(player.getName());
     }
 
     public boolean isRemoteOn(EntityPlayer player, int freq) {
@@ -124,11 +127,11 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         int dimension = CommonUtils.getDimension(world);
         ArrayList<EntityPlayer> players = ServerUtils.getPlayersInDimension(dimension);
 
-        Map<BlockCoord, TXNodeInfo> txnodes = RedstoneEther.server().getTransmittersInDimension(dimension);
+        Map<BlockPos, TXNodeInfo> txnodes = RedstoneEther.server().getTransmittersInDimension(dimension);
         Set<WirelessTransmittingDevice> devices = RedstoneEther.server().getTransmittingDevicesInDimension(dimension);
 
         for (EntityPlayer player : players) {
-            ItemStack helditem = player.getCurrentEquippedItem();
+            ItemStack helditem = player.getHeldItemMainhand();//TODO Hands?
 
             if (helditem == null || helditem.getItem() != WirelessRedstoneAddons.wirelessMap || RedstoneEther.server().isPlayerJammed(player)) {
                 continue;
@@ -166,7 +169,7 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         }
     }
 
-    private void updatePlayerMapData(EntityPlayer player, World world, MapData mapdata, Map<BlockCoord, TXNodeInfo> txnodes, Set<WirelessTransmittingDevice> devices) {
+    private void updatePlayerMapData(EntityPlayer player, World world, MapData mapdata, Map<BlockPos, TXNodeInfo> txnodes, Set<WirelessTransmittingDevice> devices) {
         TreeSet<FreqCoord> mnodes = new TreeSet<FreqCoord>();
         TreeSet<FreqCoord> mdevices = new TreeSet<FreqCoord>();
 
@@ -176,17 +179,17 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         int maxx = mapdata.xCenter + blockwidth * 64;
         int maxz = mapdata.zCenter + blockwidth * 64;
 
-        for (Entry<BlockCoord, TXNodeInfo> entry : txnodes.entrySet()) {
-            BlockCoord node = entry.getKey();
+        for (Entry<BlockPos, TXNodeInfo> entry : txnodes.entrySet()) {
+            BlockPos node = entry.getKey();
             TXNodeInfo info = entry.getValue();
-            if (info.on && node.x > minx && node.x < maxx && node.z > minz && node.z < maxz && RedstoneEther.server().canBroadcastOnFrequency(player, info.freq)) {
-                mnodes.add(new FreqCoord(node.x - mapdata.xCenter, node.y, node.z - mapdata.zCenter, info.freq));
+            if (info.on && node.getX() > minx && node.getX() < maxx && node.getZ() > minz && node.getZ() < maxz && RedstoneEther.server().canBroadcastOnFrequency(player, info.freq)) {
+                mnodes.add(new FreqCoord(node.getX() - mapdata.xCenter, node.getY(), node.getZ() - mapdata.zCenter, info.freq));
             }
         }
 
         for (Iterator<WirelessTransmittingDevice> iterator = devices.iterator(); iterator.hasNext(); ) {
             WirelessTransmittingDevice device = iterator.next();
-            Vector3 pos = device.getPosition();
+            Vector3 pos = device.getTransmitPos();
             if (pos.x > minx && pos.x < maxx && pos.z > minz && pos.z < maxz && RedstoneEther.server().canBroadcastOnFrequency(player, device.getFreq())) {
                 mdevices.add(new FreqCoord((int) pos.x, (int) pos.y, (int) pos.z, device.getFreq()));
             }
@@ -199,22 +202,22 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
     }
 
     public void onLogin(EntityPlayer player) {
-        playerInfos.put(player.getCommandSenderName(), new AddonPlayerInfo());
+        playerInfos.put(player.getName(), new AddonPlayerInfo());
     }
 
     public void onLogout(EntityPlayer player) {
-        playerInfos.remove(player.getCommandSenderName());
+        playerInfos.remove(player.getName());
     }
 
     public void onDimensionChange(EntityPlayer player) {
         deactivateRemote(player.worldObj, player);
         remSniffer(player);
 
-        playerInfos.put(player.getCommandSenderName(), new AddonPlayerInfo());
+        playerInfos.put(player.getName(), new AddonPlayerInfo());
 
         for (Iterator<EntityWirelessTracker> iterator = playerTrackers.iterator(); iterator.hasNext(); ) {
             EntityWirelessTracker tracker = iterator.next();
-            if (tracker.attachedPlayerName.equals(player.getCommandSenderName())) {
+            if (tracker.attachedPlayerName.equals(player.getName())) {
                 tracker.copyToDimension(player.dimension);
                 iterator.remove();
             }
@@ -283,7 +286,7 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
             if (device.getDimension() != player.dimension)
                 continue;
 
-            Vector3 vecTransmitter = device.getPosition();
+            Vector3 vecTransmitter = device.getTransmitPos();
             vecTransmitter.y = 0;
             double distancePow2 = vecTransmitter.subtract(vecPlayer).magSquared();
             vecAmplitude.add(vecTransmitter.multiply(1 / distancePow2));
@@ -349,13 +352,13 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
             HashSet<EntityPlayerMP> playersToTrack = new HashSet<EntityPlayerMP>();
 
             EntityWirelessTracker tracker = entry.getKey();
-            ChunkCoordIntPair chunk = new ChunkCoordIntPair(tracker.chunkCoordX, tracker.chunkCoordZ);
+            ChunkPos chunk = new ChunkPos(tracker.chunkCoordX, tracker.chunkCoordZ);
 
             for (EntityPlayer entityPlayer : playerEntities) {
                 EntityPlayerMP player = (EntityPlayerMP) entityPlayer;
                 if (tracker.isDead) {
                     WRAddonSPH.sendRemoveTrackerTo(player, tracker);
-                } else if (tracker.getDimension() == player.dimension && !player.loadedChunks.contains(chunk) && !tracker.attachedToLogout())//perform update, add to list
+                } else if (tracker.getDimension() == player.dimension && /*TODO*/!ServerUtils.isPlayerLoadingChunk(player, chunk) && !tracker.attachedToLogout())//perform update, add to list
                 {
                     playersToTrack.add(player);
                     if (!trackedPlayers.contains(player) || (tracker.isAttachedToEntity() && updateAttached) || (!tracker.isAttachedToEntity() && updateFree)) {
@@ -418,7 +421,7 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         EntityREP activeREP = new EntityREP(world, player);
         world.spawnEntityInWorld(activeREP);
         WRAddonSPH.sendSpawnREP(activeREP);
-        world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+        world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
         info.activeREP = activeREP;
         info.REPThrowTimeout = 40;
     }

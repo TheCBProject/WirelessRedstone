@@ -1,14 +1,13 @@
 package codechicken.wirelessredstone.addons;
 
-import codechicken.lib.render.uv.IconTransformation;
-import net.minecraft.init.Blocks;
-import org.lwjgl.opengl.GL11;
+import codechicken.lib.render.*;
+import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.util.ClientUtils;
+import codechicken.lib.vec.uv.IconTransformation;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
-import codechicken.core.ClientUtils;
-import codechicken.lib.render.CCModel;
-import codechicken.lib.render.CCModelLibrary;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.TextureUtils;
 import codechicken.lib.vec.Matrix4;
 import codechicken.lib.vec.Rotation;
 import codechicken.lib.vec.SwapYZ;
@@ -16,60 +15,63 @@ import codechicken.lib.vec.Translation;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.RedstoneEther;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraftforge.client.IItemRenderer;
 
 import static codechicken.lib.math.MathHelper.*;
 
-public class RenderTracker extends RenderEntity implements IItemRenderer
+public class RenderTracker extends RenderEntity //implements IItemRenderer
 {
     private static CCModel model;
     
     static
     {
-        model = CCModel.parseObjModels(new ResourceLocation("wrcbe_addons", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
+        model = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe_addons", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
         model.apply(new Translation(0, 0.1875, 0));
     }
+
+    public RenderTracker(RenderManager renderManagerIn) {
+        super(renderManagerIn);
+    }
     
-    @Override
+    /*@Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type)
     {
         return true;
-    }
+    }*/
     
     public void renderTracker(int freq)
     {
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
 
-        TextureUtils.bindAtlas(0);
-        CCRenderState.reset();
-        CCRenderState.startDrawing(7);
-        CCRenderState.setColour(0xFFFFFFFF);
-        model.render(new IconTransformation(Blocks.obsidian.getIcon(0, 0)));
-        CCRenderState.draw();
+        TextureUtils.bindBlockTexture();
+        CCRenderState ccrs = CCRenderState.instance();
+        ccrs.reset();
+        ccrs.startDrawing(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        ccrs.colour = 0xFFFFFFFF;
+        model.render(ccrs, new IconTransformation(TextureUtils.getBlockTexture("obsidian")));
+        ccrs.draw();
         
-        Matrix4 pearlMat = CCModelLibrary.getRenderMatrix(
+        Matrix4 pearlMat = RenderUtils.getMatrix(
             new Vector3(0, 0.44+RedstoneEther.getSineWave(ClientUtils.getRenderTime(), 7)*0.02, 0),
             new Rotation(RedstoneEther.getRotation(ClientUtils.getRenderTime(), freq), new Vector3(0, 1, 0)),
             0.04);
 
-        CCRenderState.changeTexture("wrcbe_core:textures/hedronmap.png");
-        CCRenderState.startDrawing(4);
-        CCRenderState.setColour(freq == 0 ? 0xC0C0C0FF : 0xFFFFFFFF);
-        CCModelLibrary.icosahedron4.render(pearlMat);
-        CCRenderState.draw();
-        
-        GL11.glEnable(GL11.GL_LIGHTING);
+        TextureUtils.changeTexture("wrcbe_core:textures/hedronmap.png");
+        ccrs.startDrawing(4, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        ccrs.colour = freq == 0 ? 0xC0C0C0FF : 0xFFFFFFFF;
+        CCModelLibrary.icosahedron4.render(ccrs, pearlMat);
+        ccrs.draw();
+
+        GlStateManager.enableLighting();
     }
     
     @Override
     public void doRender(Entity entity, double x, double y, double z, float f, float f1)
     {
-        GL11.glPushMatrix();
-        GL11.glTranslated(x, y+0.2, z);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y+0.2, z);
         
         EntityWirelessTracker tracker = (EntityWirelessTracker) entity;
         if(tracker.isAttachedToEntity())
@@ -79,39 +81,38 @@ public class RenderTracker extends RenderEntity implements IItemRenderer
             Vector3 yAxis = new Vector3(0, 1, 0);
             Vector3 axis = relVec.copy().crossProduct(yAxis);
             double angle = -(relVec.angle(yAxis)*todeg);
-            
-            GL11.glTranslated(-x, -y-0.2, -z);//undo translation
+
+            GlStateManager.translate(-x, -y-0.2, -z);//undo translation
             
             Vector3 pos = new Vector3(tracker.attachedEntity.lastTickPosX + (tracker.attachedEntity.posX - tracker.attachedEntity.lastTickPosX)*f1, 
-                    tracker.attachedEntity.lastTickPosY + (tracker.attachedEntity.posY - tracker.attachedEntity.lastTickPosY)*f1 + tracker.attachedEntity.height/2 - tracker.attachedEntity.yOffset - tracker.height, 
+                    tracker.attachedEntity.lastTickPosY + (tracker.attachedEntity.posY - tracker.attachedEntity.lastTickPosY)*f1 + tracker.attachedEntity.height/2 - tracker.attachedEntity.getEyeHeight() - tracker.height,
                     tracker.attachedEntity.lastTickPosZ + (tracker.attachedEntity.posZ - tracker.attachedEntity.lastTickPosZ)*f1);
-            
-            pos.add(relVec).add(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ);
-            
-            GL11.glTranslated(pos.x, pos.y, pos.z);            
-            
-            GL11.glRotatef((float)angle, (float)axis.x, (float)axis.y, (float)axis.z);
+            RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+            pos.add(relVec).add(-manager.renderPosX, -manager.renderPosY, -manager.renderPosZ);
+
+            GlStateManager.translate(pos.x, pos.y, pos.z);
+
+            GlStateManager.rotate((float)angle, (float)axis.x, (float)axis.y, (float)axis.z);
         }
         else if(tracker.item)
         {
             double bob = sin(ClientUtils.getRenderTime() / 10) * 0.1;
             double rotate = ClientUtils.getRenderTime() / 20 * todeg;
-            
-            GL11.glRotatef((float) rotate, 0, 1, 0);
-            GL11.glTranslated(0, bob + 0.2, 0);
+
+            GlStateManager.rotate((float) rotate, 0, 1, 0);
+            GlStateManager.translate(0, bob + 0.2, 0);
         }
-        GL11.glTranslated(0, -0.2, 0);
+        GlStateManager.translate(0, -0.2, 0);
         renderTracker(tracker.freq);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
-    @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
-    {
-        return true;
-    }
+    //@Override
+    //public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+    //    return true;
+    //}
 
-    @SuppressWarnings("incomplete-switch")
+    /*@SuppressWarnings("incomplete-switch")
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
@@ -135,5 +136,5 @@ public class RenderTracker extends RenderEntity implements IItemRenderer
                 renderTracker(item.getItemDamage());
             break;
         }
-    }
+    }*/
 }

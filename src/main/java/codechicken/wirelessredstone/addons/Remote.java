@@ -22,7 +22,7 @@ public class Remote implements WirelessTransmittingDevice
     }
 
     @Override
-    public Vector3 getPosition() {
+    public Vector3 getTransmitPos() {
         return Vector3.fromEntityCenter(owner);
     }
 

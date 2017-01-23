@@ -1,13 +1,13 @@
 package codechicken.wirelessredstone.logic;
 
+import codechicken.lib.util.ClientUtils;
 import net.minecraft.item.ItemStack;
 
-import codechicken.core.ClientUtils;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.*;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import static codechicken.lib.vec.Rotation.*;
 import static codechicken.lib.vec.Vector3.*;
@@ -93,7 +93,7 @@ public class TransmitterPart extends TransceiverPart
     }
 
     public float getPearlLight() {
-        float light = world().getLightBrightness(x(), y(), z());
+        float light = world().getLightBrightness(pos());
         if ((deadmap & 1) == 1 || (deadmap == 0 && (disabled() || !active() || currentfreq == 0))) {
             light = (light + 1) * 0.25F;
         } else {
@@ -127,7 +127,7 @@ public class TransmitterPart extends TransceiverPart
 
     @Override
     public String getGuiName() {
-        return StatCollector.translateToLocal("item.wrcbe_logic:wirelesspart|0.name");
+        return I18n.translateToLocal("item.wrcbe_logic:wirelesspart|0.name");
     }
 
     @Override

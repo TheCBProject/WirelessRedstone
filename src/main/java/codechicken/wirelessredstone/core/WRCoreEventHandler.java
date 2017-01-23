@@ -1,18 +1,18 @@
 package codechicken.wirelessredstone.core;
 
-import codechicken.core.ServerUtils;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import codechicken.lib.util.ServerUtils;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -23,23 +23,23 @@ public class WRCoreEventHandler
 {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
-        if (event.world.isRemote)
-            RedstoneEther.loadClientEther(event.world);
+        if (event.getWorld().isRemote)
+            RedstoneEther.loadClientEther(event.getWorld());
         else
-            RedstoneEther.loadServerWorld(event.world);
+            RedstoneEther.loadServerWorld(event.getWorld());
     }
 
     @SubscribeEvent
     public void onChunkDataLoad(ChunkDataEvent.Load event) {
-        RedstoneEther.loadServerWorld(event.world);
+        RedstoneEther.loadServerWorld(event.getWorld());
     }
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        if (event.world.isRemote)
+        if (event.getWorld().isRemote)
             return;
 
-        RedstoneEther.unloadServerWorld(event.world);
+        RedstoneEther.unloadServerWorld(event.getWorld());
 
         if (!ServerUtils.mc().isServerRunning())
             RedstoneEther.unloadServer();
@@ -47,28 +47,28 @@ public class WRCoreEventHandler
 
     @SubscribeEvent
     public void onWorldSave(WorldEvent.Save event) {
-        if (event.world.isRemote || RedstoneEther.server() == null)
+        if (event.getWorld().isRemote || RedstoneEther.server() == null)
             return;
 
-        RedstoneEther.server().saveEther(event.world);
+        RedstoneEther.server().saveEther(event.getWorld());
     }
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        if (event.world.isRemote)
+        if (event.getWorld().isRemote)
             return;
 
         if (RedstoneEther.server() != null)//new world
         {
-            RedstoneEther.loadServerWorld(event.world);
-            RedstoneEther.server().verifyChunkTransmitters(event.world, event.getChunk().xPosition, event.getChunk().zPosition);
+            RedstoneEther.loadServerWorld(event.getWorld());
+            RedstoneEther.server().verifyChunkTransmitters(event.getWorld(), event.getChunk().xPosition, event.getChunk().zPosition);
         }
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        RenderWirelessBolt.render(event.partialTicks, Minecraft.getMinecraft().renderViewEntity);
+        RenderWirelessBolt.render(event.getPartialTicks(), Minecraft.getMinecraft().getRenderViewEntity());
     }
 
     @SubscribeEvent

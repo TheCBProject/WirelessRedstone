@@ -8,18 +8,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.util.AxisAlignedBB;
+import codechicken.lib.util.CommonUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import codechicken.core.CommonUtils;
 import codechicken.lib.config.ConfigTag;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Vector3;
@@ -125,7 +127,7 @@ public class WirelessBolt
     ArrayList<Segment> segments = new ArrayList<Segment>();
     Vector3 start;
     Vector3 end;
-    BlockCoord target;
+    BlockPos target;
     HashMap<Integer, Integer> splitparents = new HashMap<Integer, Integer>();
 
     public double length;
@@ -169,26 +171,24 @@ public class WirelessBolt
         particleMaxAge = fadetime + rand.nextInt(fadetime) - (fadetime / 2);
         particleAge = -(int) (length * speed);
 
-        boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
-        boundingBox.setBB(AxisAlignedBB.getBoundingBox(
-                Math.min(start.x, end.x), Math.min(start.y, end.y), Math.min(start.z, end.z),
+        boundingBox = new AxisAlignedBB(Math.min(start.x, end.x), Math.min(start.y, end.y), Math.min(start.z, end.z),
                 Math.max(start.x, end.x), Math.max(start.y, end.y), Math.max(start.z, end.z))
-                .expand(length / 2, length / 2, length / 2));
+                .expand(length / 2, length / 2, length / 2);
 
         segments.add(new Segment(start, end));
     }
 
     public static Vector3 getFocalPoint(ITileWireless tile) {
-        return Vector3.fromTileEntityCenter((TileEntity) tile).add(tile.getFocalPoint());
+        return Vector3.fromTileCenter((TileEntity) tile).add(tile.getFocalPoint());
     }
 
     public static Vector3 getFocalPoint(ITileJammer tile) {
-        return Vector3.fromTileEntityCenter((TileEntity) tile).add(tile.getFocalPoint());
+        return Vector3.fromTileCenter((TileEntity) tile).add(tile.getFocalPoint());
     }
 
     public WirelessBolt(World world, Vector3 jammer, ITileWireless target, long seed) {
         this(world, jammer, getFocalPoint(target), seed);
-        this.target = new BlockCoord((TileEntity) target);
+        this.target = new BlockPos(((TileEntity) target).getPos());
     }
 
     public void setWrapper(Entity entity) {
@@ -267,38 +267,38 @@ public class WirelessBolt
     }
 
     private float rayTraceResistance(Vector3 start, Vector3 end, float prevresistance) {
-        MovingObjectPosition mop = world.rayTraceBlocks(start.toVec3D(), end.toVec3D());
+        RayTraceResult hit = world.rayTraceBlocks(start.vec3(), end.vec3());
 
-        if (mop == null)
+        if (hit == null)
             return prevresistance;
 
-        if (mop.typeOfHit == MovingObjectType.BLOCK) {
-            Block block = world.getBlock(mop.blockX, mop.blockY, mop.blockZ);
-            if (block.isAir(world, mop.blockX, mop.blockY, mop.blockZ))
+        if (hit.typeOfHit == Type.BLOCK) {
+            IBlockState state = world.getBlockState(hit.getBlockPos());
+            if (state.getBlock().isAir(state, world, hit.getBlockPos()))
                 return prevresistance;
             
             /*if(Block.blocksList[blockID] instanceof ISpecialResistance) 
             {
                 ISpecialResistance isr = (ISpecialResistance) Block.blocksList[blockID];
-                 return prevresistance + (isr.getSpecialExplosionResistance(world, mop.blockX, mop.blockY, mop.blockZ, 
+                 return prevresistance + (isr.getSpecialExplosionResistance(world, hit.blockX, hit.blockY, hit.blockZ,
                          start.x, start.y, start.z, wrapper) + 0.3F);
             } 
             else 
             {*/
-            return prevresistance + block.getExplosionResistance(wrapper) + 0.3F;
+            return prevresistance + state.getBlock().getExplosionResistance(wrapper) + 0.3F;
             //}
         }
         return prevresistance;
     }
 
     private void vecBBDamageSegment(Vector3 start, Vector3 end, ArrayList<Entity> entitylist) {
-        Vec3 start3D = start.toVec3D();
-        Vec3 end3D = end.toVec3D();
+        Vec3d start3D = start.vec3();
+        Vec3d end3D = end.vec3();
 
         for (Iterator<Entity> iterator = entitylist.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
             if (entity instanceof EntityLivingBase &&
-                    (entity.boundingBox.isVecInside(start3D) || entity.boundingBox.isVecInside(end3D))) {
+                    (entity.getEntityBoundingBox().isVecInside(start3D) || entity.getEntityBoundingBox().isVecInside(end3D))) {
                 if (entity instanceof EntityPlayer)
                     entity.attackEntityFrom(WirelessRedstoneCore.damagebolt, playerdamage);
                 else
@@ -404,19 +404,19 @@ public class WirelessBolt
         if (canhittarget) {
             TileEntity tile = RedstoneEther.getTile(world, target);
             if (tile == null || !(tile instanceof ITileWireless)) {
-                ether.unjamTile(world, target.x, target.y, target.z);
+                ether.unjamTile(world, target.getX(), target.getY(), target.getZ());
                 return;
             }
             ITileWireless wirelesstile = (ITileWireless) tile;
             int freq = wirelesstile.getFreq();
             if (freq == 0) {
-                ether.unjamTile(world, target.x, target.y, target.z);
+                ether.unjamTile(world, target.getX(), target.getY(), target.getZ());
                 return;
             }
             ether.jamNode(world, target, CommonUtils.getDimension(world), freq);
             wirelesstile.jamTile();
         } else {
-            ether.unjamTile(world, target.x, target.y, target.z);
+            ether.unjamTile(world, target.getX(), target.getY(), target.getZ());
         }
     }
 

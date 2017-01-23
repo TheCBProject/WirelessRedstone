@@ -1,8 +1,8 @@
 package codechicken.wirelessredstone.logic;
 
+import codechicken.lib.util.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import codechicken.core.ClientUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.*;
@@ -69,7 +69,7 @@ public class JammerPart extends WirelessPart implements ITileJammer
     
     public float getPearlLight()
     {
-        float light = world().getLightBrightness(x(), y(), z());
+        float light = world().getLightBrightness(pos());
         if(active())
             light = (light + 1) * 0.5F;
         else

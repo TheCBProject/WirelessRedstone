@@ -1,22 +1,22 @@
 package codechicken.wirelessredstone.addons;
 
-import codechicken.core.ClientUtils;
-import codechicken.core.ServerUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import codechicken.lib.util.ClientUtils;
+import codechicken.lib.util.ServerUtils;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.world.ChunkEvent.Unload;
 import net.minecraftforge.event.world.WorldEvent.Load;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WRAddonEventHandler
 {
@@ -68,7 +68,7 @@ public class WRAddonEventHandler
 
     @SubscribeEvent
     public void onWorldLoad(Load event) {
-        if (event.world.isRemote)
+        if (event.getWorld().isRemote)
             RedstoneEtherAddons.loadClientManager();
         else
             RedstoneEtherAddons.loadServerWorld();
@@ -77,9 +77,8 @@ public class WRAddonEventHandler
     @SubscribeEvent
     public void onChunkUnload(Unload event) {
         Chunk chunk = event.getChunk();
-        for (int i = 0; i < chunk.entityLists.length; ++i) {
-            for (int j = 0; j < chunk.entityLists[i].size(); ++j) {
-                Object o = chunk.entityLists[i].get(j);
+        for (int i = 0; i < chunk.getEntityLists().length; ++i) {
+            for (Object o : chunk.getEntityLists()[i]) {
                 if (o instanceof EntityWirelessTracker)
                     ((EntityWirelessTracker) o).onChunkUnload();
             }
@@ -89,15 +88,13 @@ public class WRAddonEventHandler
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureLoad(TextureStitchEvent.Pre event) {
-        if (event.map.getTextureType() == 1) {
-            RemoteTexManager.load(event.map);
-            TriangTexManager.loadTextures();
-        }
+        RemoteTexManager.load(event.getMap());
+        TriangTexManager.loadTextures();
     }
 
     @SubscribeEvent
     public void onWorldUnload(net.minecraftforge.event.world.WorldEvent.Unload event) {
-        if (event.world.isRemote)
+        if (event.getWorld().isRemote)
             return;
 
         if (!ServerUtils.mc().isServerRunning())

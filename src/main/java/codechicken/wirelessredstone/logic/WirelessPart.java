@@ -1,49 +1,42 @@
 package codechicken.wirelessredstone.logic;
 
 import java.util.Arrays;
+import java.util.Collections;
 
-import codechicken.core.ClientUtils;
-import codechicken.core.asm.InterfaceDependancies;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.render.BlockRenderer;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.util.ClientUtils;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.RedundantTransformation;
 import codechicken.lib.vec.Rotation;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.Vector3;
-import codechicken.microblock.FaceMicroClass;
+import codechicken.lib.vec.uv.IconTransformation;
+import codechicken.microblock.FaceMicroFactory;
 import codechicken.microblock.JMicroShrinkRender;
 import codechicken.microblock.MicroOcclusion;
-import codechicken.multipart.IFaceRedstonePart;
-import codechicken.multipart.IRedstonePart;
-import codechicken.multipart.IconHitEffects;
-import codechicken.multipart.JCuboidPart;
-import codechicken.multipart.JIconHitEffects;
-import codechicken.multipart.JNormalOcclusion;
-import codechicken.multipart.JPartialOcclusion;
-import codechicken.multipart.NormalOcclusionTest;
-import codechicken.multipart.RedstoneInteractions;
-import codechicken.multipart.TFacePart;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
+import codechicken.multipart.*;
 import codechicken.wirelessredstone.core.RedstoneEther;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import static codechicken.lib.vec.Rotation.*;
 import static codechicken.lib.vec.Vector3.*;
 
-@InterfaceDependancies
-public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIconHitEffects, IFaceRedstonePart, JNormalOcclusion, JPartialOcclusion, JMicroShrinkRender
+public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TFacePart, TIconHitEffectsPart, IFaceRedstonePart, TNormalOcclusionPart, TPartialOcclusionPart, JMicroShrinkRender
 {
     private static Cuboid6[] nBoxes = new Cuboid6[6];
 
@@ -185,7 +178,7 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
     }
 
     @Override
-    public ItemStack pickItem(MovingObjectPosition hit) {
+    public ItemStack pickItem(CuboidRayTraceResult hit) {
         return getItem();
     }
 
@@ -211,8 +204,7 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
     }
 
     public boolean dropIfCantStay() {
-        BlockCoord pos = new BlockCoord(tile()).offset(side());
-        if (!world().isSideSolid(pos.x, pos.y, pos.z, ForgeDirection.getOrientation(side() ^ 1))) {
+        if (!world().isSideSolid(pos().offset(EnumFacing.VALUES[side()]), EnumFacing.values()[side() ^ 1])) {
             drop();
             return true;
         }
@@ -220,14 +212,14 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
     }
 
     public void drop() {
-        TileMultipart.dropItem(getItem(), world(), Vector3.fromTileEntityCenter(tile()));
+        TileMultipart.dropItem(getItem(), world(), Vector3.fromTileCenter(tile()));
         tile().remPart(this);
     }
 
     public void setupPlacement(EntityPlayer player, int side) {
         setSide(side ^ 1);
         setRotation(Rotation.getSidedRotation(player, side) ^ 2);
-        owner = player.getCommandSenderName();
+        owner = player.getName();
     }
 
     public abstract ItemStack getItem();
@@ -291,27 +283,32 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
 
     @Override
     public Iterable<IndexedCuboid6> getSubParts() {
-        return Arrays.asList(new IndexedCuboid6(0, getBounds()));
+        return Collections.singletonList(new IndexedCuboid6(0, getBounds()));
     }
 
     @Override
-    public float getStrength(MovingObjectPosition hit, EntityPlayer player) {
+    public Iterable<Cuboid6> getCollisionBoxes() {
+        return Collections.singletonList(getBounds());
+    }
+
+    @Override
+    public float getStrength(EntityPlayer player, CuboidRayTraceResult hit) {
         return 10F;
     }
 
     @Override
-    public boolean renderStatic(Vector3 pos, int pass) {
-        if (pass == 0) {
-            RenderWireless.renderWorld(this);
+    public boolean renderStatic(Vector3 pos, BlockRenderLayer layer, CCRenderState ccrs) {
+        if (layer == BlockRenderLayer.SOLID) {
+            RenderWireless.renderWorld(ccrs, this);
             return true;
         }
         return false;
     }
 
     @Override
-    public void renderDynamic(Vector3 pos, float frame, int pass) {
+    public void renderDynamic(Vector3 pos, int pass, float frame) {
         if (pass == 0)
-            RenderWireless.renderPearl(pos, this);
+            RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
     }
 
     @Override
@@ -372,12 +369,12 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
     }
 
     public static Cuboid6 baseBounds(int i) {
-        return FaceMicroClass.aBounds()[0x10 | i];
+        return FaceMicroFactory.aBounds()[0x10 | i];
     }
 
     @Override
-    public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack held) {
-        if (hit.sideHit == (side() ^ 1) && player.isSneaking()) {
+    public boolean activate(EntityPlayer player, CuboidRayTraceResult hit, ItemStack held, EnumHand hand) {
+        if (hit.sideHit.ordinal() == (side() ^ 1) && player.isSneaking()) {
             int r = rotation();
             setRotation((r + 1) % 4);
             if (!tile().canReplacePart(this, this)) {
@@ -397,25 +394,31 @@ public abstract class WirelessPart extends JCuboidPart implements TFacePart, JIc
     }
 
     @Override
-    public void addDestroyEffects(MovingObjectPosition hit, EffectRenderer effectRenderer) {
+    public void renderBreaking(Vector3 pos, TextureAtlasSprite texture, CCRenderState ccrs) {
+        ccrs.setPipeline(pos.translation(), new IconTransformation(texture));
+        BlockRenderer.renderCuboid(ccrs, getBounds(), 0);
+    }
+
+    @Override
+    public void addDestroyEffects(CuboidRayTraceResult hit, ParticleManager effectRenderer) {
         IconHitEffects.addDestroyEffects(this, effectRenderer);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addHitEffects(MovingObjectPosition hit, EffectRenderer effectRenderer) {
+    public void addHitEffects(CuboidRayTraceResult hit, ParticleManager effectRenderer) {
         IconHitEffects.addHitEffects(this, hit, effectRenderer);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getBreakingIcon(Object subPart, int side) {
-        return getBrokenIcon(side);
+    public TextureAtlasSprite getBreakingIcon(CuboidRayTraceResult hit) {
+        return getBrokenIcon(hit.sideHit.ordinal());
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getBrokenIcon(int side) {
+    public TextureAtlasSprite getBrokenIcon(int side) {
         return RenderWireless.getBreakingIcon(textureSet());
     }
 }

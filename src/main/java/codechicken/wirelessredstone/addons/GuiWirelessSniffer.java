@@ -4,13 +4,12 @@ import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourARGB;
 import codechicken.lib.config.ConfigTag;
 import codechicken.lib.render.CCRenderState;
+import codechicken.lib.texture.TextureUtils;
 import codechicken.wirelessredstone.core.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class GuiWirelessSniffer extends GuiScreen
 {
@@ -75,25 +74,25 @@ public class GuiWirelessSniffer extends GuiScreen
         if(endfreq > RedstoneEther.numfreqs)
             endfreq = RedstoneEther.numfreqs;
         
-        GL11.glColor4f(1, 1, 1, 1);
-        CCRenderState.changeTexture("wrcbe_addons:textures/gui/sniffer.png");
+        GlStateManager.color(1, 1, 1, 1);
+        TextureUtils.changeTexture("wrcbe_addons:textures/gui/sniffer.png");
         drawTexturedModalRect(backtexx, backtexy, 0, 0, xSize, ySize);
-        
-        GL11.glPushMatrix();
-            GL11.glTranslatef(backtexx, backtexy, 0.0F);
-    
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-            fontRendererObj.drawString(title, xSize / 2 - fontRendererObj.getStringWidth(title) / 2, 10, 0x404040);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(backtexx, backtexy, 0.0F);
+
+        GlStateManager.disableRescaleNormal();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+
+        fontRendererObj.drawString(title, xSize / 2 - fontRendererObj.getStringWidth(title) / 2, 10, 0x404040);
     
-            drawFrequencies(8, 24, startfreq);
+        drawFrequencies(8, 24, startfreq);
             
-            String rangestring = ""+startfreq+" - "+endfreq;
-            fontRendererObj.drawString(rangestring, xSize / 2 - fontRendererObj.getStringWidth(rangestring) / 2, 181, 0x404040);
-        GL11.glPopMatrix();
+        String rangestring = ""+startfreq+" - "+endfreq;
+        fontRendererObj.drawString(rangestring, xSize / 2 - fontRendererObj.getStringWidth(rangestring) / 2, 181, 0x404040);
+        GlStateManager.popMatrix();
         
         int freq = getFreqMouseOver(mousex, mousey);
         if(freq != 0)
@@ -106,8 +105,8 @@ public class GuiWirelessSniffer extends GuiScreen
         
         super.drawScreen(mousex, mousey, partialframe);
 
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 
     public String getFreqTip(int freq)

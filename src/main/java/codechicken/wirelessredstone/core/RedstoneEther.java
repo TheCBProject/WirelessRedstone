@@ -3,20 +3,20 @@ package codechicken.wirelessredstone.core;
 import java.util.*;
 import java.util.Map.Entry;
 
+import codechicken.lib.util.CommonUtils;
+import codechicken.lib.util.ServerUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import codechicken.core.CommonUtils;
-import codechicken.core.ServerUtils;
 import codechicken.lib.math.MathHelper;
-import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Vector3;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class RedstoneEther
 {
@@ -33,13 +33,13 @@ public abstract class RedstoneEther
 
     static class DimensionalEtherHash
     {
-        TreeMap<BlockCoord, TXNodeInfo> transmittingblocks = new TreeMap<BlockCoord, RedstoneEther.TXNodeInfo>();
-        TreeMap<BlockCoord, Integer> recievingblocks = new TreeMap<BlockCoord, Integer>();
+        TreeMap<BlockPos, TXNodeInfo> transmittingblocks = new TreeMap<BlockPos, RedstoneEther.TXNodeInfo>();
+        TreeMap<BlockPos, Integer> recievingblocks = new TreeMap<BlockPos, Integer>();
         HashSet<WirelessTransmittingDevice> transmittingdevices = new HashSet<WirelessTransmittingDevice>();
         ArrayList<RedstoneEtherFrequency> freqsToSave = new ArrayList<RedstoneEtherFrequency>();
 
-        TreeSet<BlockCoord> jammerset = new TreeSet<BlockCoord>();
-        TreeMap<BlockCoord, Integer> jammednodes = new TreeMap<BlockCoord, Integer>();
+        TreeSet<BlockPos> jammerset = new TreeSet<BlockPos>();
+        TreeMap<BlockPos, Integer> jammednodes = new TreeMap<BlockPos, Integer>();
     }
 
     public final boolean remote;
@@ -55,7 +55,7 @@ public abstract class RedstoneEther
     protected HashMap<Integer, String> privateFreqs;
 
     protected int processingAddittions = Integer.MAX_VALUE;
-    protected HashMap<BlockCoord, Integer> backupmap;
+    protected HashMap<BlockPos, Integer> backupmap;
     protected HashMap<EntityLivingBase, Integer> jammedentities;
 
     public static final int numfreqs = 5000;
@@ -94,16 +94,16 @@ public abstract class RedstoneEther
     private static RedstoneEtherServer serverEther;
     private static RedstoneEtherClient clientEther;
 
-    public static int pythagorasPow2(BlockCoord node1, BlockCoord node2) {
-        return (node1.x - node2.x) * (node1.x - node2.x) +
-                (node1.y - node2.y) * (node1.y - node2.y) +
-                (node1.z - node2.z) * (node1.z - node2.z);
+    public static int pythagorasPow2(BlockPos node1, BlockPos node2) {
+        return (node1.getX() - node2.getX()) * (node1.getX() - node2.getX()) +
+                (node1.getY() - node2.getY()) * (node1.getY() - node2.getY()) +
+                (node1.getZ() - node2.getZ()) * (node1.getZ() - node2.getZ());
     }
 
-    public static double pythagorasPow2(BlockCoord node, Vector3 point) {
-        return (node.x - point.x) * (node.x - point.x) +
-                (node.y - point.y) * (node.y - point.y) +
-                (node.z - point.z) * (node.z - point.z);
+    public static double pythagorasPow2(BlockPos node, Vector3 point) {
+        return (node.getX() - point.x) * (node.getX() - point.x) +
+                (node.getY() - point.y) * (node.getY() - point.y) +
+                (node.getZ() - point.z) * (node.getZ() - point.z);
     }
 
     public static void loadServerWorld(World world) {
@@ -158,27 +158,27 @@ public abstract class RedstoneEther
     public static ItemStack[] getColourSetters() {
         if (coloursetters == null) {
             coloursetters = new ItemStack[]{
-                    new ItemStack(Items.dye, 1, 1),
-                    new ItemStack(Items.dye, 1, 2),
-                    new ItemStack(Items.dye, 1, 3),
-                    new ItemStack(Items.dye, 1, 4),
-                    new ItemStack(Items.dye, 1, 5),
-                    new ItemStack(Items.dye, 1, 6),
-                    new ItemStack(Items.dye, 1, 7),
-                    new ItemStack(Items.dye, 1, 8),
-                    new ItemStack(Items.dye, 1, 9),
-                    new ItemStack(Items.dye, 1, 10),
-                    new ItemStack(Items.dye, 1, 11),
-                    new ItemStack(Items.dye, 1, 12),
-                    new ItemStack(Items.dye, 1, 13),
-                    new ItemStack(Items.dye, 1, 14),
-                    new ItemStack(Items.redstone, 1)};
+                    new ItemStack(Items.DYE, 1, 1),
+                    new ItemStack(Items.DYE, 1, 2),
+                    new ItemStack(Items.DYE, 1, 3),
+                    new ItemStack(Items.DYE, 1, 4),
+                    new ItemStack(Items.DYE, 1, 5),
+                    new ItemStack(Items.DYE, 1, 6),
+                    new ItemStack(Items.DYE, 1, 7),
+                    new ItemStack(Items.DYE, 1, 8),
+                    new ItemStack(Items.DYE, 1, 9),
+                    new ItemStack(Items.DYE, 1, 10),
+                    new ItemStack(Items.DYE, 1, 11),
+                    new ItemStack(Items.DYE, 1, 12),
+                    new ItemStack(Items.DYE, 1, 13),
+                    new ItemStack(Items.DYE, 1, 14),
+                    new ItemStack(Items.REDSTONE, 1)};
         }
         return coloursetters;
     }
 
-    public static TileEntity getTile(World world, BlockCoord node) {
-        return world.getTileEntity(node.x, node.y, node.z);
+    public static TileEntity getTile(World world, BlockPos node) {
+        return world.getTileEntity(node);
     }
 
     public static int[] parseFrequencyRange(String freqstring) {
@@ -252,7 +252,7 @@ public abstract class RedstoneEther
     }
 
     public void loadTransmitter(int dimension, int x, int y, int z, int freq) {
-        BlockCoord node = new BlockCoord(x, y, z);
+        BlockPos node = new BlockPos(x, y, z);
         ethers.get(dimension).transmittingblocks.put(node, new TXNodeInfo(freq, true));
         freqarray[freq].loadTransmitter(node, dimension);
     }
@@ -283,7 +283,7 @@ public abstract class RedstoneEther
     }
 
     public boolean canBroadcastOnFrequency(EntityPlayer player, int freq) {
-        return canBroadcastOnFrequency(player.getCommandSenderName(), freq);
+        return canBroadcastOnFrequency(player.getName(), freq);
     }
 
     public boolean canBroadcastOnFrequency(String username, int freq) {

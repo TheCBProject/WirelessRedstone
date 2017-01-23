@@ -2,24 +2,28 @@ package codechicken.wirelessredstone.addons;
 
 import java.util.List;
 
-import codechicken.core.CommonUtils;
-import codechicken.core.ServerUtils;
+import codechicken.lib.math.MathHelper;
+import codechicken.lib.util.CommonUtils;
+import codechicken.lib.util.ServerUtils;
 import codechicken.lib.vec.Quat;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.RedstoneEther;
 import codechicken.wirelessredstone.core.WirelessTransmittingDevice;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -76,9 +80,9 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
             }
         }
         
-        boundingBox.setBB(boundingBox.expand(0,0.2,0));//so we actually consist of something decent for material tests
+        setEntityBoundingBox(getEntityBoundingBox().expand(0,0.2,0));//so we actually consist of something decent for material tests
         super.onEntityUpdate();
-        boundingBox.setBB(boundingBox.expand(0,-0.2,0));
+        setEntityBoundingBox(getEntityBoundingBox().expand(0,-0.2,0));
         
         if(attached && attachedEntity == null)
         {
@@ -147,7 +151,8 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     {
         if (!this.worldObj.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(WirelessRedstoneAddons.tracker, 1, freq)))
         {
-            this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            //TODO SoundCat for this.
+            this.worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             par1EntityPlayer.onItemPickup(this, 1);
             setDead();
         }
@@ -167,9 +172,9 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
             detachFromEntity();
         }
         
-        int x = MathHelper.floor_double(posX);
-        int y = MathHelper.floor_double(posY+height/2);
-        int z = MathHelper.floor_double(posZ);
+        int x = MathHelper.floor(posX);
+        int y = MathHelper.floor(posY+height/2);
+        int z = MathHelper.floor(posZ);
         
         if(isRetractingStickyPistonFacing(x, y + 2, z, 0) ||
             isRetractingStickyPistonFacing(x, y - 2, z, 1) ||
@@ -184,16 +189,17 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
 
     public boolean isRetractingStickyPistonFacing(int x, int y, int z, int facing)
     {
-        Block block = worldObj.getBlock(x, y, z);
-        if(block != Blocks.piston_extension)
+        BlockPos pos = new BlockPos(x,y,z);
+        IBlockState state = worldObj.getBlockState(pos);
+        if(state.getBlock() != Blocks.PISTON_EXTENSION)
             return false;
         
-        TileEntity t = worldObj.getTileEntity(x, y, z);
+        TileEntity t = worldObj.getTileEntity(pos);
         if(!(t instanceof TileEntityPiston))
             return false;
         
         TileEntityPiston tep = (TileEntityPiston)t;
-        return tep.getPistonOrientation() == facing && !tep.isExtending() && tep.getStoredBlockID() == Blocks.sticky_piston;
+        return tep.getFacing().ordinal() == facing && !tep.isExtending() && tep.getPistonState().getBlock() == Blocks.STICKY_PISTON;
     }
 
     private void detachFromEntity()
@@ -219,7 +225,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     {        
         Vector3 relPos = getRotatedAttachment();
         setPosition(attachedEntity.posX + relPos.x, 
-                attachedEntity.posY + attachedEntity.height/2 - attachedEntity.yOffset + relPos.y - height, 
+                attachedEntity.posY + attachedEntity.height/2 - attachedEntity.getEyeHeight() + relPos.y - height,
                 attachedEntity.posZ + relPos.z);
     }
 
@@ -233,7 +239,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
             motionZ *= 0.8;
         }
 
-        func_145771_j(posX, posY+height/2, posZ);
+        pushOutOfBlocks(posX, posY+height/2, posZ);
     }
 
     private void attachToNearbyEntities()
@@ -241,9 +247,9 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         if(isAttachedToEntity() || item || attachmentCounter > 0)
             return;
         
-        for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
+        for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
         {            
-            AxisAlignedBB bb = entity.boundingBox;
+            AxisAlignedBB bb = entity.getEntityBoundingBox();
             if(bb != null && 
                     entity.width >= 0.3)
             {
@@ -286,12 +292,12 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         attached = true;
         attachedEntity = e;
         attachedX = (float) (pos.x - e.posX);
-        attachedY = (float) (pos.y + height/2 - (e.posY - e.yOffset + e.height/2));
+        attachedY = (float) (pos.y + height/2 - (e.posY - e.getEyeHeight() + e.height/2));
         attachedZ = (float) (pos.z - e.posZ);
         attachedYaw = getEntityRotation();
         
         if(attachedEntity instanceof EntityPlayer)
-            attachedPlayerName = attachedEntity.getCommandSenderName();
+            attachedPlayerName = attachedEntity.getName();
 
         moveToEntityExterior();
         RedstoneEtherAddons.server().updateTracker(this);
@@ -356,7 +362,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
             posZ += Math.signum(motionZ)*0.1;
         }
 
-        func_145771_j(posX, posY + height / 2, posZ);
+        pushOutOfBlocks(posX, posY + height / 2, posZ);
     }
 
     private void findAttachedEntity()
@@ -381,7 +387,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         }
         else
         {
-            for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
+            for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
             {
                 if(tryAttach(entity, 0.4, 0.2))
                 {
@@ -500,7 +506,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     }
 
     @Override
-    public Vector3 getPosition()
+    public Vector3 getTransmitPos()
     {
         return Vector3.fromEntityCenter(this);
     }

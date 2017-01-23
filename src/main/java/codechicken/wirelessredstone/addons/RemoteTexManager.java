@@ -2,13 +2,13 @@ package codechicken.wirelessredstone.addons;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourARGB;
-import codechicken.lib.render.TextureDataHolder;
-import codechicken.lib.render.TextureSpecial;
-import codechicken.lib.render.TextureUtils;
+import codechicken.lib.texture.TextureDataHolder;
+import codechicken.lib.texture.TextureSpecial;
+import codechicken.lib.texture.TextureUtils;
 import codechicken.wirelessredstone.core.*;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 public class RemoteTexManager
@@ -43,7 +43,7 @@ public class RemoteTexManager
         icons[i].addTexture(new TextureDataHolder(imageData, 16).copyData());
     }
 
-    public static IIcon getIcon(int colourid, boolean on)
+    public static TextureAtlasSprite getIcon(int colourid, boolean on)
     {
         return icons[getIconIndex(colourid, on)];
     }

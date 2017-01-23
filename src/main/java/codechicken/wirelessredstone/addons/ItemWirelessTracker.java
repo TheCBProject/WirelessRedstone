@@ -1,12 +1,16 @@
 package codechicken.wirelessredstone.addons;
 
 import codechicken.wirelessredstone.core.ItemWirelessFreq;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemWirelessTracker extends ItemWirelessFreq
@@ -16,24 +20,24 @@ public class ItemWirelessTracker extends ItemWirelessFreq
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
-            return super.onItemRightClick(itemstack, world, player);
+            return super.onItemRightClick(itemStack, world, player, hand);
         }
 
-        if (getItemFreq(itemstack) == 0)
-            return itemstack;
+        if (getItemFreq(itemStack) == 0)
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
 
         if (!player.capabilities.isCreativeMode) {
-            itemstack.stackSize--;
+            itemStack.stackSize--;
         }
         if (!world.isRemote) {
-            world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-            EntityWirelessTracker tracker = new EntityWirelessTracker(world, getItemFreq(itemstack), player);
+            world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+            EntityWirelessTracker tracker = new EntityWirelessTracker(world, getItemFreq(itemStack), player);
             world.spawnEntityInWorld(tracker);
             WRAddonSPH.sendThrowTracker(tracker, player);
         }
-        return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
     }
 
 
@@ -46,17 +50,17 @@ public class ItemWirelessTracker extends ItemWirelessFreq
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(
-                StatCollector.translateToLocal("wrcbe_addons.tracker.short"),
+                I18n.translateToLocal("wrcbe_addons.tracker.short"),
                 itemstack.getItemDamage());
     }
 
     @Override
     public String getGuiName() {
-        return StatCollector.translateToLocal("item.wrcbe_addons:tracker.name");
+        return I18n.translateToLocal("item.wrcbe_addons:tracker.name");
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public void registerIcons(IIconRegister par1IconRegister) {
+    //}
 }

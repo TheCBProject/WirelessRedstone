@@ -1,23 +1,19 @@
 package codechicken.wirelessredstone.logic;
 
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
-import codechicken.core.asm.InterfaceDependancies;
+import net.minecraft.util.EnumHand;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.core.ITileWireless;
 import codechicken.wirelessredstone.core.RedstoneEther;
 import codechicken.wirelessredstone.core.WirelessRedstoneCore;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-/*import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.ILuaContext;
-import dan200.computer.api.IPeripheral;*/
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@InterfaceDependancies
 public abstract class TransceiverPart extends WirelessPart implements ITileWireless//, IPeripheral
 {
     public byte deadmap;
@@ -92,11 +88,11 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
     }
 
     @Override
-    public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack held) {
-        if (super.activate(player, hit, held))
+    public boolean activate(EntityPlayer player, CuboidRayTraceResult hit, ItemStack held, EnumHand hand) {
+        if (super.activate(player, hit, held, hand))
             return true;
 
-        if (hit.sideHit == (side() ^ 1) && !player.isSneaking()) {
+        if (hit.sideHit.ordinal() == (side() ^ 1) && !player.isSneaking()) {
             if (world().isRemote)
                 WirelessRedstoneCore.proxy.openTileWirelessGui(player, (ITileWireless) tile());
             return true;
@@ -106,54 +102,9 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderDynamic(Vector3 pos, float frame, int pass) {
-        super.renderDynamic(pos, frame, pass);
+    public void renderDynamic(Vector3 pos, int pass, float frame) {
+        super.renderDynamic(pos, pass, frame);
         if (pass == 0)
             RenderWireless.renderFreq(pos, this);
     }
-    
-    /*@Override
-    public void attach(IComputerAccess computer)
-    {
-    }
-    
-    @Override
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception
-    {
-        switch(method)
-        {
-            case 0:
-                if(arguments.length < 1)
-                    throw new Exception("Not Enough Arguments");
-                if(!(arguments[0] instanceof Double) || Math.floor((Double) arguments[0]) != (Double)arguments[0])
-                    throw new Exception("Argument 0 is not a number");
-                int freq = ((Double)arguments[0]).intValue();
-                if(freq < 0 || freq > RedstoneEther.numfreqs)
-                    throw new Exception("Invalid Frequency: "+freq);
-                if(!RedstoneEther.server().canBroadcastOnFrequency(owner, freq))
-                    throw new Exception("Frequency: "+freq+" is private");
-                setFreq(freq);
-                return null;
-            case 1:
-                return new Object[]{getFreq()};
-        }
-        throw new Exception("derp?");
-    }
-    
-    @Override
-    public boolean canAttachToSide(int side)
-    {
-        return (side&6) != (side()&6);
-    }
-    
-    @Override
-    public void detach(IComputerAccess computer)
-    {
-    }
-    
-    @Override
-    public String[] getMethodNames()
-    {
-        return new String[]{"setFreq", "getFreq"};
-    }*/
 }

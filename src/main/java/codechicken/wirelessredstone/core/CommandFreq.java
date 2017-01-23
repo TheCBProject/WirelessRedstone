@@ -3,6 +3,7 @@ package codechicken.wirelessredstone.core;
 import java.util.LinkedList;
 
 import codechicken.core.commands.CoreCommand;
+import net.minecraft.command.ICommandSender;
 
 public class CommandFreq extends CoreCommand
 {    
@@ -25,7 +26,7 @@ public class CommandFreq extends CoreCommand
     }
 
     @Override
-    public void handleCommand(String command, String playername, String[] args, WCommandSender listener)
+    public void handleCommand(String command, String playername, String[] args, ICommandSender listener)
     {        
         if(args[0].equals("help"))
         {
@@ -37,7 +38,7 @@ public class CommandFreq extends CoreCommand
                     return;
                 }
             }
-            listener.chatT("wrcbe_core.param.missing");
+            chatT(listener, "wrcbe_core.param.missing");
             return;
         }
         
@@ -49,13 +50,13 @@ public class CommandFreq extends CoreCommand
                 return;
             }
         }
-        listener.chatT("wrcbe_core.param.missing");
+        chatT(listener, "wrcbe_core.param.missing");
     }
     
     @Override
-    public void printHelp(WCommandSender listener)
+    public void printHelp(ICommandSender listener)
     {
-        listener.chatT("wrcbe_core.command.usage");
+        chatT(listener, "wrcbe_core.command.usage");
         StringBuilder paramNames = new StringBuilder();
         for(FreqParam param : paramHandlers)
         {
@@ -63,12 +64,12 @@ public class CommandFreq extends CoreCommand
                 paramNames.append(", ");
             paramNames.append(param.getName());
         }
-        listener.chatT("wrcbe_core.command.usage1", paramNames.toString());
-        listener.chatT("wrcbe_core.command.usage2");
+        chatT(listener, "wrcbe_core.command.usage1", paramNames.toString());
+        chatT(listener, "wrcbe_core.command.usage2");
     }
 
     @Override
-    public boolean OPOnly()
+    public boolean isOpOnly()
     {
         return true;
     }

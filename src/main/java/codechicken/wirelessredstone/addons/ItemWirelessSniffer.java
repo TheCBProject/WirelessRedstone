@@ -3,6 +3,9 @@ package codechicken.wirelessredstone.addons;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemWirelessSniffer extends Item
@@ -11,11 +14,12 @@ public class ItemWirelessSniffer extends Item
         setMaxStackSize(1);
     }
 
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote) {
-            WirelessRedstoneAddons.proxy.openSnifferGui(entityplayer);
-            RedstoneEtherAddons.client().addSniffer(entityplayer);
+            WirelessRedstoneAddons.proxy.openSnifferGui(player);
+            RedstoneEtherAddons.client().addSniffer(player);
         }
-        return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
     }
 }

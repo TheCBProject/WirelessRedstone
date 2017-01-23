@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -29,7 +30,7 @@ public class WRCoreSPH implements IServerPacketHandler
     private void handlePacket(WorldServer world, EntityPlayerMP player, PacketCustom packet) {
         switch (packet.getType()) {
             case 1:
-                setTileFreq(player, world, packet.readCoord(), packet.readShort());
+                setTileFreq(player, world, packet.readPos(), packet.readShort());
                 break;
             case 2:
                 setItemFreq(player, packet.readShort(), packet.readShort());
@@ -66,7 +67,7 @@ public class WRCoreSPH implements IServerPacketHandler
         }
     }
 
-    private void setTileFreq(EntityPlayer sender, World world, BlockCoord pos, int freq) {
+    private void setTileFreq(EntityPlayer sender, World world, BlockPos pos, int freq) {
         if (RedstoneEther.get(false).canBroadcastOnFrequency(sender, freq)) {
             TileEntity tile = RedstoneEther.getTile(world, pos);
             if (tile instanceof ITileWireless)

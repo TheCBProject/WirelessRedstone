@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.network.play.INetHandlerPlayClient;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class WRCoreCPH implements IClientPacketHandler
                 handleLastFreqInfo(packet.readUShort(), packet.readUByte());
                 break;
             case 3:
-                RedstoneEther.get(true).setFrequencyRange(player.getCommandSenderName(), packet.readUShort(), packet.readUShort(), packet.readBoolean());
+                RedstoneEther.get(true).setFrequencyRange(player.getName(), packet.readUShort(), packet.readUShort(), packet.readBoolean());
                 break;
             case 4:
                 handleFreqInfo(packet);
@@ -86,9 +87,9 @@ public class WRCoreCPH implements IClientPacketHandler
         }
     }
 
-    public static void sendSetTileFreq(int x, int y, int z, int freq) {
+    public static void sendSetTileFreq(BlockPos pos, int freq) {
         PacketCustom packet = new PacketCustom(WirelessRedstoneCore.channel, 1);
-        packet.writeCoord(x, y, z);
+        packet.writePos(pos);
         packet.writeShort(freq);
         packet.sendToServer();
     }

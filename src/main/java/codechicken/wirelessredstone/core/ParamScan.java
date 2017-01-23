@@ -1,15 +1,16 @@
 package codechicken.wirelessredstone.core;
 
-import codechicken.core.ServerUtils;
-import codechicken.core.commands.CoreCommand.WCommandSender;
+import codechicken.core.commands.CoreCommand;
+import codechicken.lib.util.ServerUtils;
+import net.minecraft.command.ICommandSender;
 
 public class ParamScan extends FreqParam
 {
     @Override
-    public void printHelp(WCommandSender listener) {
-        listener.chatT("wrcbe_core.param.scan.usage");
-        listener.chatT("wrcbe_core.param.scan.usage1");
-        listener.chatT("wrcbe_core.param.scan.usage" + (rand.nextInt(2) + 2));
+    public void printHelp(ICommandSender listener) {
+        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage");
+        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage1");
+        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage" + (rand.nextInt(2) + 2));
     }
 
     @Override
@@ -18,11 +19,11 @@ public class ParamScan extends FreqParam
     }
 
     @Override
-    public void handleCommand(String playername, String[] subArray, WCommandSender listener) {
+    public void handleCommand(String playername, String[] subArray, ICommandSender listener) {
         RedstoneEther ether = RedstoneEther.get(false);
 
         if (subArray.length == 1 && ServerUtils.getPlayer(playername) == null) {
-            listener.chatT("wrcbe_core.param.invalidno");
+            CoreCommand.chatT(listener,"wrcbe_core.param.invalidno");
             return;
         }
 
@@ -56,9 +57,9 @@ public class ParamScan extends FreqParam
         }
 
         if (ranges == 0)
-            listener.chatT("wrcbe_core.param.scan.onlypublic", scanPlayer);
+            CoreCommand.chatT(listener,"wrcbe_core.param.scan.onlypublic", scanPlayer);
         else
-            listener.chatT("wrcbe_core.param.scan.list", scanPlayer, freqs);
+            CoreCommand.chatT(listener,"wrcbe_core.param.scan.list", scanPlayer, freqs);
     }
 
 }

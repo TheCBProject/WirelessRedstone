@@ -1,12 +1,10 @@
 package codechicken.wirelessredstone.addons;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import codechicken.wirelessredstone.core.*;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWirelessTriangulator extends ItemWirelessFreq
 {
@@ -14,12 +12,11 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq
         setMaxStackSize(1);
     }
 
-    public IIcon getIconFromDamage(int damage) {
-        if (damage < 0 || damage > RedstoneEther.numfreqs)
-            damage = 0;
-
-        return TriangTexManager.getIconFromDamage(damage);
-    }
+    //public IIcon getIconFromDamage(int damage) {
+    //    if (damage < 0 || damage > RedstoneEther.numfreqs)
+    //        damage = 0;
+    //    return TriangTexManager.getIconFromDamage(damage);
+    //}
 
     public int getItemFreq(ItemStack itemstack) {
         return itemstack.getItemDamage();
@@ -29,16 +26,16 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(
-                StatCollector.translateToLocal("wrcbe_addons.triangulator.short"),
+                I18n.translateToLocal("wrcbe_addons.triangulator.short"),
                 itemstack.getItemDamage());
     }
 
     public String getGuiName() {
-        return StatCollector.translateToLocal("item.wrcbe_addons:triangulator.name");
+        return I18n.translateToLocal("item.wrcbe_addons:triangulator.name");
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public void registerIcons(IIconRegister par1IconRegister) {
+    //}
 }

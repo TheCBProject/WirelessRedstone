@@ -23,6 +23,6 @@ public class RedstoneEtherClient extends RedstoneEther
     public void setFreq(ITileWireless tile, int freq)
     {
         TileEntity t = (TileEntity)tile;
-        WRCoreCPH.sendSetTileFreq(t.xCoord, t.yCoord, t.zCoord, freq);
+        WRCoreCPH.sendSetTileFreq(t.getPos(), freq);
     }
 }

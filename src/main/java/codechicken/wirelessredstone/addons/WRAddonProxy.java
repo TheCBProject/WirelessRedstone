@@ -1,8 +1,8 @@
 package codechicken.wirelessredstone.addons;
 
-import codechicken.core.CommonUtils;
+import codechicken.lib.util.CommonUtils;
 import codechicken.wirelessredstone.core.WRCoreSPH;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import codechicken.wirelessredstone.core.WirelessRedstoneCore;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static codechicken.wirelessredstone.addons.WirelessRedstoneAddons.*;
@@ -24,8 +24,8 @@ public class WRAddonProxy
     }
 
     private <T extends Item> T register(T item, String name) {
-        item.setUnlocalizedName("wrcbe_addons:"+name).setTextureName("wrcbe_addons:"+name);
-        item.setCreativeTab(CreativeTabs.tabRedstone);
+        item.setUnlocalizedName("wrcbe_addons:"+name);
+        item.setCreativeTab(CreativeTabs.REDSTONE);
         GameRegistry.registerItem(item, name);
         return item;
     }
@@ -54,12 +54,12 @@ public class WRAddonProxy
         GameRegistry.addRecipe(new ItemStack(triangulator), " i ",
                 "iti",
                 " i ",
-                'i', Items.iron_ingot,
+                'i', Items.IRON_INGOT,
                 't', WirelessRedstoneCore.wirelessTransceiver);
         
         GameRegistry.addRecipe(new ItemStack(remote), "t",
                 "B",
-                'B', Blocks.stone_button,
+                'B', Blocks.STONE_BUTTON,
                 't', WirelessRedstoneCore.wirelessTransceiver);
         
         GameRegistry.addRecipe(new ItemStack(sniffer), "dtd",
@@ -67,14 +67,14 @@ public class WRAddonProxy
                 "SSS",
                 'd', WirelessRedstoneCore.recieverDish,
                 't', WirelessRedstoneCore.wirelessTransceiver,
-                'r', Items.redstone,
-                'B', Blocks.stone_button,
-                'S', Blocks.stone);
+                'r', Items.REDSTONE,
+                'B', Blocks.STONE_BUTTON,
+                'S', Blocks.STONE);
         
         GameRegistry.addRecipe(new ItemStack(wirelessMap, 1), "ppp",
                 "ptp",
                 "ppp",
-                'p', Items.paper,
+                'p', Items.PAPER,
                 't', new ItemStack(triangulator, 1, OreDictionary.WILDCARD_VALUE));
         
         GameRegistry.addRecipe(new ItemStack(rep), " Ot",
@@ -82,25 +82,25 @@ public class WRAddonProxy
                 "tO ",
                 'p', WirelessRedstoneCore.retherPearl,
                 't', WirelessRedstoneCore.blazeTransceiver,
-                'r', Items.redstone,
-                'g', Items.glowstone_dust,
-                'O', Blocks.obsidian);
+                'r', Items.REDSTONE,
+                'g', Items.GLOWSTONE_DUST,
+                'O', Blocks.OBSIDIAN);
 
         GameRegistry.addRecipe(new ItemStack(tracker, 1), " p ",
                 "OOO",
                 " s ",
                 'p', WirelessRedstoneCore.retherPearl,
-                's', Items.slime_ball,
-                'O', Blocks.obsidian);
+                's', Items.SLIME_BALL,
+                'O', Blocks.OBSIDIAN);
 
         GameRegistry.addRecipe(new ItemStack(psniffer), "dtd",
                 "rBr",
                 "SSS",
                 'd', WirelessRedstoneCore.blazeRecieverDish,
                 't', WirelessRedstoneCore.blazeTransceiver,
-                'r', Items.redstone,
-                'B', Blocks.stone_button,
-                'S', Blocks.stone);
+                'r', Items.REDSTONE,
+                'B', Blocks.STONE_BUTTON,
+                'S', Blocks.STONE);
     }
     
     public void openPSnifferGui(EntityPlayer player)

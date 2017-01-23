@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.core;
 
-import codechicken.lib.vec.BlockCoord;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class FreqCoord implements Comparable<FreqCoord>
 {
@@ -16,17 +16,17 @@ public class FreqCoord implements Comparable<FreqCoord>
     public FreqCoord(ITileWireless itile)
     {
         TileEntity tile = (TileEntity)itile;
-        x = tile.xCoord;
-        y = tile.yCoord;
-        z = tile.zCoord;
+        x = tile.getPos().getX();
+        y = tile.getPos().getY();
+        z = tile.getPos().getZ();
         freq = itile.getFreq();
     }
     
-    public FreqCoord(BlockCoord node, int freq)
+    public FreqCoord(BlockPos node, int freq)
     {
-        x = node.x;
-        y = node.y;
-        z = node.z;
+        x = node.getX();
+        y = node.getY();
+        z = node.getZ();
         this.freq = freq;
     }
 

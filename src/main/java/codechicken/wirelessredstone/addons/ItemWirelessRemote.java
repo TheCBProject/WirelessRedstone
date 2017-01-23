@@ -1,16 +1,19 @@
 package codechicken.wirelessredstone.addons;
 
 import codechicken.wirelessredstone.core.*;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemWirelessRemote extends ItemWirelessFreq
@@ -20,30 +23,30 @@ public class ItemWirelessRemote extends ItemWirelessFreq
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (!player.isSneaking() && stack.getItemDamage() <= 5000 && stack.getItemDamage() > 0)//not sneaking, off and valid freq
         {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = world.getTileEntity(pos);
             int freq = stack.getItemDamage();
             if (tile != null && tile instanceof ITileWireless && RedstoneEther.get(world.isRemote).canBroadcastOnFrequency(player, freq)) {
                 RedstoneEther.get(world.isRemote).setFreq((ITileWireless) tile, freq);
-                return true;
+                return EnumActionResult.SUCCESS;
             }
         }
-        onItemRightClick(stack, world, player);
-        return false;
+        onItemRightClick(stack, world, player, hand);
+        return EnumActionResult.PASS;
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer entityplayer) {
-        if (entityplayer.isSneaking()) {
-            return super.onItemRightClick(stack, world, entityplayer);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+        if (player.isSneaking()) {
+            return super.onItemRightClick(itemStack, world, player, hand);
         }
 
-        if (!getTransmitting(stack) && stack.getItemDamage() != 0)
-            RedstoneEtherAddons.get(world.isRemote).activateRemote(world, entityplayer);
+        if (!getTransmitting(itemStack) && itemStack.getItemDamage() != 0)
+            RedstoneEtherAddons.get(world.isRemote).activateRemote(world, player);
 
-        return stack;
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
     }
 
     @Override
@@ -79,37 +82,36 @@ public class ItemWirelessRemote extends ItemWirelessFreq
         stack.getTagCompound().setBoolean("on", on);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int pass) {
-        return getIconIndex(stack);
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public IIcon getIcon(ItemStack stack, int pass) {
+    //    return getIconIndex(stack);
+    //}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack) {
-        int freq = stack.getItemDamage();
-
-        if (freq <= 0 || freq > RedstoneEther.numfreqs)
-            return RemoteTexManager.getIcon(-1, false);
-
-        return RemoteTexManager.getIcon(RedstoneEther.get(true).getFreqColourId(freq), getTransmitting(stack));
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public IIcon getIconIndex(ItemStack stack) {
+    //    int freq = stack.getItemDamage();
+    //    if (freq <= 0 || freq > RedstoneEther.numfreqs)
+    //        return RemoteTexManager.getIcon(-1, false);
+    //    return RemoteTexManager.getIcon(RedstoneEther.get(true).getFreqColourId(freq), getTransmitting(stack));
+    //}
 
     @Override
     @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(
-                StatCollector.translateToLocal("wrcbe_addons.remote.short"),
+                I18n.translateToLocal("wrcbe_addons.remote.short"),
                 itemstack.getItemDamage());
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public void registerIcons(IIconRegister par1IconRegister) {
+    //}
 
+    @Override
     public String getGuiName() {
-        return StatCollector.translateToLocal("item.wrcbe_addons:remote.name");
+        return I18n.translateToLocal("item.wrcbe_addons:remote.name");
     }
 }

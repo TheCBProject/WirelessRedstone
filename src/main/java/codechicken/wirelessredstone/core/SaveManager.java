@@ -16,10 +16,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import codechicken.core.CommonUtils;
 import codechicken.lib.config.ConfigFile;
 import codechicken.lib.config.SimpleProperties;
-import codechicken.lib.vec.BlockCoord;
+import codechicken.lib.util.CommonUtils;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SaveManager
@@ -328,7 +328,7 @@ public class SaveManager
         }
     }
     
-    private void writeNodes(int freq, int numnodes, ArrayList<BlockCoord> nodes)
+    private void writeNodes(int freq, int numnodes, ArrayList<BlockPos> nodes)
     {
         try
         {        
@@ -362,11 +362,11 @@ public class SaveManager
                 
                 while(writtennodes != nodespersector && numnodes > 0)//sector node writing loop
                 {
-                    BlockCoord node = nodes.get(nodes.size() - numnodes);
+                    BlockPos node = nodes.get(nodes.size() - numnodes);
                     
-                    rwfile.writeInt(node.x);
-                    rwfile.writeInt(node.y);
-                    rwfile.writeInt(node.z);
+                    rwfile.writeInt(node.getX());
+                    rwfile.writeInt(node.getY());
+                    rwfile.writeInt(node.getZ());
                 
                     numnodes--;
                     writtennodes++;
@@ -391,7 +391,7 @@ public class SaveManager
         }
     }
     
-    public void saveFreq(int freq, int activetransmitters, TreeMap<BlockCoord, Boolean> transmittermap, Map<Integer, Integer> dimensionHash)
+    public void saveFreq(int freq, int activetransmitters, TreeMap<BlockPos, Boolean> transmittermap, Map<Integer, Integer> dimensionHash)
     {        
         try
         {            
@@ -399,11 +399,11 @@ public class SaveManager
             hashChanged = true;
             
             int numnodes = 0;
-            ArrayList<BlockCoord> nodes = new ArrayList<BlockCoord>(activetransmitters);
+            ArrayList<BlockPos> nodes = new ArrayList<BlockPos>(activetransmitters);
             
-            for(Iterator<BlockCoord> iterator = transmittermap.keySet().iterator(); iterator.hasNext() && numnodes < activetransmitters;)
+            for(Iterator<BlockPos> iterator = transmittermap.keySet().iterator(); iterator.hasNext() && numnodes < activetransmitters;)
             {
-                BlockCoord node = iterator.next();
+                BlockPos node = iterator.next();
                 if(transmittermap.get(node))
                 {
                     nodes.add(node);

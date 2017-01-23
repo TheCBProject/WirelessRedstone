@@ -1,5 +1,6 @@
 package codechicken.wirelessredstone.logic;
 
+import codechicken.multipart.IPartFactory;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -8,10 +9,9 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import codechicken.multipart.MultiPartRegistry;
 import codechicken.multipart.MultipartGenerator;
 import codechicken.multipart.TMultiPart;
-import codechicken.multipart.MultiPartRegistry.IPartFactory;
 import codechicken.wirelessredstone.core.WirelessRedstoneCore;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static codechicken.wirelessredstone.logic.WirelessRedstoneLogic.*;
 
@@ -31,7 +31,7 @@ public class WRLogicProxy implements IPartFactory
         //until CC proper integration
         //MultipartGenerator.registerPassThroughInterface("dan200.computer.api.IPeripheral");
         
-        itemwireless = new ItemWirelessPart().setCreativeTab(CreativeTabs.tabRedstone);
+        itemwireless = new ItemWirelessPart().setCreativeTab(CreativeTabs.REDSTONE);
         GameRegistry.registerItem(itemwireless, "wirelessLogic");
 
         addRecipies();
@@ -45,8 +45,8 @@ public class WRLogicProxy implements IPartFactory
                 "fff",
                 't', WirelessRedstoneCore.wirelessTransceiver,
                 's', "obsidianRod",
-                'f', new ItemStack(Blocks.stone_slab, 1, 0),
-                'r', Items.redstone));
+                'f', new ItemStack(Blocks.STONE_SLAB, 1, 0),
+                'r', Items.REDSTONE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemwireless, 1, 1),
                 "d  ",
@@ -54,17 +54,17 @@ public class WRLogicProxy implements IPartFactory
                 "fff",
                 'd', WirelessRedstoneCore.recieverDish,
                 's', "obsidianRod",
-                'f', new ItemStack(Blocks.stone_slab, 1, 0),
-                'r', Items.redstone));
+                'f', new ItemStack(Blocks.STONE_SLAB, 1, 0),
+                'r', Items.REDSTONE));
         
         GameRegistry.addRecipe(new ItemStack(itemwireless, 1, 2),
                 "p  ",
                 "srr",
                 "fff",
                 'p', WirelessRedstoneCore.blazeTransceiver,
-                's', Items.blaze_rod,
-                'f', new ItemStack(Blocks.stone_slab, 1, 0),
-                'r', Items.redstone);
+                's', Items.BLAZE_ROD,
+                'f', new ItemStack(Blocks.STONE_SLAB, 1, 0),
+                'r', Items.REDSTONE);
     }
     
     @Override

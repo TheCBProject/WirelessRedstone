@@ -2,6 +2,9 @@ package codechicken.wirelessredstone.addons;
 
 import java.util.HashMap;
 
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
@@ -9,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.MapData;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import codechicken.wirelessredstone.core.IGuiRemoteUseable;
 import codechicken.wirelessredstone.core.ItemWirelessFreq;
@@ -78,7 +80,7 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         }
     }
 
-    public void processRemote(World world, EntityPlayer player, GuiScreen currentscreen, MovingObjectPosition mop) {
+    public void processRemote(World world, EntityPlayer player, GuiScreen currentscreen, RayTraceResult hit) {
         boolean jammed = RedstoneEther.client().isPlayerJammed(player);
 
         if (remote != null && //remote is on
@@ -204,7 +206,7 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         if (!player.capabilities.isCreativeMode) {
             itemstack.stackSize--;
         }
-        world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+        world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL,  0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
         activeREP = new EntityREP(world, player);
         world.spawnEntityInWorld(activeREP);
         REPThrowTimeout = 40;
