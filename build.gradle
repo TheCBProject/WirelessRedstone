@@ -1,19 +1,16 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+
 
 //add dependency repositories
 repositories {
@@ -23,7 +20,7 @@ repositories {
 	}
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 group = "codechicken" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "WR-CBE"
@@ -50,18 +47,9 @@ println  config.mc_version + "-" + config.forge_version
 // Setup the forge minecraft plugin data. Specify the preferred forge/minecraft version here
 minecraft {
     version = config.mc_version + "-" + config.forge_version
-}
-
-def root = project.projectDir.parentFile
-sourceSets {
-    main {
-        java {
-            srcDir new File(root, "src")
-        }
-        resources {
-            srcDir new File(root, "resources")
-        }
-    }
+    mappings = config.mappings
+    makeObfSourceJar = false
+    runDir = "run"
 }
 
 processResources {
@@ -82,8 +70,6 @@ processResources {
 
 version = "${project.minecraft.version}-${project.version}"
 def commonManifest = {
-    attributes 'FMLCorePlugin': 'codechicken.core.launch.DepLoader'
-    attributes 'FMLCorePluginContainsFMLMod': 'true'
     attributes 'FMLAT': 'wrcbe_at.cfg'
 }
 
@@ -92,21 +78,20 @@ jar {
     manifest commonManifest
 }
 
-task sourceJar(type: Jar) {
+task srcJar(type: Jar) {
     from sourceSets.main.java
-    from new File(root, "dev")
-    classifier = 'src'
+    classifier = 'sources'
 }
 
-task devJar(type: Jar) {
+task deobfJar(type: Jar) {
     from sourceSets.main.output
-    classifier = 'dev'
+    classifier = 'deobf'
     manifest commonManifest
 }
 
 // Tell the artifact system about our extra jars
 artifacts {
-    archives sourceJar, devJar
+    archives src, deobfJar
 }
 
 // Configure an upload task.
