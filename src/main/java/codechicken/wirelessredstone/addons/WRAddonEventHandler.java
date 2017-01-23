@@ -88,8 +88,8 @@ public class WRAddonEventHandler
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureLoad(TextureStitchEvent.Pre event) {
-        RemoteTexManager.load(event.getMap());
-        TriangTexManager.loadTextures();
+        //RemoteTexManager.load(event.getMap());
+        //TriangTexManager.loadTextures();
     }
 
     @SubscribeEvent

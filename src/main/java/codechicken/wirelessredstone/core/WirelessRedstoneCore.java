@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = "WR-CBE|Core", dependencies = "required-after:CodeChickenCore@[" + CodeChickenCorePlugin.version + ",);" +
-        "required-after:ForgeMultipart")//have to make sure it's before all mods within this container until FML fixes proxy injection.
+        "required-after:forgemultipartcbe")//have to make sure it's before all mods within this container until FML fixes proxy injection.
 public class WirelessRedstoneCore
 {
     public static Item obsidianStick;

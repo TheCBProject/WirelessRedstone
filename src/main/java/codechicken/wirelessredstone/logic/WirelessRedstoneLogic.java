@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "WR-CBE|Logic", dependencies = "required-after:WR-CBE|Core;required-after:ForgeMultipart")
+@Mod(modid = "WR-CBE|Logic", dependencies = "required-after:WR-CBE|Core;required-after:forgemultipartcbe")
 public class WirelessRedstoneLogic
 {
     public static Item itemwireless;
