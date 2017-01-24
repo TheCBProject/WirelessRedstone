@@ -23,9 +23,9 @@ public class PartFactory implements IPartFactory {
                 "wrcbe-jamm"
         });
 
-        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.core.ITileWireless");
-        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.core.ITileReceiver");
-        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.core.ITileJammer");
+        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileWireless");
+        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileReceiver");
+        MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileJammer");
     }
 
 

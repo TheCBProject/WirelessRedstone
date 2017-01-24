@@ -12,7 +12,6 @@ import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.manager.RedstoneEther;
-import codechicken.wirelessredstone.core.WirelessRedstoneCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
