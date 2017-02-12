@@ -30,7 +30,7 @@ public class RenderItemWireless implements IItemRenderer, IPerspectiveAwareModel
 
     public RenderItemWireless() {
         for (int i = 0; i < renderParts.length; i++) {
-            renderParts[i] = ItemWirelessPart.getPart(i);
+            renderParts[i] = ItemWirelessPart.getPart(i).setRotation(2);
         }
     }
 

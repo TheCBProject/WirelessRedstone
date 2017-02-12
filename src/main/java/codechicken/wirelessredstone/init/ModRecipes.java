@@ -114,7 +114,7 @@ public class ModRecipes {
                 'p', Items.PAPER,
                 't', new ItemStack(ModItems.triangulator, 1, OreDictionary.WILDCARD_VALUE));
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.rep), " Ot",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemRep), " Ot",
                 "OpO",
                 "tO ",
                 'p', ModItems.retherPearl,

@@ -58,16 +58,18 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
         return state & 3;
     }
 
-    public void setRotation(int rot) {
+    public WirelessPart setRotation(int rot) {
         state = (byte) ((state & 0xFC) | rot);
+        return this;
     }
 
     public int side() {
         return state >> 2 & 7;
     }
 
-    public void setSide(int side) {
+    public WirelessPart setSide(int side) {
         state = (byte) ((state & 0xE3) | side << 2);
+        return this;
     }
 
     public int shape() {
@@ -251,9 +253,12 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     public abstract float getPearlLight();
 
     public double getFloating() {
-        if (tile() != null)
+
+        if (tile() != null) {
             return RedstoneEther.getSineWave(ClientUtils.getRenderTime() + x() * 3 + y() * 5 + z() * 9, 7);
-        return 0;
+        } else {// Part not in the world? Too bad, Lets have a bob anyway!
+            return RedstoneEther.getSineWave(ClientUtils.getRenderTime(), 7);
+        }
     }
 
     @Override

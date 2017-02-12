@@ -24,7 +24,7 @@ public class ModItems {
     public static Item emptyWirelessMap;
     public static ItemMap wirelessMap;
     public static ItemWirelessTracker tracker;
-    public static ItemREP rep;
+    public static ItemREP itemRep;
     public static ItemPrivateSniffer pSniffer;
 
     public static ItemStack obsidianStick;
@@ -40,16 +40,16 @@ public class ModItems {
         itemWireless = new ItemWirelessPart().setCreativeTab(WirelessRedstone.creativeTab);
         GameRegistry.register(ModItems.itemWireless.setRegistryName("wirelessLogic"));
 
-        itemMaterial = new ItemMultiType(WirelessRedstone.creativeTab, "material");
+        itemMaterial = new ItemMultiType(WirelessRedstone.creativeTab, "material").setUnlocalizedName("wrcbe:material");
         GameRegistry.register(itemMaterial);
 
-        obsidianStick = itemMaterial.registerSubItem("obsidianStick");
-        stoneBowl = itemMaterial.registerSubItem("stoneBowl");
-        retherPearl = itemMaterial.registerSubItem("retherPearl");
-        wirelessTransceiver = itemMaterial.registerSubItem("wirelessTransceiver");
-        blazeTransceiver = itemMaterial.registerSubItem("blazeTransceiver");
-        receiverDish = itemMaterial.registerSubItem("receiverDish");
-        blazeReceiverDish = itemMaterial.registerSubItem("blazeReceiverDish");
+        obsidianStick = itemMaterial.registerSubItem("obsidian_stick");
+        stoneBowl = itemMaterial.registerSubItem("stone_bowl");
+        retherPearl = itemMaterial.registerSubItem("rether_pearl");
+        wirelessTransceiver = itemMaterial.registerSubItem("wireless_transceiver");
+        blazeTransceiver = itemMaterial.registerSubItem("blaze_transceiver");
+        receiverDish = itemMaterial.registerSubItem("receiver_dish");
+        blazeReceiverDish = itemMaterial.registerSubItem("blaze_receiver_dish");
 
         OreDictionary.registerOre("obsidianRod", obsidianStick);
         OreDictionary.registerOre("stoneBowl", stoneBowl);
@@ -66,25 +66,10 @@ public class ModItems {
         GameRegistry.register(wirelessMap);
         tracker = new ItemWirelessTracker();
         GameRegistry.register(tracker.setRegistryName("tracker"));
-        rep = new ItemREP();
-        GameRegistry.register(rep.setRegistryName("rep"));
+        itemRep = new ItemREP();
+        GameRegistry.register(itemRep.setRegistryName("rep"));
         pSniffer = new ItemPrivateSniffer();
         GameRegistry.register(pSniffer.setRegistryName("p_sniffer"));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
 

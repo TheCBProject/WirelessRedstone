@@ -18,16 +18,18 @@ import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.network.WRClientPH;
 import codechicken.wirelessredstone.manager.SaveManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 
 import static codechicken.wirelessredstone.WirelessRedstone.NET_CHANNEL;
-import static codechicken.wirelessredstone.init.ModItems.rep;
+import static codechicken.wirelessredstone.init.ModItems.itemRep;
 
 /**
  * Created by covers1624 on 23/01/2017.
@@ -47,7 +49,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityREP.class, new IRenderFactory<EntityREP>() {
             @Override
             public Render<? super EntityREP> createRenderFor(RenderManager manager) {
-                return new RenderSnowball<EntityREP>(manager,rep, Minecraft.getMinecraft().getRenderItem());
+                return new RenderSnowball<EntityREP>(manager, itemRep, Minecraft.getMinecraft().getRenderItem());
             }
         });
         RenderingRegistry.registerEntityRenderingHandler(EntityWirelessTracker.class, new IRenderFactory<EntityWirelessTracker>() {
@@ -56,9 +58,15 @@ public class ClientProxy extends CommonProxy {
                 return new RenderTracker(manager);
             }
         });
+        registerModels();
+    }
 
+    private void registerModels() {
         ModelRegistryHelper.registerItemRenderer(ModItems.itemWireless, new RenderItemWireless());
 
+        ModItems.itemMaterial.registerModelVariants();
+        ModelResourceLocation location = new ModelResourceLocation("wrcbe:material", "type=rep");
+        ModelLoader.setCustomModelResourceLocation(ModItems.itemRep, 0, location);
     }
 
     @Override

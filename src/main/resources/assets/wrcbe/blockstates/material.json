@@ -1,0 +1,57 @@
+{
+	"ccl_marker": 1,
+	"variant_sets" : [
+		"type"
+	],
+	"defaults": {
+		"model": "builtin/generated",
+		"textures": {
+			"layer0": "blocks/dirt"
+		},
+		"transform": "ccl:default-item"
+	},
+	"variants": {
+		"type": {
+			"obsidian_stick": {
+				"textures": {
+					"layer0": "wrcbe:items/obsidian_stick"
+				}
+			},
+			"stone_bowl": {
+				"textures": {
+					"layer0": "wrcbe:items/stone_bowl"
+				}
+			},
+			"rether_pearl": {
+				"textures": {
+					"layer0": "wrcbe:items/rether_pearl"
+				}
+			},
+			"wireless_transceiver": {
+				"textures": {
+					"layer0": "wrcbe:items/wireless_transceiver"
+				}
+			},
+			"blaze_transceiver": {
+				"textures": {
+					"layer0": "wrcbe:items/blaze_transceiver"
+				}
+			},
+			"receiver_dish": {
+				"textures": {
+					"layer0": "wrcbe:items/receiver_dish"
+				}
+			},
+			"blaze_receiver_dish": {
+				"textures": {
+					"layer0": "wrcbe:items/blaze_receiver_dish"
+				}
+			},
+			"rep": {
+				"textures": {
+					"layer0": "wrcbe:items/rep"
+				}
+			}
+		}
+	}
+}

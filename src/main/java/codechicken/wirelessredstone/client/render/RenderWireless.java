@@ -1,10 +1,10 @@
 package codechicken.wirelessredstone.client.render;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import codechicken.lib.colour.Colour;
+import codechicken.lib.lighting.LightModel;
+import codechicken.lib.lighting.LightModel.Light;
 import codechicken.lib.lighting.PlanarLightModel;
+import codechicken.lib.math.MathHelper;
 import codechicken.lib.render.*;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.texture.TextureUtils.IIconRegister;
@@ -12,23 +12,22 @@ import codechicken.lib.vec.*;
 import codechicken.lib.vec.uv.MultiIconTransformation;
 import codechicken.wirelessredstone.part.TransceiverPart;
 import codechicken.wirelessredstone.part.WirelessPart;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-
-import codechicken.lib.math.MathHelper;
-import codechicken.lib.lighting.LightModel;
-import codechicken.lib.lighting.LightModel.Light;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 
-import static codechicken.lib.vec.Vector3.*;
-import static codechicken.lib.vec.Rotation.*;
+import java.util.Arrays;
+import java.util.Map;
 
-public class RenderWireless implements IIconRegister
-{
+import static codechicken.lib.vec.Rotation.sideOrientation;
+import static codechicken.lib.vec.Vector3.center;
+import static codechicken.lib.vec.Vector3.zero;
+
+public class RenderWireless implements IIconRegister {
     private static MultiIconTransformation model_icont;
     private static MultiIconTransformation base_icont[] = new MultiIconTransformation[2];
     private static CCModel[][] models = new CCModel[3][24];
@@ -38,6 +37,7 @@ public class RenderWireless implements IIconRegister
     private static TextureAtlasSprite off;
     private static TextureAtlasSprite blaze;
 
+    //@formatter:off
     private static LightModel lm = new LightModel()
             .setAmbient(new Vector3(0.7, 0.7, 0.7))
             .addLight(new Light(new Vector3(0.2, 1, -0.7))
@@ -49,36 +49,46 @@ public class RenderWireless implements IIconRegister
             .addLight(new Light(new Vector3(-0.7, -1, 0.2))
                     .setDiffuse(new Vector3(0.2, 0.2, 0.2)));
     private static PlanarLightModel rlm = lm.reducePlanar();
+    //@formatter:on
 
     static {
-        Map<String, CCModel> modelMap = CCOBJParser.parseObjModels(
-                new ResourceLocation("wrcbe_logic", "models/models.obj"), 7, null);
+        Map<String, CCModel> modelMap = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe", "models/logic.obj"), 7, null);
         CCModel tstand = setTex(modelMap.get("TStand"), 2);
         CCModel jstand = setTex(tstand.copy(), 1);
         CCModel rstand = setTex(modelMap.get("RStand"), 2);
         CCModel rdish = modelMap.get("RDish");
 
+        Vertex5[] verts = rdish.getVertices();
+        for (int vertexIndex = 64; vertexIndex < 96; vertexIndex++) {
+            verts[vertexIndex].uv.set(0, 0.9);
+        }
+
         models[0][0] = tstand;
         models[1][0] = CCModel.combine(Arrays.asList(rstand, rdish));
         models[2][0] = jstand;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             models[i][0].computeNormals();
+        }
 
         for (int j = 1; j < 24; j++) {
             Transformation t = sideOrientation(j >> 2, j & 3).at(center);
-            for (int i = 0; i < models.length; i++)
+            for (int i = 0; i < models.length; i++) {
                 models[i][j] = models[i][0].copy().apply(t);
+            }
         }
 
-        for (int j = 0; j < 24; j++)
-            for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 24; j++) {
+            for (int i = 0; i < 3; i++) {
                 models[i][j].computeLighting(lm);
+            }
+        }
     }
 
     private static CCModel setTex(CCModel model, int index) {
-        for (Vertex5 v : model.verts)
+        for (Vertex5 v : model.verts) {
             v.uv.tex = index;
+        }
 
         return model;
     }
@@ -104,9 +114,9 @@ public class RenderWireless implements IIconRegister
         ccrs.reset();
         ccrs.pullLightmap();
         ccrs.startDrawing(7, DefaultVertexFormats.ITEM);
-        ccrs.setPipeline(base_icont[0]);
+        ccrs.setPipeline(p.rotationT().at(center), base_icont[0]);
         BlockRenderer.renderCuboid(ccrs, WirelessPart.baseBounds(0), 0);
-        models[p.modelId()][0].render(ccrs, model_icont);
+        models[p.modelId()][p.side() << 2 | p.rotation()].render(ccrs, model_icont);
         ccrs.draw();
 
         renderPearl(ccrs, zero, p);
