@@ -19,7 +19,7 @@ public class ModItems {
     public static ItemMultiType itemMaterial;
 
     public static ItemWirelessTriangulator triangulator;
-    public static ItemWirelessRemote remote;
+    public static ItemWirelessRemote itemRemote;
     public static ItemWirelessSniffer sniffer;
     public static Item emptyWirelessMap;
     public static ItemMap wirelessMap;
@@ -56,8 +56,8 @@ public class ModItems {
 
         triangulator = new ItemWirelessTriangulator();
         GameRegistry.register(triangulator.setRegistryName("triangulator"));
-        remote = new ItemWirelessRemote();
-        GameRegistry.register(remote.setRegistryName("remote"));
+        itemRemote = new ItemWirelessRemote();
+        GameRegistry.register(itemRemote.setRegistryName("remote"));
         sniffer = new ItemWirelessSniffer();
         GameRegistry.register(sniffer.setRegistryName("sniffer"));
         emptyWirelessMap = new ItemWirelessMap("empty_map");

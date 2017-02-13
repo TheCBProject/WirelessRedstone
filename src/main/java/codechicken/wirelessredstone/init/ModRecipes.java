@@ -94,7 +94,7 @@ public class ModRecipes {
                 'i', Items.IRON_INGOT,
                 't', ModItems.wirelessTransceiver);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.remote), "t",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemRemote), "t",
                 "B",
                 'B', Blocks.STONE_BUTTON,
                 't', ModItems.wirelessTransceiver);

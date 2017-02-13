@@ -99,7 +99,7 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
 
         if (mouseClicked() &&
                 remote == null && //not already using a remote
-                player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() == ModItems.remote && //holding a remote
+                player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() == ModItems.itemRemote && //holding a remote
                 (currentscreen != null && (currentscreen instanceof IGuiRemoteUseable) && !player.isSneaking()) && //in a remote active gui where onItemRight click won't take it
                 ticksInGui > 0 && !jammed) {
             ItemStack stack = player.inventory.getCurrentItem();

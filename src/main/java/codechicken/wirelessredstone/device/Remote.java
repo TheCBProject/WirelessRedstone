@@ -40,7 +40,7 @@ public class Remote implements WirelessTransmittingDevice
         ItemStack held = owner.inventory.getCurrentItem();
         return owner.inventory.currentItem == slot && //same slot
                 held != null && //not holding nothing
-                held.getItem() == ModItems.remote && //same item type
+                held.getItem() == ModItems.itemRemote && //same item type
                 held.getItemDamage() == freq;//same freq
     }
 

@@ -1,26 +1,28 @@
 package codechicken.wirelessredstone.item;
 
+import codechicken.lib.model.blockbakery.IBakeryItem;
+import codechicken.lib.model.blockbakery.IItemBakery;
 import codechicken.wirelessredstone.WirelessRedstone;
-import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import codechicken.wirelessredstone.api.ITileWireless;
+import codechicken.wirelessredstone.client.bakery.WirelessRemoteBakery;
 import codechicken.wirelessredstone.manager.RedstoneEther;
+import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
-public class ItemWirelessRemote extends ItemWirelessFreq
-{
+public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem {
     public ItemWirelessRemote() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:remote");
@@ -48,23 +50,25 @@ public class ItemWirelessRemote extends ItemWirelessFreq
             return super.onItemRightClick(itemStack, world, player, hand);
         }
 
-        if (!getTransmitting(itemStack) && itemStack.getItemDamage() != 0)
+        if (!getTransmitting(itemStack) && itemStack.getItemDamage() != 0) {
             RedstoneEtherAddons.get(world.isRemote).activateRemote(world, player);
+        }
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean held) {
-        if (!(entity instanceof EntityPlayer))
+        if (!(entity instanceof EntityPlayer)) {
             return;
+        }
 
         int freq = getItemFreq(stack);
         EntityPlayer player = (EntityPlayer) entity;
 
-        if (getTransmitting(stack) && (!held || !RedstoneEtherAddons.get(world.isRemote).isRemoteOn(player, freq)) &&
-                !RedstoneEtherAddons.get(world.isRemote).deactivateRemote(world, player))
+        if (getTransmitting(stack) && (!held || !RedstoneEtherAddons.get(world.isRemote).isRemoteOn(player, freq)) && !RedstoneEtherAddons.get(world.isRemote).deactivateRemote(world, player)) {
             stack.setItemDamage(freq);
+        }
     }
 
     @Override
@@ -83,7 +87,9 @@ public class ItemWirelessRemote extends ItemWirelessFreq
     }
 
     public static void setOn(ItemStack stack, boolean on) {
-        if(!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
         stack.getTagCompound().setBoolean("on", on);
     }
 
@@ -103,11 +109,9 @@ public class ItemWirelessRemote extends ItemWirelessFreq
     //}
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public String getItemStackDisplayName(ItemStack itemstack) {
-        return RedstoneEtherAddons.localizeWirelessItem(
-                I18n.translateToLocal("wrcbe_addons.remote.short"),
-                itemstack.getItemDamage());
+        return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("wrcbe_addons.remote.short"), itemstack.getItemDamage());
     }
 
     //@Override
@@ -118,5 +122,11 @@ public class ItemWirelessRemote extends ItemWirelessFreq
     @Override
     public String getGuiName() {
         return I18n.translateToLocal("item.wrcbe_addons:remote.name");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IItemBakery getBakery() {
+        return WirelessRemoteBakery.INSTANCE;
     }
 }

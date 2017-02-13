@@ -2,11 +2,14 @@ package codechicken.wirelessredstone.proxy;
 
 import codechicken.core.CCUpdateChecker;
 import codechicken.lib.model.ModelRegistryHelper;
+import codechicken.lib.model.blockbakery.BlockBakery;
+import codechicken.lib.model.blockbakery.IItemStackKeyGenerator;
 import codechicken.lib.packet.PacketCustom;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.client.gui.GuiPrivateSniffer;
 import codechicken.wirelessredstone.client.render.item.RenderItemWireless;
+import codechicken.wirelessredstone.client.texture.RemoteTexManager;
 import codechicken.wirelessredstone.entity.EntityREP;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.client.gui.GuiWirelessSniffer;
@@ -15,14 +18,17 @@ import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.client.gui.GuiRedstoneWireless;
 import codechicken.wirelessredstone.client.render.RenderWireless;
 import codechicken.wirelessredstone.init.ModItems;
+import codechicken.wirelessredstone.item.ItemWirelessRemote;
 import codechicken.wirelessredstone.network.WRClientPH;
 import codechicken.wirelessredstone.manager.SaveManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -41,6 +47,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
         GuiWirelessSniffer.loadColours(SaveManager.config().getTag("addon"));
         TextureUtils.addIconRegister(new RenderWireless());
+        TextureUtils.addIconRegister(new RemoteTexManager());
         if (SaveManager.config().getTag("checkUpdates").getBooleanValue(true)) {
             CCUpdateChecker.updateCheck("WR-CBE", WirelessRedstone.class.getAnnotation(Mod.class).version());
         }
@@ -67,6 +74,20 @@ public class ClientProxy extends CommonProxy {
         ModItems.itemMaterial.registerModelVariants();
         ModelResourceLocation location = new ModelResourceLocation("wrcbe:material", "type=rep");
         ModelLoader.setCustomModelResourceLocation(ModItems.itemRep, 0, location);
+
+        ModelLoader.setCustomMeshDefinition(ModItems.itemRemote, new ItemMeshDefinition() {
+            @Override
+            public ModelResourceLocation getModelLocation(ItemStack stack) {
+                return new ModelResourceLocation("wrcbe:device", "type=wireless_remote");
+            }
+        });
+        ModelLoader.setCustomModelResourceLocation(ModItems.itemRemote, 0, new ModelResourceLocation("wrcbe:device", "type=wireless_remote"));
+        BlockBakery.registerItemKeyGenerator(ModItems.itemRemote, new IItemStackKeyGenerator() {
+            @Override
+            public String generateKey(ItemStack stack) {
+                return stack.getItem().getRegistryName().toString() + "|" + stack.getMetadata() + "," + ItemWirelessRemote.getTransmitting(stack);
+            }
+        });
     }
 
     @Override
