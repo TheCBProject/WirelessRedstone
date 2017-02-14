@@ -22,12 +22,12 @@ public class RemoteTexManager implements IIconRegister {
     public void registerIcons(TextureMap textureMap) {
 
         for (int i = 0; i < icons.length; i++) {
-            icons[i] = TextureUtils.getTextureSpecial(textureMap, "wrcbe_addons:remote_" + i);
+            icons[i] = TextureUtils.getTextureSpecial(textureMap, "wrcbe:remote_" + i);
         }
 
-        texOn = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe_addons", "textures/items/remoteOn.png"));
-        texOff = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe_addons", "textures/items/remoteOff.png"));
-        texGrad = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe_addons", "textures/items/remoteGrad.png"));
+        texOn = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe", "textures/items/remote_on.png"));
+        texOff = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe", "textures/items/remote_off.png"));
+        texGrad = TextureUtils.loadTextureColours(new ResourceLocation("wrcbe", "textures/items/remote_grad.png"));
 
         for (int i = 0; i < RedstoneEther.numcolours; i++) {
             processTexture(RedstoneEther.colours[i], false, getIconIndex(i, false));

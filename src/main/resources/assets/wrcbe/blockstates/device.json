@@ -3,10 +3,28 @@
 	"variant_sets" : [
 		"type"
 	],
+	"texture_domain" : "wrcbe",
 	"variants": {
 		"type": {
 			"wireless_remote": {
 				"model" : "ccl:bakery"
+			},
+			"wireless_triangulator": {
+				"model" : "ccl:bakery"
+			},
+			"sniffer": {
+				"model": "builtin/generated",
+				"textures": {
+					"layer0": "items/sniffer"
+				},
+				"transform": "ccl:default-item"
+			},
+			"private_sniffer": {
+				"model": "builtin/generated",
+				"textures": {
+					"layer0": "items/private_sniffer"
+				},
+				"transform": "ccl:default-item"
 			}
 		}
 	}

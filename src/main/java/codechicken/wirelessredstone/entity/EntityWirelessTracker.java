@@ -150,7 +150,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        if (!this.worldObj.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.tracker, 1, freq)))
+        if (!this.worldObj.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.itemTracker, 1, freq)))
         {
             //TODO SoundCat for this.
             this.worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);

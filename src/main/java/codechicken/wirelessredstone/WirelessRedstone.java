@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -29,6 +30,9 @@ public class WirelessRedstone {
 
     @SidedProxy (clientSide = "codechicken.wirelessredstone.proxy.ClientProxy", serverSide = "codechicken.wirelessredstone.proxy.CommonProxy")
     public static CommonProxy proxy;
+
+    @Instance(Reference.MOD_ID)
+    public static WirelessRedstone instance;
 
     public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", "wrcbe:wirelessLogic", 1);
     public static DamageSource damageBolt;

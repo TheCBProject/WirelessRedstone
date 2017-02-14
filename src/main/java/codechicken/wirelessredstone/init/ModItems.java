@@ -18,14 +18,14 @@ public class ModItems {
 
     public static ItemMultiType itemMaterial;
 
-    public static ItemWirelessTriangulator triangulator;
+    public static ItemWirelessTriangulator itemTriangulator;
     public static ItemWirelessRemote itemRemote;
-    public static ItemWirelessSniffer sniffer;
+    public static ItemWirelessSniffer itemSniffer;
     public static Item emptyWirelessMap;
     public static ItemMap wirelessMap;
-    public static ItemWirelessTracker tracker;
+    public static ItemWirelessTracker itemTracker;
     public static ItemREP itemRep;
-    public static ItemPrivateSniffer pSniffer;
+    public static ItemPrivateSniffer itemPrivateSniffer;
 
     public static ItemStack obsidianStick;
     public static ItemStack stoneBowl;
@@ -54,22 +54,22 @@ public class ModItems {
         OreDictionary.registerOre("obsidianRod", obsidianStick);
         OreDictionary.registerOre("stoneBowl", stoneBowl);
 
-        triangulator = new ItemWirelessTriangulator();
-        GameRegistry.register(triangulator.setRegistryName("triangulator"));
+        itemTriangulator = new ItemWirelessTriangulator();
+        GameRegistry.register(itemTriangulator.setRegistryName("triangulator"));
         itemRemote = new ItemWirelessRemote();
         GameRegistry.register(itemRemote.setRegistryName("remote"));
-        sniffer = new ItemWirelessSniffer();
-        GameRegistry.register(sniffer.setRegistryName("sniffer"));
+        itemSniffer = new ItemWirelessSniffer();
+        GameRegistry.register(itemSniffer.setRegistryName("sniffer"));
         emptyWirelessMap = new ItemWirelessMap("empty_map");
         GameRegistry.register(emptyWirelessMap);
         wirelessMap = new ItemWirelessMap("map");
         GameRegistry.register(wirelessMap);
-        tracker = new ItemWirelessTracker();
-        GameRegistry.register(tracker.setRegistryName("tracker"));
+        itemTracker = new ItemWirelessTracker();
+        GameRegistry.register(itemTracker.setRegistryName("tracker"));
         itemRep = new ItemREP();
         GameRegistry.register(itemRep.setRegistryName("rep"));
-        pSniffer = new ItemPrivateSniffer();
-        GameRegistry.register(pSniffer.setRegistryName("p_sniffer"));
+        itemPrivateSniffer = new ItemPrivateSniffer();
+        GameRegistry.register(itemPrivateSniffer.setRegistryName("p_sniffer"));
     }
 
 

@@ -88,7 +88,7 @@ public class ModRecipes {
                 't', blazeTransceiver,
                 'b', "stoneBowl"));
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.triangulator), " i ",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemTriangulator), " i ",
                 "iti",
                 " i ",
                 'i', Items.IRON_INGOT,
@@ -99,7 +99,7 @@ public class ModRecipes {
                 'B', Blocks.STONE_BUTTON,
                 't', ModItems.wirelessTransceiver);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.sniffer), "dtd",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemSniffer), "dtd",
                 "rBr",
                 "SSS",
                 'd', ModItems.receiverDish,
@@ -112,7 +112,7 @@ public class ModRecipes {
                 "ptp",
                 "ppp",
                 'p', Items.PAPER,
-                't', new ItemStack(ModItems.triangulator, 1, OreDictionary.WILDCARD_VALUE));
+                't', new ItemStack(ModItems.itemTriangulator, 1, OreDictionary.WILDCARD_VALUE));
 
         GameRegistry.addRecipe(new ItemStack(ModItems.itemRep), " Ot",
                 "OpO",
@@ -123,14 +123,14 @@ public class ModRecipes {
                 'g', Items.GLOWSTONE_DUST,
                 'O', Blocks.OBSIDIAN);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.tracker, 1), " p ",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemTracker, 1), " p ",
                 "OOO",
                 " s ",
                 'p', ModItems.retherPearl,
                 's', Items.SLIME_BALL,
                 'O', Blocks.OBSIDIAN);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.pSniffer), "dtd",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemPrivateSniffer), "dtd",
                 "rBr",
                 "SSS",
                 'd', ModItems.blazeReceiverDish,

@@ -1,12 +1,21 @@
 package codechicken.wirelessredstone.client.render;
 
 import codechicken.lib.render.*;
+import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.util.ClientUtils;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import codechicken.lib.vec.Matrix4;
@@ -16,19 +25,27 @@ import codechicken.lib.vec.Translation;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
+import java.util.List;
 
 import static codechicken.lib.math.MathHelper.*;
 
-public class RenderTracker extends RenderEntity //implements IItemRenderer
+public class RenderTracker extends RenderEntity
 {
     private static CCModel model;
     
     static
     {
-        model = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe_addons", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
+        model = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
         model.apply(new Translation(0, 0.1875, 0));
     }
 
@@ -36,13 +53,7 @@ public class RenderTracker extends RenderEntity //implements IItemRenderer
         super(renderManagerIn);
     }
     
-    /*@Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type)
-    {
-        return true;
-    }*/
-    
-    public void renderTracker(int freq)
+    public static void renderTracker(int freq)
     {
         GlStateManager.disableLighting();
 
@@ -107,35 +118,4 @@ public class RenderTracker extends RenderEntity //implements IItemRenderer
         renderTracker(tracker.freq);
         GlStateManager.popMatrix();
     }
-
-    //@Override
-    //public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-    //    return true;
-    //}
-
-    /*@SuppressWarnings("incomplete-switch")
-    @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data)
-    {
-        switch(type)
-        {
-            case ENTITY:
-                GL11.glScaled(1.9, 1.9, 1.9);
-                renderTracker(item.getItemDamage());                
-            break;
-            case EQUIPPED:
-            case EQUIPPED_FIRST_PERSON:
-                GL11.glPushMatrix();
-                GL11.glTranslated(0.4, 0.3, 0.5);
-                GL11.glScaled(2, 2, 2);
-                renderTracker(item.getItemDamage());
-                GL11.glPopMatrix();
-            break;
-            case INVENTORY:
-                GL11.glTranslated(0, -0.7, 0);
-                GL11.glScalef(2, 2, 2);
-                renderTracker(item.getItemDamage());
-            break;
-        }
-    }*/
 }

@@ -1,25 +1,22 @@
 package codechicken.wirelessredstone.item;
 
+import codechicken.lib.model.blockbakery.IBakeryItem;
+import codechicken.lib.model.blockbakery.IItemBakery;
 import codechicken.wirelessredstone.WirelessRedstone;
+import codechicken.wirelessredstone.client.bakery.WirelessTriangulatorBakery;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWirelessTriangulator extends ItemWirelessFreq
+public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBakeryItem
 {
     public ItemWirelessTriangulator() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:triangulator");
         setMaxStackSize(1);
     }
-
-    //public IIcon getIconFromDamage(int damage) {
-    //    if (damage < 0 || damage > RedstoneEther.numfreqs)
-    //        damage = 0;
-    //    return TriangTexManager.getIconFromDamage(damage);
-    //}
 
     public int getItemFreq(ItemStack itemstack) {
         return itemstack.getItemDamage();
@@ -37,8 +34,8 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq
         return I18n.translateToLocal("item.wrcbe_addons:triangulator.name");
     }
 
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister par1IconRegister) {
-    //}
+    @Override
+    public IItemBakery getBakery() {
+        return WirelessTriangulatorBakery.INSTANCE;
+    }
 }
