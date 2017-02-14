@@ -37,13 +37,13 @@ public class RenderWirelessBolt
 
         ccrs.reset();
         ccrs.brightness = 0xF000F0;
-        TextureUtils.changeTexture("wrcbe_core:textures/lightning_glowstone.png");
+        TextureUtils.changeTexture("wrcbe:textures/lightning_glowstone.png");
         ccrs.startDrawing(7, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
         for(WirelessBolt bolt : WirelessBolt.clientboltlist)
             renderBolt(ccrs.getBuffer(), bolt, 0, 0xF000F0);
         ccrs.draw();
 
-        TextureUtils.changeTexture("wrcbe_core:textures/lightning_redstone.png");
+        TextureUtils.changeTexture("wrcbe:textures/lightning_redstone.png");
         ccrs.startDrawing(7, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
         for(WirelessBolt bolt : WirelessBolt.clientboltlist)
             renderBolt(ccrs.getBuffer(), bolt, 1, 0xF000F0);

@@ -322,9 +322,9 @@ public class GuiRedstoneWireless extends GuiScreenWidget implements IGuiRemoteUs
     @Override
     public void drawBackground() {
         if (largeGui) {
-            TextureUtils.changeTexture("wrcbe_core:textures/gui/wirelessLarge.png");
+            TextureUtils.changeTexture("wrcbe:textures/gui/wirelessLarge.png");
         } else
-            TextureUtils.changeTexture("wrcbe_core:textures/gui/wirelessSmall.png");
+            TextureUtils.changeTexture("wrcbe:textures/gui/wirelessSmall.png");
         GlStateManager.color(1, 1, 1, 1);
         drawTexturedModalRect(0, 0, 0, 0, xSize, ySize);
     }

@@ -70,7 +70,7 @@ public class RenderTracker extends RenderEntity
             new Rotation(RedstoneEther.getRotation(ClientUtils.getRenderTime(), freq), new Vector3(0, 1, 0)),
             0.04);
 
-        TextureUtils.changeTexture("wrcbe_core:textures/hedronmap.png");
+        TextureUtils.changeTexture("wrcbe:textures/hedronmap.png");
         ccrs.startDrawing(4, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         ccrs.colour = freq == 0 ? 0xC0C0C0FF : 0xFFFFFFFF;
         CCModelLibrary.icosahedron4.render(ccrs, pearlMat);

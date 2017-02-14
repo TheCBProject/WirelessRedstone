@@ -32,7 +32,7 @@ public class GuiButtonArrow extends GuiCCButton
     
     private void drawArrow(int x, int y, int colour)
     {
-        TextureUtils.changeTexture("wrcbe_core:textures/gui/arrow.png");
+        TextureUtils.changeTexture("wrcbe:textures/gui/arrow.png");
         
         new ColourARGB(colour).glColour();
         Tessellator t = Tessellator.getInstance();

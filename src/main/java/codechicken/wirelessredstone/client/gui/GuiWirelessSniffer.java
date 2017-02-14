@@ -75,7 +75,7 @@ public class GuiWirelessSniffer extends GuiScreen
             endfreq = RedstoneEther.numfreqs;
         
         GlStateManager.color(1, 1, 1, 1);
-        TextureUtils.changeTexture("wrcbe_addons:textures/gui/sniffer.png");
+        TextureUtils.changeTexture("wrcbe:textures/gui/sniffer.png");
         drawTexturedModalRect(backtexx, backtexy, 0, 0, xSize, ySize);
 
         GlStateManager.pushMatrix();

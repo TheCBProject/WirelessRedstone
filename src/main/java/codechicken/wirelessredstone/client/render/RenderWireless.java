@@ -179,7 +179,7 @@ public class RenderWireless implements IIconRegister {
 
         GlStateManager.disableLighting();
         ccrs.reset();
-        TextureUtils.changeTexture("wrcbe_core:textures/hedronmap.png");
+        TextureUtils.changeTexture("wrcbe:textures/hedronmap.png");
         ccrs.pullLightmap();
         ccrs.colour = Colour.packRGBA(light, light, light, 1);
         ccrs.startDrawing(4, DefaultVertexFormats.POSITION_TEX_NORMAL);
