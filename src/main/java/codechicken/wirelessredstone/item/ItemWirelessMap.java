@@ -1,5 +1,6 @@
 package codechicken.wirelessredstone.item;
 
+import codechicken.lib.util.ClientUtils;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import net.minecraft.entity.Entity;
@@ -14,13 +15,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemWirelessMap extends ItemMap {
 
 
-    public ItemWirelessMap(String name) {
-        setUnlocalizedName("wrcbe:" + name);
-        setRegistryName(name);
+    public ItemWirelessMap() {
+        setUnlocalizedName("wrcbe:map");
         setCreativeTab(WirelessRedstone.creativeTab);
     }
-
-
 
     @Override
     @SideOnly (Side.CLIENT)
@@ -29,14 +27,18 @@ public class ItemWirelessMap extends ItemMap {
         EntityPlayer player = (EntityPlayer) entity;
         if (held) {
             if (slotno != lastheldmap) {
-                RedstoneEtherAddons.client().clearMapNodes(player);
-                lastheldmap = slotno;
+                if (ClientUtils.inWorld()) {
+                    RedstoneEtherAddons.client().clearMapNodes(player);
+                    lastheldmap = slotno;
+                }
             }
         } else {
             ItemStack helditem = player.inventory.getCurrentItem();
             if ((helditem == null || helditem.getItem() != this) && lastheldmap >= 0) {
-                lastheldmap = -1;
-                RedstoneEtherAddons.client().clearMapNodes(player);
+                if (ClientUtils.inWorld()) {
+                    RedstoneEtherAddons.client().clearMapNodes(player);
+                    lastheldmap = -1;
+                }
             }
         }
     }

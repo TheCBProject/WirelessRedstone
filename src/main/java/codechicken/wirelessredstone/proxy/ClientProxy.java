@@ -5,6 +5,7 @@ import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.model.blockbakery.BlockBakery;
 import codechicken.lib.model.blockbakery.IItemStackKeyGenerator;
 import codechicken.lib.packet.PacketCustom;
+import codechicken.lib.render.item.map.MapRenderRegistry;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.api.ITileWireless;
@@ -13,6 +14,7 @@ import codechicken.wirelessredstone.client.gui.GuiRedstoneWireless;
 import codechicken.wirelessredstone.client.gui.GuiWirelessSniffer;
 import codechicken.wirelessredstone.client.render.RenderTracker;
 import codechicken.wirelessredstone.client.render.RenderWireless;
+import codechicken.wirelessredstone.client.render.WirelessMapRenderer;
 import codechicken.wirelessredstone.client.render.item.RenderItemTracker;
 import codechicken.wirelessredstone.client.render.item.RenderItemWireless;
 import codechicken.wirelessredstone.client.texture.RemoteTexManager;
@@ -59,6 +61,8 @@ public class ClientProxy extends CommonProxy {
         }
         PacketCustom.assignHandler(NET_CHANNEL, new WRClientPH());
 
+        MapRenderRegistry.registerMapRenderer(ModItems.itemWirelessMap, new WirelessMapRenderer());
+
         RenderingRegistry.registerEntityRenderingHandler(EntityREP.class, new IRenderFactory<EntityREP>() {
             @Override
             public Render<? super EntityREP> createRenderFor(RenderManager manager) {
@@ -90,7 +94,7 @@ public class ClientProxy extends CommonProxy {
                 return new ModelResourceLocation("wrcbe:device", "type=wireless_remote");
             }
         });
-        ModelLoader.setCustomModelResourceLocation(ModItems.itemRemote, 0, new ModelResourceLocation("wrcbe:device", "type=wireless_remote"));
+        ModelLoader.registerItemVariants(ModItems.itemRemote, new ModelResourceLocation("wrcbe:device", "type=wireless_remote"));
         BlockBakery.registerItemKeyGenerator(ModItems.itemRemote, new IItemStackKeyGenerator() {
             @Override
             public String generateKey(ItemStack stack) {
@@ -104,7 +108,7 @@ public class ClientProxy extends CommonProxy {
                 return new ModelResourceLocation("wrcbe:device", "type=wireless_triangulator");
             }
         });
-        ModelBakery.registerItemVariants(ModItems.itemTriangulator, new ModelResourceLocation("wrcbe:device", "type=wireless_triangulator"));
+        ModelLoader.registerItemVariants(ModItems.itemTriangulator, new ModelResourceLocation("wrcbe:device", "type=wireless_triangulator"));
         BlockBakery.registerItemKeyGenerator(ModItems.itemTriangulator, new IItemStackKeyGenerator() {
             @Override
             public String generateKey(ItemStack stack) {
@@ -121,6 +125,14 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(ModItems.itemPrivateSniffer, 0, new ModelResourceLocation("wrcbe:device", "type=private_sniffer"));
 
         ModelRegistryHelper.registerItemRenderer(ModItems.itemTracker, new RenderItemTracker());
+        ModelLoader.setCustomModelResourceLocation(ModItems.itemEmptyWirelessMap, 0, new ModelResourceLocation("wrcbe:device", "type=empty_wireless_map"));
+        ModelLoader.registerItemVariants(ModItems.itemWirelessMap, new ModelResourceLocation("wrcbe:device", "type=wireless_map"));
+        ModelLoader.setCustomMeshDefinition(ModItems.itemWirelessMap, new ItemMeshDefinition() {
+            @Override
+            public ModelResourceLocation getModelLocation(ItemStack stack) {
+                return new ModelResourceLocation("wrcbe:device", "type=wireless_map");
+            }
+        });
     }
 
     @Override

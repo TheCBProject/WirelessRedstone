@@ -9,8 +9,8 @@ public class ClientMapInfo
         this.scale = scale;
     }
     
-    int xCenter;
-    int zCenter;
-    byte scale;
+    public int xCenter;
+    public int zCenter;
+    public byte scale;
     int dimension;
 }

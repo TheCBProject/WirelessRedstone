@@ -1,16 +1,16 @@
 {
 	"ccl_marker": 1,
-	"variant_sets" : [
+	"variant_sets": [
 		"type"
 	],
-	"texture_domain" : "wrcbe",
+	"texture_domain": "wrcbe",
 	"variants": {
 		"type": {
 			"wireless_remote": {
-				"model" : "ccl:bakery"
+				"model": "ccl:bakery"
 			},
 			"wireless_triangulator": {
-				"model" : "ccl:bakery"
+				"model": "ccl:bakery"
 			},
 			"sniffer": {
 				"model": "builtin/generated",
@@ -23,6 +23,20 @@
 				"model": "builtin/generated",
 				"textures": {
 					"layer0": "items/private_sniffer"
+				},
+				"transform": "ccl:default-item"
+			},
+			"wireless_map": {
+				"model": "builtin/generated",
+				"textures": {
+					"layer0": "items/map"
+				},
+				"transform": "ccl:default-item"
+			},
+			"empty_wireless_map": {
+				"model": "builtin/generated",
+				"textures": {
+					"layer0": "items/empty_map"
 				},
 				"transform": "ccl:default-item"
 			}

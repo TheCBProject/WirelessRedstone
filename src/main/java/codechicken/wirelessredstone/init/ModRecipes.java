@@ -108,7 +108,7 @@ public class ModRecipes {
                 'B', Blocks.STONE_BUTTON,
                 'S', Blocks.STONE);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.wirelessMap, 1), "ppp",
+        GameRegistry.addRecipe(new ItemStack(ModItems.itemWirelessMap, 1), "ppp",
                 "ptp",
                 "ppp",
                 'p', Items.PAPER,

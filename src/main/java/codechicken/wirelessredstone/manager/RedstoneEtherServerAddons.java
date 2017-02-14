@@ -139,7 +139,7 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         for (EntityPlayer player : players) {
             ItemStack helditem = player.getHeldItemMainhand();//TODO Hands?
 
-            if (helditem == null || helditem.getItem() != ModItems.wirelessMap || RedstoneEther.server().isPlayerJammed(player)) {
+            if (helditem == null || helditem.getItem() != ModItems.itemWirelessMap || RedstoneEther.server().isPlayerJammed(player)) {
                 continue;
             }
 

@@ -21,8 +21,8 @@ public class ModItems {
     public static ItemWirelessTriangulator itemTriangulator;
     public static ItemWirelessRemote itemRemote;
     public static ItemWirelessSniffer itemSniffer;
-    public static Item emptyWirelessMap;
-    public static ItemMap wirelessMap;
+    public static Item itemEmptyWirelessMap;
+    public static ItemMap itemWirelessMap;
     public static ItemWirelessTracker itemTracker;
     public static ItemREP itemRep;
     public static ItemPrivateSniffer itemPrivateSniffer;
@@ -60,10 +60,10 @@ public class ModItems {
         GameRegistry.register(itemRemote.setRegistryName("remote"));
         itemSniffer = new ItemWirelessSniffer();
         GameRegistry.register(itemSniffer.setRegistryName("sniffer"));
-        emptyWirelessMap = new ItemWirelessMap("empty_map");
-        GameRegistry.register(emptyWirelessMap);
-        wirelessMap = new ItemWirelessMap("map");
-        GameRegistry.register(wirelessMap);
+        itemEmptyWirelessMap = new ItemEmptyWirelessMap();
+        GameRegistry.register(itemEmptyWirelessMap.setRegistryName("empty_map"));
+        itemWirelessMap = new ItemWirelessMap();
+        GameRegistry.register(itemWirelessMap.setRegistryName("map"));
         itemTracker = new ItemWirelessTracker();
         GameRegistry.register(itemTracker.setRegistryName("tracker"));
         itemRep = new ItemREP();

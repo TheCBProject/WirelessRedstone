@@ -1,5 +1,6 @@
 package codechicken.wirelessredstone.item;
 
+import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.init.ModItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMapBase;
@@ -10,11 +11,17 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapData;
 
-public class ItemEmptyWirelessMap extends ItemMapBase
-{
+public class ItemEmptyWirelessMap extends ItemMapBase {
+
+    public ItemEmptyWirelessMap() {
+        setUnlocalizedName("wrcbe:empty_map");
+        setCreativeTab(WirelessRedstone.creativeTab);
+    }
+
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        ItemStack itemstack1 = new ItemStack(ModItems.wirelessMap, 1, worldIn.getUniqueDataId("map"));
+        ItemStack itemstack1 = new ItemStack(ModItems.itemWirelessMap, 1, worldIn.getUniqueDataId("map"));
         String s = "map_" + itemstack1.getItemDamage();
         MapData mapdata = new MapData(s);
         worldIn.setItemData(s, mapdata);
