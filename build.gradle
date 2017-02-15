@@ -25,6 +25,7 @@ repositories {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
 group = "codechicken" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "WR-CBE"
@@ -102,14 +103,50 @@ artifacts {
 
 // Configure an upload task.
 uploadArchives {
-    dependsOn 'reobf'
-	if (project.hasProperty("local_maven")) {
-		repositories {
-			logger.info('Publishing to local maven repo')
-
-			mavenDeployer {
-				repository(url: "file://${local_maven}")
-			}
-		}
-	}
+    repositories {
+        mavenDeployer {
+            if (project.hasProperty("local_maven")) {
+                repository(url: "file://${local_maven}")
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'WR-CBE'
+                        url 'https://github.com/TheCBProject/WirelessRedstone'
+                        scm {
+                            url 'https://github.com/TheCBProject/WirelessRedstone'
+                            connection 'scm:git:git@github.com:TheCBProject/WirelessRedstone.git'
+                            developerConnection 'scm:git:git@github.com:TheCBProject/WirelessRedstone.git'
+                        }
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/TheCBProject/WirelessRedstone/issues'
+                        }
+                        licenses {
+                            license {
+                                name 'License'
+                                url 'https://raw.githubusercontent.com/TheCBProject/WirelessRedstone/master/LICENSE.txt'
+                                distribution 'repo'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id 'chicken-bones'
+                                name 'chicken-bones'
+                                roles { role 'owner' }
+                            }
+                            developer {
+                                id 'covers1624'
+                                name 'covers1624'
+                                roles { role 'maintainer' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
