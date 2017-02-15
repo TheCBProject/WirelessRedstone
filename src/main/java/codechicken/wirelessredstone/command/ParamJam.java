@@ -17,9 +17,9 @@ public class ParamJam extends FreqParam
 {
     @Override
     public void printHelp(ICommandSender listener) {
-        CoreCommand.chatT(listener, "wrcbe_core.param.jam.usage");
-        CoreCommand.chatT(listener, "wrcbe_core.param.jam.usage1");
-        CoreCommand.chatT(listener, "wrcbe_core.param.jam.usage" + (rand.nextInt(5) + 2), "jam");
+        CoreCommand.chatT(listener, "wrcbe.param.jam.usage");
+        CoreCommand.chatT(listener, "wrcbe.param.jam.usage1");
+        CoreCommand.chatT(listener, "wrcbe.param.jam.usage" + (rand.nextInt(5) + 2), "jam");
     }
 
     @Override
@@ -36,12 +36,12 @@ public class ParamJam extends FreqParam
         RedstoneEtherServer ether = RedstoneEther.server();
 
         if (args.length == 0) {
-            CoreCommand.chatT(listener, "wrcbe_core.param.invalidno");
+            CoreCommand.chatT(listener, "wrcbe.param.invalidno");
             return;
         }
 
         if ((args.length == 1 && ServerUtils.getPlayer(playername) == null)) {
-            CoreCommand.chatT(listener, "wrcbe_core.param.jam.noplayer");
+            CoreCommand.chatT(listener, "wrcbe.param.jam.noplayer");
             return;
         }
 
@@ -64,7 +64,7 @@ public class ParamJam extends FreqParam
         }
 
         if (startfreq < 1 || endfreq > RedstoneEther.numfreqs || endfreq < startfreq) {
-            CoreCommand.chatT(listener, "wrcbe_core.param.invalidfreqrange");
+            CoreCommand.chatT(listener, "wrcbe.param.invalidfreqrange");
             return;
         }
 
@@ -76,23 +76,23 @@ public class ParamJam extends FreqParam
         Style playerStyle = new Style().setColor(TextFormatting.YELLOW);
         if (startfreq == endfreq) {
             if (startfreq <= publicend) {
-                CoreCommand.chatT(listener, "wrcbe_core.param.jam.errpublic");
+                CoreCommand.chatT(listener, "wrcbe.param.jam.errpublic");
                 return;
             }
-            CoreCommand.chatOpsT("wrcbe_core.param."+paramName+".opjammed", playername, jamPlayer, startfreq);
+            CoreCommand.chatOpsT("wrcbe.param."+paramName+".opjammed", playername, jamPlayer, startfreq);
             if (player != null)
-                player.addChatMessage(new TextComponentTranslation("wrcbe_core.param."+paramName+".jammed", startfreq).setStyle(playerStyle));
+                player.addChatMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed", startfreq).setStyle(playerStyle));
         } else {
             if (startfreq <= publicend && endfreq <= publicend) {
-                CoreCommand.chatT(listener, "wrcbe_core.param.jam.errpublic");
+                CoreCommand.chatT(listener, "wrcbe.param.jam.errpublic");
                 return;
             }
             if (startfreq <= publicend)
                 startfreq = publicend + 1;
 
-            CoreCommand.chatOpsT("wrcbe_core.param."+paramName+".opjammed2", playername, jamPlayer, startfreq + "-" + endfreq);
+            CoreCommand.chatOpsT("wrcbe.param."+paramName+".opjammed2", playername, jamPlayer, startfreq + "-" + endfreq);
             if (player != null)
-                player.addChatComponentMessage(new TextComponentTranslation("wrcbe_core.param."+paramName+".jammed2", startfreq + "-" + endfreq).setStyle(playerStyle));
+                player.addChatComponentMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed2", startfreq + "-" + endfreq).setStyle(playerStyle));
         }
     }
 }

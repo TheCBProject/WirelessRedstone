@@ -38,7 +38,7 @@ public class CommandFreq extends CoreCommand
                     return;
                 }
             }
-            chatT(listener, "wrcbe_core.param.missing");
+            chatT(listener, "wrcbe.param.missing");
             return;
         }
         
@@ -50,13 +50,13 @@ public class CommandFreq extends CoreCommand
                 return;
             }
         }
-        chatT(listener, "wrcbe_core.param.missing");
+        chatT(listener, "wrcbe.param.missing");
     }
     
     @Override
     public void printHelp(ICommandSender listener)
     {
-        chatT(listener, "wrcbe_core.command.usage");
+        chatT(listener, "wrcbe.command.usage");
         StringBuilder paramNames = new StringBuilder();
         for(FreqParam param : paramHandlers)
         {
@@ -64,8 +64,8 @@ public class CommandFreq extends CoreCommand
                 paramNames.append(", ");
             paramNames.append(param.getName());
         }
-        chatT(listener, "wrcbe_core.command.usage1", paramNames.toString());
-        chatT(listener, "wrcbe_core.command.usage2");
+        chatT(listener, "wrcbe.command.usage1", paramNames.toString());
+        chatT(listener, "wrcbe.command.usage2");
     }
 
     @Override

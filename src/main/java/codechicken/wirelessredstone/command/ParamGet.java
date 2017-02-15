@@ -9,10 +9,10 @@ public class ParamGet extends FreqParam
     @Override
     public void printHelp(ICommandSender listener)
     {
-        CoreCommand.chatT(listener, "wrcbe_core.param.get.usage");
-        CoreCommand.chatT(listener, "wrcbe_core.param.get.usage1");
-        CoreCommand.chatT(listener, "wrcbe_core.param.get.usage2");
-        CoreCommand.chatT(listener, "wrcbe_core.param.get.usage3");
+        CoreCommand.chatT(listener, "wrcbe.param.get.usage");
+        CoreCommand.chatT(listener, "wrcbe.param.get.usage1");
+        CoreCommand.chatT(listener, "wrcbe.param.get.usage2");
+        CoreCommand.chatT(listener, "wrcbe.param.get.usage3");
     }
 
     @Override
@@ -28,20 +28,20 @@ public class ParamGet extends FreqParam
         
         if(subArray.length != 2)
         {
-            CoreCommand.chatT(listener, "wrcbe_core.param.invalidno");
+            CoreCommand.chatT(listener, "wrcbe.param.invalidno");
             return;
         }
                 
         if(subArray[1].equals("public"))
-            CoreCommand.chatT(listener, "wrcbe_core.param.get.public", ether.getLastPublicFrequency());
+            CoreCommand.chatT(listener, "wrcbe.param.get.public", ether.getLastPublicFrequency());
         else if(subArray[1].equals("shared"))
             if(ether.getLastPublicFrequency() >= ether.getLastSharedFrequency())
-                CoreCommand.chatT(listener, "wrcbe_core.param.get.shared0");
+                CoreCommand.chatT(listener, "wrcbe.param.get.shared0");
             else
-                CoreCommand.chatT(listener, "wrcbe_core.param.get.shared", ether.getLastPublicFrequency()+1, ether.getLastSharedFrequency());
+                CoreCommand.chatT(listener, "wrcbe.param.get.shared", ether.getLastPublicFrequency()+1, ether.getLastSharedFrequency());
         else if(subArray[1].equals("private"))
-            CoreCommand.chatT(listener, "wrcbe_core.param.get.private", ether.getNumPrivateFreqs());
+            CoreCommand.chatT(listener, "wrcbe.param.get.private", ether.getNumPrivateFreqs());
         else
-            CoreCommand.chatT(listener, "wrcbe_core.param.invalid");
+            CoreCommand.chatT(listener, "wrcbe.param.invalid");
     }
 }

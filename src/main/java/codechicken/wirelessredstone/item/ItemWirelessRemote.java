@@ -111,7 +111,7 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
     @Override
     @SideOnly (Side.CLIENT)
     public String getItemStackDisplayName(ItemStack itemstack) {
-        return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("wrcbe_addons.remote.short"), itemstack.getItemDamage());
+        return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("item.wrcbe.remote.short"), itemstack.getItemDamage());
     }
 
     //@Override
@@ -121,7 +121,7 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
 
     @Override
     public String getGuiName() {
-        return I18n.translateToLocal("item.wrcbe_addons:remote.name");
+        return I18n.translateToLocal("item.wrcbe:remote.name");
     }
 
     @Override

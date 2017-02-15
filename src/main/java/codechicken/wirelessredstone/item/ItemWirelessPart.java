@@ -23,7 +23,7 @@ public class ItemWirelessPart extends JItemMultiPart
 {
     public ItemWirelessPart() {
         setHasSubtypes(true);
-        setUnlocalizedName("wrcbe_logic:wirelesspart");
+        setUnlocalizedName("wrcbe:wireless_part");
     }
 
     @Override
@@ -59,16 +59,4 @@ public class ItemWirelessPart extends JItemMultiPart
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName() + "|" + stack.getItemDamage();
     }
-
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public int getSpriteNumber() {
-    //    return 0;
-    //}
-
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister par1IconRegister) {
-    //    RenderWireless.loadIcons(par1IconRegister);
-    //}
 }

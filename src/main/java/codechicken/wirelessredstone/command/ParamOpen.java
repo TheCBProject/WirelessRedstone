@@ -9,9 +9,9 @@ public class ParamOpen extends FreqParam
 {
     @Override
     public void printHelp(ICommandSender listener) {
-        CoreCommand.chatT(listener, "wrcbe_core.param.open.usage");
-        CoreCommand.chatT(listener, "wrcbe_core.param.open.usage1");
-        CoreCommand.chatT(listener, "wrcbe_core.param.jam.usage" + (rand.nextInt(5) + 2), "open");
+        CoreCommand.chatT(listener, "wrcbe.param.open.usage");
+        CoreCommand.chatT(listener, "wrcbe.param.open.usage1");
+        CoreCommand.chatT(listener, "wrcbe.param.jam.usage" + (rand.nextInt(5) + 2), "open");
     }
 
     @Override

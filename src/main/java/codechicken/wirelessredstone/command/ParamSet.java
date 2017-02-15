@@ -9,10 +9,10 @@ public class ParamSet extends FreqParam
     @Override
     public void printHelp(ICommandSender listener)
     {
-        CoreCommand.chatT(listener,"wrcbe_core.param.set.usage");
-        CoreCommand.chatT(listener,"wrcbe_core.param.set.usage1");
-        CoreCommand.chatT(listener,"wrcbe_core.param.set.usage2");
-        CoreCommand.chatT(listener,"wrcbe_core.param.set.usage3");
+        CoreCommand.chatT(listener,"wrcbe.param.set.usage");
+        CoreCommand.chatT(listener,"wrcbe.param.set.usage1");
+        CoreCommand.chatT(listener,"wrcbe.param.set.usage2");
+        CoreCommand.chatT(listener,"wrcbe.param.set.usage3");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ParamSet extends FreqParam
         
         if(subArray.length != 3)
         {
-            CoreCommand.chatT(listener,"wrcbe_core.param.invalidno");
+            CoreCommand.chatT(listener,"wrcbe.param.invalidno");
             return;
         }
         
@@ -47,23 +47,23 @@ public class ParamSet extends FreqParam
         {        
             if(freq < 1 || freq > RedstoneEther.numfreqs)
             {
-                CoreCommand.chatT(listener,"wrcbe_core.param.invalidfreq");
+                CoreCommand.chatT(listener,"wrcbe.param.invalidfreq");
                 return;
             }
             
             ether.setLastPublicFrequency(freq);
-            CoreCommand.chatOpsT("wrcbe_core.param.set.nowpublic", playername, ether.getLastPublicFrequency());
+            CoreCommand.chatOpsT("wrcbe.param.set.nowpublic", playername, ether.getLastPublicFrequency());
             
             if(freq >= ether.getLastSharedFrequency())
-                CoreCommand.chatOpsT("wrcbe_core.param.set.sharedpublic", playername);
+                CoreCommand.chatOpsT("wrcbe.param.set.sharedpublic", playername);
             else
-                CoreCommand.chatOpsT("wrcbe_core.param.set.nowshared", playername, (freq+1), ether.getLastSharedFrequency());
+                CoreCommand.chatOpsT("wrcbe.param.set.nowshared", playername, (freq+1), ether.getLastSharedFrequency());
         }
         else if(subArray[1].equals("shared"))
         {        
             if(freq < 1 || freq > RedstoneEther.numfreqs)
             {
-                CoreCommand.chatT(listener,"wrcbe_core.param.invalidfreq");
+                CoreCommand.chatT(listener,"wrcbe.param.invalidfreq");
                 return;
             }
             
@@ -73,9 +73,9 @@ public class ParamSet extends FreqParam
             
             if(ether.getLastSharedFrequency() >= freq)
                 if(!wasPublic)
-                    CoreCommand.chatOpsT("wrcbe_core.param.set.sharedremoved", playername);
+                    CoreCommand.chatOpsT("wrcbe.param.set.sharedremoved", playername);
                 else
-                    CoreCommand.chatOpsT("wrcbe_core.param.set.nowshared", playername, (ether.getLastPublicFrequency()+1), freq);
+                    CoreCommand.chatOpsT("wrcbe.param.set.nowshared", playername, (ether.getLastPublicFrequency()+1), freq);
         }
         else if(subArray[1].equals("private"))
         {        
@@ -86,11 +86,11 @@ public class ParamSet extends FreqParam
             }
             
             ether.setNumPrivateFreqs(freq);
-            CoreCommand.chatOpsT("wrcbe_core.param.set.privateno", playername, freq);
+            CoreCommand.chatOpsT("wrcbe.param.set.privateno", playername, freq);
         }
         else
         {
-            CoreCommand.chatT(listener,"wrcbe_core.param.set.invalidqty");
+            CoreCommand.chatT(listener,"wrcbe.param.set.invalidqty");
         }
     }
 }

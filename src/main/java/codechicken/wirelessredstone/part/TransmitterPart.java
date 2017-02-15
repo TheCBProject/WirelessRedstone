@@ -128,7 +128,7 @@ public class TransmitterPart extends TransceiverPart
 
     @Override
     public String getGuiName() {
-        return I18n.translateToLocal("item.wrcbe_logic:wirelesspart|0.name");
+        return I18n.translateToLocal("item.wrcbe:wireless_part|0.name");
     }
 
     @Override

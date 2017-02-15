@@ -55,13 +55,13 @@ public class ItemWirelessTracker extends ItemWirelessFreq
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(
-                I18n.translateToLocal("wrcbe_addons.tracker.short"),
+                I18n.translateToLocal("item.wrcbe.tracker.short"),
                 itemstack.getItemDamage());
     }
 
     @Override
     public String getGuiName() {
-        return I18n.translateToLocal("item.wrcbe_addons:tracker.name");
+        return I18n.translateToLocal("item.wrcbe:tracker.name");
     }
 
     //@Override

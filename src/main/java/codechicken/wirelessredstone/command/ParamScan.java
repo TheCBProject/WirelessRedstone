@@ -9,9 +9,9 @@ public class ParamScan extends FreqParam
 {
     @Override
     public void printHelp(ICommandSender listener) {
-        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage");
-        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage1");
-        CoreCommand.chatT(listener,"wrcbe_core.param.scan.usage" + (rand.nextInt(2) + 2));
+        CoreCommand.chatT(listener,"wrcbe.param.scan.usage");
+        CoreCommand.chatT(listener,"wrcbe.param.scan.usage1");
+        CoreCommand.chatT(listener,"wrcbe.param.scan.usage" + (rand.nextInt(2) + 2));
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ParamScan extends FreqParam
         RedstoneEther ether = RedstoneEther.get(false);
 
         if (subArray.length == 1 && ServerUtils.getPlayer(playername) == null) {
-            CoreCommand.chatT(listener,"wrcbe_core.param.invalidno");
+            CoreCommand.chatT(listener,"wrcbe.param.invalidno");
             return;
         }
 
@@ -58,9 +58,9 @@ public class ParamScan extends FreqParam
         }
 
         if (ranges == 0)
-            CoreCommand.chatT(listener,"wrcbe_core.param.scan.onlypublic", scanPlayer);
+            CoreCommand.chatT(listener,"wrcbe.param.scan.onlypublic", scanPlayer);
         else
-            CoreCommand.chatT(listener,"wrcbe_core.param.scan.list", scanPlayer, freqs);
+            CoreCommand.chatT(listener,"wrcbe.param.scan.list", scanPlayer, freqs);
     }
 
 }

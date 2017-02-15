@@ -26,12 +26,12 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBaker
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(
-                I18n.translateToLocal("wrcbe_addons.triangulator.short"),
+                I18n.translateToLocal("item.wrcbe.triangulator.short"),
                 itemstack.getItemDamage());
     }
 
     public String getGuiName() {
-        return I18n.translateToLocal("item.wrcbe_addons:triangulator.name");
+        return I18n.translateToLocal("item.wrcbe:triangulator.name");
     }
 
     @Override

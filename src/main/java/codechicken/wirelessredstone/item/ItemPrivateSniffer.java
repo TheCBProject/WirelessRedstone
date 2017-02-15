@@ -16,7 +16,7 @@ public class ItemPrivateSniffer extends Item {
     public ItemPrivateSniffer() {
         setMaxStackSize(1);
         setCreativeTab(WirelessRedstone.creativeTab);
-        setUnlocalizedName("wrcbe:pSniffer");
+        setUnlocalizedName("wrcbe:private_sniffer");
     }
 
     @Override

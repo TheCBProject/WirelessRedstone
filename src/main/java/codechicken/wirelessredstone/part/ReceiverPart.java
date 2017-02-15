@@ -144,7 +144,7 @@ public class ReceiverPart extends TransceiverPart implements ITileReceiver
     
     public String getGuiName()
     {
-        return I18n.translateToLocal("item.wrcbe_logic:wirelesspart|1.name");
+        return I18n.translateToLocal("item.wrcbe:wireless_part|1.name");
     }
     
     @Override
