@@ -1,38 +1,20 @@
 [
-{
-  "modid": "WR-CBE|Core",
-  "name": "WR-CBE Core",
-  "description": "Wireless Redstone ChickenBones Edition Core API
-
-Supporters: Vizerei",
-  "version": "${version}",
-  "mcversion": "${mc_version}",
-  "url": "http://www.minecraftforum.net/topic/909223",
-  "authorList": [ "ChickenBones" ],
-  "dependencies": [ "CodeChickenCore" ]
-},
-{
-  "modid": "WR-CBE|Addons",
-  "name": "WR-CBE Addons",
-  "description": "Various wireless gadgets to play with!
-
-Supporters: Vizerei",
-  "version": "${version}",
-  "mcversion": "${mc_version}",
-  "url": "http://www.minecraftforum.net/topic/909223",
-  "authorList": [ "ChickenBones" ],
-  "dependencies": [ "WR-CBE Core" ]
-},
-{
-  "modid": "WR-CBE|Logic",
-  "name": "WR-CBE Logic",
-  "description": "Transmitter, Receiver and Jammer blocks. Integrated with ForgeMultipart for covers and other cool stuff
-
-Supporters: Vizerei",
-  "version": "${version}",
-  "mcversion": "${mc_version}",
-  "url": "http://www.minecraftforum.net/topic/909223",
-  "authorList": [ "ChickenBones" ],
-  "dependencies": [ "WR-CBE Core, ForgeMultipart" ]
-}
+	{
+		"modid": "wrcbe",
+		"name": "WirelessRedsone-CBE",
+		"description": "Wireless Redstone ChickenBones Edition
+		
+		Supporters: Vizerei
+		",
+		"version": "${version}",
+		"mcversion": "${mc_version}",
+		"url": "http://chickenbones.net/pages/Links.html",
+		"authorList": [
+			"ChickenBones"
+		],
+		"dependencies": [
+			"CodeChickenLib",
+			"forgemultipartcbe"
+		]
+	}
 ]

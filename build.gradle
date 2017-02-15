@@ -53,6 +53,8 @@ minecraft {
     version = config.mc_version + "-" + config.forge_version
     mappings = config.mappings
     makeObfSourceJar = false
+    replace '${mod_version}', project.config.mod_version
+    replaceIn "Reference.java"
     runDir = "run"
 }
 
