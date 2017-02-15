@@ -18,6 +18,10 @@ repositories {
 		name = "chickenbones"
 		url = "http://chickenbones.net/maven"
 	}
+    maven {
+        name = "JEI Maven."
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -36,9 +40,9 @@ configFile.withReader {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:dev"
-    compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
-    compile "codechicken:ForgeMultipart:${config.mc_version}-${config.fmp_version}:dev"
+    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
+    compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:deobf"
+    compile "codechicken:ForgeMultipart:${config.mc_version}-${config.fmp_version}:deobf"
 }
 
 version =  "${project.config.mod_version}." + System.getenv("BUILD_NUMBER") ?: "1"
@@ -91,7 +95,7 @@ task deobfJar(type: Jar) {
 
 // Tell the artifact system about our extra jars
 artifacts {
-    archives src, deobfJar
+    archives srcJar, deobfJar
 }
 
 // Configure an upload task.
