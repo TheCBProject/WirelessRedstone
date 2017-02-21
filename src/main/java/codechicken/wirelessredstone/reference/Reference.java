@@ -10,7 +10,7 @@ public class Reference {
 
     public static final String MOD_ID = "wrcbe";
 
-    public static final String MOD_NAME = "WirelessRedsone-CBE";
+    public static final String MOD_NAME = "WirelessRedstone-CBE";
 
     public static final String MOD_VERSION = "${mod_version}";
 

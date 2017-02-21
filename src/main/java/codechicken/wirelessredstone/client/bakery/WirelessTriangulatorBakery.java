@@ -1,5 +1,6 @@
 package codechicken.wirelessredstone.client.bakery;
 
+import codechicken.lib.model.PerspectiveAwareModelProperties;
 import codechicken.lib.model.bakery.ItemModelBakery;
 import codechicken.lib.model.blockbakery.IItemBakery;
 import codechicken.wirelessredstone.client.texture.TriangTexManager;
@@ -27,5 +28,10 @@ public class WirelessTriangulatorBakery implements IItemBakery {
         }
 
         return ItemModelBakery.bakeItem(ImmutableList.of(TriangTexManager.getIconFromDamage(damage)));
+    }
+
+    @Override
+    public PerspectiveAwareModelProperties getModelProperties(ItemStack stack) {
+        return PerspectiveAwareModelProperties.DEFAULT_ITEM;
     }
 }
