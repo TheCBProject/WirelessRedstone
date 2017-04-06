@@ -122,7 +122,9 @@ public class WirelessMapRenderer implements IMapRenderer {
             GlStateManager.scale(0.0078125F, 0.0078125F, 0.0078125F);
             GlStateManager.translate(-64.0F, -64.0F, 0.0F);
             GlStateManager.translate(0.0F, 0.0F, -1.0F);
-            Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(data, inFrame);
+            if (data != null) {
+                Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(data, inFrame);
+            }
         } else {
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
@@ -139,7 +141,9 @@ public class WirelessMapRenderer implements IMapRenderer {
             vertexbuffer.pos(135.0D, -7.0D, 0.0D).tex(1.0D, 0.0D).endVertex();
             vertexbuffer.pos(-7.0D, -7.0D, 0.0D).tex(0.0D, 0.0D).endVertex();
             tessellator.draw();
-            Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(data, inFrame);
+            if (data != null) {
+                Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(data, inFrame);
+            }
         }
         render(stack, data, inFrame);
     }
