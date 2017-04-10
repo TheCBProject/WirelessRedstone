@@ -117,7 +117,7 @@ public class GuiWirelessSniffer extends GuiScreen
     
     public Colour getColour(int freq)
     {
-        if(RedstoneEther.get(true).isPlayerJammed(mc.thePlayer) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq))
+        if(RedstoneEther.get(true).isPlayerJammed(mc.player) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq))
             return colourJammed;
         
         return colourOff.copy().interpolate(colourOn, brightness[freq-1] / 64F);
@@ -125,7 +125,7 @@ public class GuiWirelessSniffer extends GuiScreen
     
     public Colour getBorder(int freq)
     {
-        if(RedstoneEther.get(true).isPlayerJammed(mc.thePlayer) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq))
+        if(RedstoneEther.get(true).isPlayerJammed(mc.player) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq))
         {
             return borderJammed;
         }
@@ -168,7 +168,7 @@ public class GuiWirelessSniffer extends GuiScreen
 
     public void onGuiClosed()
     {
-        RedstoneEtherAddons.client().remSniffer(mc.thePlayer);
+        RedstoneEtherAddons.client().remSniffer(mc.player);
     }
     
     public void updateScreen()

@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.command;
 
 
-import codechicken.core.commands.CoreCommand;
+import codechicken.lib.command.CoreCommand;
 import codechicken.lib.util.ServerUtils;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import codechicken.wirelessredstone.manager.RedstoneEtherServer;
@@ -81,7 +81,7 @@ public class ParamJam extends FreqParam
             }
             CoreCommand.chatOpsT("wrcbe.param."+paramName+".opjammed", playername, jamPlayer, startfreq);
             if (player != null)
-                player.addChatMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed", startfreq).setStyle(playerStyle));
+                player.sendMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed", startfreq).setStyle(playerStyle));
         } else {
             if (startfreq <= publicend && endfreq <= publicend) {
                 CoreCommand.chatT(listener, "wrcbe.param.jam.errpublic");
@@ -92,7 +92,7 @@ public class ParamJam extends FreqParam
 
             CoreCommand.chatOpsT("wrcbe.param."+paramName+".opjammed2", playername, jamPlayer, startfreq + "-" + endfreq);
             if (player != null)
-                player.addChatComponentMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed2", startfreq + "-" + endfreq).setStyle(playerStyle));
+                player.sendMessage(new TextComponentTranslation("wrcbe.param."+paramName+".jammed2", startfreq + "-" + endfreq).setStyle(playerStyle));
         }
     }
 }

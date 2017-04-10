@@ -30,10 +30,10 @@ public class TriangTexManager implements IIconRegister {
     private static ColourRGBA pg = new ColourRGBA(0x808080FF);//pointer colour grey
     private static ColourRGBA pd = new ColourRGBA(0x404040FF);//pointer colour dark grey
 
-    private static HashMap<Integer, Integer> freqslotmap = new HashMap<Integer, Integer>(256);
-    private static LinkedList<Integer> freeslots = new LinkedList<Integer>();
-    private static HashSet<Integer> activetextures = new HashSet<Integer>(256);
-    private static HashSet<Integer> visibletextures = new HashSet<Integer>(256);
+    private static HashMap<Integer, Integer> freqslotmap = new HashMap<>(256);
+    private static LinkedList<Integer> freeslots = new LinkedList<>();
+    private static HashSet<Integer> activetextures = new HashSet<>(256);
+    private static HashSet<Integer> visibletextures = new HashSet<>(256);
 
     private static ColourRGBA[] pointercolours = new ColourRGBA[] { pb, pr, pr, pr, pr, pr, pr, pr, pb, pr, pr, pr, pb, pb };
     private static ColourRGBA[] pointersidecolours = new ColourRGBA[] { pg, pg, pg, pg, pg, pg, pd, pg, pd, pd, pd, pd, pg, pg };
@@ -110,7 +110,7 @@ public class TriangTexManager implements IIconRegister {
     }
 
     private static void writePointer(int freq) {
-        if (RedstoneEther.get(true).isPlayerJammed(Minecraft.getMinecraft().thePlayer) || !RedstoneEtherAddons.client().isTriangOn(freq)) {
+        if (RedstoneEther.get(true).isPlayerJammed(Minecraft.getMinecraft().player) || !RedstoneEtherAddons.client().isTriangOn(freq)) {
             return;
         }
 
@@ -142,11 +142,11 @@ public class TriangTexManager implements IIconRegister {
     }
 
     public static void processAllTextures() {
-        HashSet<Integer> wasActive = new HashSet<Integer>(activetextures);
+        HashSet<Integer> wasActive = new HashSet<>(activetextures);
         for (int freq : visibletextures) {
             int slot = freqslotmap.get(freq);
             if (!wasActive.remove(freq)) {
-                RedstoneEtherAddons.client().setTriangRequired(Minecraft.getMinecraft().thePlayer, freq, true);
+                RedstoneEtherAddons.client().setTriangRequired(Minecraft.getMinecraft().player, freq, true);
                 freeslots.remove(slot);
                 activetextures.add(freq);
             }
@@ -155,7 +155,7 @@ public class TriangTexManager implements IIconRegister {
         }
 
         for (int freq : wasActive) {
-            RedstoneEtherAddons.client().setTriangRequired(Minecraft.getMinecraft().thePlayer, freq, false);
+            RedstoneEtherAddons.client().setTriangRequired(Minecraft.getMinecraft().player, freq, false);
             freeslots.add(freqslotmap.get(freq));
             activetextures.remove(freq);
         }

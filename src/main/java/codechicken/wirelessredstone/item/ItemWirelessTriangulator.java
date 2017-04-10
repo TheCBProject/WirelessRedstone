@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.item;
 
-import codechicken.lib.model.blockbakery.IBakeryItem;
-import codechicken.lib.model.blockbakery.IItemBakery;
+import codechicken.lib.model.bakery.IBakeryProvider;
+import codechicken.lib.model.bakery.generation.IBakery;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.client.bakery.WirelessTriangulatorBakery;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
@@ -10,7 +10,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBakeryItem
+public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBakeryProvider
 {
     public ItemWirelessTriangulator() {
         setCreativeTab(WirelessRedstone.creativeTab);
@@ -35,7 +35,7 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBaker
     }
 
     @Override
-    public IItemBakery getBakery() {
+    public IBakery getBakery() {
         return WirelessTriangulatorBakery.INSTANCE;
     }
 }

@@ -38,18 +38,18 @@ public class ModItems {
 
     public static void init() {
         itemWireless = new ItemWirelessPart().setCreativeTab(WirelessRedstone.creativeTab);
-        GameRegistry.register(ModItems.itemWireless.setRegistryName("wirelessLogic"));
+        GameRegistry.register(ModItems.itemWireless.setRegistryName("wireless_logic"));
 
         itemMaterial = new ItemMultiType(WirelessRedstone.creativeTab, "material").setUnlocalizedName("wrcbe:material");
         GameRegistry.register(itemMaterial);
 
-        obsidianStick = itemMaterial.registerSubItem("obsidian_stick");
-        stoneBowl = itemMaterial.registerSubItem("stone_bowl");
-        retherPearl = itemMaterial.registerSubItem("rether_pearl");
-        wirelessTransceiver = itemMaterial.registerSubItem("wireless_transceiver");
-        blazeTransceiver = itemMaterial.registerSubItem("blaze_transceiver");
-        receiverDish = itemMaterial.registerSubItem("receiver_dish");
-        blazeReceiverDish = itemMaterial.registerSubItem("blaze_receiver_dish");
+        obsidianStick = itemMaterial.registerItem("obsidian_stick");
+        stoneBowl = itemMaterial.registerItem("stone_bowl");
+        retherPearl = itemMaterial.registerItem("rether_pearl");
+        wirelessTransceiver = itemMaterial.registerItem("wireless_transceiver");
+        blazeTransceiver = itemMaterial.registerItem("blaze_transceiver");
+        receiverDish = itemMaterial.registerItem("receiver_dish");
+        blazeReceiverDish = itemMaterial.registerItem("blaze_receiver_dish");
 
         OreDictionary.registerOre("obsidianRod", obsidianStick);
         OreDictionary.registerOre("stoneBowl", stoneBowl);

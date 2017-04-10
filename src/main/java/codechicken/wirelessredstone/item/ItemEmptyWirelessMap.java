@@ -20,22 +20,23 @@ public class ItemEmptyWirelessMap extends ItemMapBase {
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
         ItemStack itemstack1 = new ItemStack(ModItems.itemWirelessMap, 1, worldIn.getUniqueDataId("map"));
         String s = "map_" + itemstack1.getItemDamage();
         MapData mapdata = new MapData(s);
-        worldIn.setItemData(s, mapdata);
+        worldIn.setData(s, mapdata);
         mapdata.scale = 0;
         int i = 128 * (1 << mapdata.scale);
         mapdata.xCenter = (int)(Math.round(playerIn.posX / (double)i) * (long)i);
         mapdata.zCenter = (int)(Math.round(playerIn.posZ / (double)i) * (long)i);
         mapdata.dimension = worldIn.provider.getDimension();
         mapdata.markDirty();
-        --itemStackIn.stackSize;
+        itemStackIn.shrink(1);
 
-        if (itemStackIn.stackSize <= 0)
+        if (itemStackIn.getCount() <= 0)
         {
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack1);
+            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack1);
         }
         else
         {
@@ -44,7 +45,7 @@ public class ItemEmptyWirelessMap extends ItemMapBase {
                 playerIn.dropItem(itemstack1, false);
             }
 
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+            return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
         }
     }
 }

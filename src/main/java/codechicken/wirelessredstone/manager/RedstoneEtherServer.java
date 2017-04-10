@@ -93,7 +93,7 @@ public class RedstoneEtherServer extends RedstoneEther
         int blockzmin = chunkz * 16;
         int blockzmax = blockzmin + 15;
         
-        ArrayList<BlockPos> transmittingblocks = new ArrayList<BlockPos>(ether.transmittingblocks.keySet());
+        ArrayList<BlockPos> transmittingblocks = new ArrayList<>(ether.transmittingblocks.keySet());
         
         for(BlockPos node : transmittingblocks)
         {            
@@ -103,21 +103,20 @@ public class RedstoneEtherServer extends RedstoneEther
                 int freq = ether.transmittingblocks.get(node).freq;
                 if(tile == null || !(tile instanceof ITileWireless) || ((ITileWireless)tile).getFreq() != freq)
                 {
-                    remTransmitter(world, node.getX(), node.getY(), node.getZ(), freq);
+                    remTransmitter(world, node, freq);
                     System.out.println("Removed Badly Synced node at:"+node.getX()+","+node.getY()+","+node.getZ()+" on "+freq+" in dim"+dimension);
                 }
             }
         }
     }    
     
-    public void setTransmitter(World world, int x, int y, int z, int freq, boolean on)
+    public void setTransmitter(World world, BlockPos node, int freq, boolean on)
     {
         if(freq == 0)
         {
             return;
         }
 
-        BlockPos node = new BlockPos(x, y, z);
         int dimension = CommonUtils.getDimension(world);
         
         if(isNodeInAOEofJammer(node, dimension))
@@ -132,7 +131,7 @@ public class RedstoneEtherServer extends RedstoneEther
         freqarray[freq].setTransmitter(world, node, dimension, on);
     }
 
-    public void remTransmitter(World world, int x, int y, int z, int freq)
+    public void remTransmitter(World world, BlockPos node, int freq)
     {
         if(freq == 0)
         {
@@ -140,19 +139,17 @@ public class RedstoneEtherServer extends RedstoneEther
         }
 
         int dimension = CommonUtils.getDimension(world);
-        BlockPos node = new BlockPos(x, y, z);
         
         ethers.get(dimension).jammednodes.remove(node);
         ethers.get(dimension).transmittingblocks.remove(node);
         freqarray[freq].remTransmitter(world, node, dimension);
     }
 
-    public void addReceiver(World world, int x, int y, int z, int freq)
+    public void addReceiver(World world, BlockPos node, int freq)
     {
         if(freq == 0)
             return;
 
-        BlockPos node = new BlockPos(x, y, z);
         int dimension = CommonUtils.getDimension(world);
         
         if(isNodeInAOEofJammer(node, dimension))
@@ -163,31 +160,29 @@ public class RedstoneEtherServer extends RedstoneEther
         freqarray[freq].addReceiver(world, node, dimension);
     }
 
-    public void remReceiver(World world, int x, int y, int z, int freq)
+    public void remReceiver(World world, BlockPos node, int freq)
     {
         if(freq == 0)
             return;
 
         int dimension = CommonUtils.getDimension(world);
-        BlockPos node = new BlockPos(x, y, z);
 
         ethers.get(dimension).jammednodes.remove(node);    
         ethers.get(dimension).recievingblocks.remove(node);
         freqarray[freq].remReceiver(world, node, dimension);
     }
     
-    public void addJammer(World world, int x, int y, int z)
+    public void addJammer(World world, BlockPos jammer)
     {
         int dimension = CommonUtils.getDimension(world);
-        BlockPos jammer = new BlockPos(x, y, z);
         
         ethers.get(dimension).jammerset.add(jammer);
         jamNodesInAOEOfJammer(world, jammer, dimension);        
     }
 
-    public void remJammer(World world, int x, int y, int z)
+    public void remJammer(World world, BlockPos jammer)
     {
-        ethers.get(CommonUtils.getDimension(world)).jammerset.remove(new BlockPos(x, y, z));
+        ethers.get(CommonUtils.getDimension(world)).jammerset.remove(jammer);
     }
 
     public boolean isNodeJammed(World world, int x, int y, int z)
@@ -263,7 +258,7 @@ public class RedstoneEtherServer extends RedstoneEther
 
     public void jamEntitySometime(EntityLivingBase entity)
     {
-        jammedentities.put(entity, -entity.worldObj.rand.nextInt(jammerentitywait));
+        jammedentities.put(entity, -entity.world.rand.nextInt(jammerentitywait));
     }
 
     public void jamNode(World world, BlockPos node, int dimension, int freq)
@@ -274,12 +269,12 @@ public class RedstoneEtherServer extends RedstoneEther
         freqarray[freq].remReceiver(world, node, dimension);
     }
     
-    public void jamNode(World world, int x, int y, int z, int freq)
+    public void jamNode(World world, BlockPos pos, int freq)
     {
         if(freq == 0)
             return;
         
-        jamNode(world, new BlockPos(x, y, z), CommonUtils.getDimension(world), freq);
+        jamNode(world, pos, CommonUtils.getDimension(world), freq);
     }
     
     @Override
@@ -287,7 +282,7 @@ public class RedstoneEtherServer extends RedstoneEther
     {
         if(jam)//iterator.remove will be used to unjam entities. We only need to send the packet.
         {
-            jammedentities.put(entity, getRandomTimeout(entity.worldObj.rand));
+            jammedentities.put(entity, getRandomTimeout(entity.world.rand));
         }
         if(entity instanceof EntityPlayer)
         {
@@ -428,7 +423,7 @@ public class RedstoneEtherServer extends RedstoneEther
     
     private void sendFreqInfoTo(EntityPlayer player)
     {        
-        ArrayList<Integer> freqsWithInfo = new ArrayList<Integer>();
+        ArrayList<Integer> freqsWithInfo = new ArrayList<>();
         for(int freq = 1; freq <= numfreqs; freq++)
         {
             if(!freqarray[freq].getName().equals("") || freqarray[freq].getColourId() != -1)
@@ -440,7 +435,7 @@ public class RedstoneEtherServer extends RedstoneEther
     
     private void sendPrivateFreqsTo(EntityPlayer player)
     {
-        ArrayList<Integer> freqsWithOwners = new ArrayList<Integer>();
+        ArrayList<Integer> freqsWithOwners = new ArrayList<>();
         for(int freq = 1; freq <= numfreqs; freq++)
         {
             if(isFreqPrivate(freq))
@@ -452,7 +447,7 @@ public class RedstoneEtherServer extends RedstoneEther
 
     public TreeMap<Integer, Integer> getLoadedFrequencies()
     {
-        TreeMap<Integer, Integer> treemap = new TreeMap<Integer, Integer>();
+        TreeMap<Integer, Integer> treemap = new TreeMap<>();
         for(int freq = 1; freq <= numfreqs; freq++)
         {
             if(freqarray[freq].nodeCount() != 0)
@@ -486,7 +481,7 @@ public class RedstoneEtherServer extends RedstoneEther
 
     public ArrayList<FreqCoord> getActiveTransmittersOnFreq(int freq, int dimension)
     {
-        ArrayList<FreqCoord> txnodes = new ArrayList<FreqCoord>();
+        ArrayList<FreqCoord> txnodes = new ArrayList<>();
         freqarray[freq].putActiveTransmittersInList(dimension, txnodes);
         return txnodes;
     }
@@ -503,7 +498,7 @@ public class RedstoneEtherServer extends RedstoneEther
     
     public TreeSet<BlockPos> getNodesInRangeofPoint(int dimension, Vector3 point, float range, boolean includejammed)
     {
-        TreeSet<BlockPos> nodes = new TreeSet<BlockPos>();
+        TreeSet<BlockPos> nodes = new TreeSet<>();
         float rangePow2 = range*range;
         for(int freq = 1; freq <= numfreqs; freq++)
         {
@@ -545,7 +540,7 @@ public class RedstoneEtherServer extends RedstoneEther
     
     public TreeSet<BlockPos> getNodesInRangeofNode(int dimension, BlockPos block, float range, boolean includejammed)
     {
-        TreeSet<BlockPos> nodes = new TreeSet<BlockPos>();
+        TreeSet<BlockPos> nodes = new TreeSet<>();
         float rangePow2 = range*range;
         for(int freq = 1; freq <= numfreqs; freq++)
         {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import codechicken.core.gui.GuiScrollSlot;
+import codechicken.lib.gui.GuiScrollSlot;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -119,7 +119,7 @@ public class GuiNameSlot extends GuiScrollSlot
         return selectedslot == -1 ? "" : names.get(selectedslot);
     }
 
-    private ArrayList<String> names = new ArrayList<String>();
+    private ArrayList<String> names = new ArrayList<>();
     private String match = "";
     private int selectedslot = -1;
 }

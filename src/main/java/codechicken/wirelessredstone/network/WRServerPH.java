@@ -3,8 +3,8 @@ package codechicken.wirelessredstone.network;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import codechicken.lib.packet.ICustomPacketHandler.IServerPacketHandler;
 import codechicken.lib.packet.PacketCustom;
-import codechicken.lib.packet.PacketCustom.IServerPacketHandler;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.entity.EntityREP;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
@@ -29,7 +29,7 @@ public class WRServerPH implements IServerPacketHandler
 
     @Override
     public void handlePacket(PacketCustom packet, EntityPlayerMP sender, INetHandlerPlayServer handler) {
-        handlePacket((WorldServer) sender.worldObj, sender, packet);
+        handlePacket((WorldServer) sender.world, sender, packet);
     }
 
     private void handlePacket(WorldServer world, EntityPlayerMP player, PacketCustom packet) {
@@ -72,18 +72,18 @@ public class WRServerPH implements IServerPacketHandler
 
     private void decrementSlot(EntityPlayerMP player, int slot) {
         try {
-            ItemStack item = player.inventory.mainInventory[slot];
-            item.stackSize--;
+            ItemStack item = player.inventory.mainInventory.get(slot);
+            item.shrink(1);
 
-            if (item.stackSize == 0) {
-                player.inventory.mainInventory[slot] = null;
+            if (item.getCount() == 0) {
+                player.inventory.mainInventory.set(slot, ItemStack.EMPTY);
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     private void setItemFreq(EntityPlayerMP sender, int slot, int freq) {
         if (RedstoneEther.get(false).canBroadcastOnFrequency(sender, freq)) {
-            ItemStack stack = sender.inventory.mainInventory[slot];
+            ItemStack stack = sender.inventory.mainInventory.get(slot);
             if (stack != null && stack.getItem() instanceof ItemWirelessFreq) {
                 ((ItemWirelessFreq) stack.getItem()).setFreq(sender, slot, stack, freq);
             }
@@ -211,7 +211,7 @@ public class WRServerPH implements IServerPacketHandler
     public static void sendEtherCopyTo(EntityPlayer player, byte[] ethercopy) {
         PacketCustom packet = new PacketCustom(WirelessRedstone.NET_CHANNEL, 54);
         packet.writeShort(ethercopy.length);
-        packet.writeByteArray(ethercopy);
+        packet.writeBytes(ethercopy);
 
         packet.sendToPlayer(player);
     }
@@ -266,7 +266,7 @@ public class WRServerPH implements IServerPacketHandler
         packet.writeInt(activeREP.getEntityId());
         packet.writeInt(activeREP.shootingEntity.getEntityId());
 
-        packet.sendToChunk(activeREP.worldObj, (int) activeREP.posX >> 4, (int) activeREP.posZ >> 4);
+        packet.sendToChunk(activeREP.world, (int) activeREP.posX >> 4, (int) activeREP.posZ >> 4);
     }
 
     public static void sendKillREP(EntityREP entityREP) {
@@ -274,7 +274,7 @@ public class WRServerPH implements IServerPacketHandler
         packet.writeBoolean(false);
         packet.writeInt(entityREP.getEntityId());
 
-        packet.sendToChunk(entityREP.worldObj, (int) entityREP.posX >> 4, (int) entityREP.posZ >> 4);
+        packet.sendToChunk(entityREP.world, (int) entityREP.posX >> 4, (int) entityREP.posZ >> 4);
     }
 
     public static void sendTrackerUpdatePacketTo(EntityPlayerMP player, EntityWirelessTracker tracker) {
@@ -317,6 +317,6 @@ public class WRServerPH implements IServerPacketHandler
         packet.writeInt(thrower.getEntityId());
         packet.writeShort(tracker.freq);
 
-        packet.sendToChunk(thrower.worldObj, (int) thrower.posX >> 4, (int) thrower.posZ >> 4);
+        packet.sendToChunk(thrower.world, (int) thrower.posX >> 4, (int) thrower.posZ >> 4);
     }
 }

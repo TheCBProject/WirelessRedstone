@@ -48,7 +48,7 @@ public class SaveManager
     
     private static boolean loadinginfo;
     
-    private static HashMap<Integer, SaveManager> managers = new HashMap<Integer, SaveManager>();
+    private static HashMap<Integer, SaveManager> managers = new HashMap<>();
     
     private final int largesectorsize = 256;
     private final int largesectornodes = largesectorsize / 12;
@@ -394,11 +394,11 @@ public class SaveManager
     {        
         try
         {            
-            freqDimensionHashes[freq] = new ArrayList<Entry<Integer, Integer>>(dimensionHash.entrySet());
+            freqDimensionHashes[freq] = new ArrayList<>(dimensionHash.entrySet());
             hashChanged = true;
             
             int numnodes = 0;
-            ArrayList<BlockPos> nodes = new ArrayList<BlockPos>(activetransmitters);
+            ArrayList<BlockPos> nodes = new ArrayList<>(activetransmitters);
             
             for(Iterator<BlockPos> iterator = transmittermap.keySet().iterator(); iterator.hasNext() && numnodes < activetransmitters;)
             {
@@ -460,13 +460,13 @@ public class SaveManager
             throw new RuntimeException(e);
         }
         
-        usedSmallSectors = new ArrayList<Boolean>(numsmallsectors);
+        usedSmallSectors = new ArrayList<>(numsmallsectors);
         for(int i = 0; i < numsmallsectors; i++)//intialize array
         {
             usedSmallSectors.add(false);
         }
         
-        usedLargeSectors = new ArrayList<Boolean>(numlargesectors);
+        usedLargeSectors = new ArrayList<>(numlargesectors);
         for(int i = 0; i < numlargesectors; i++)//intialize array
         {
             usedLargeSectors.add(false);

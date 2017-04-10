@@ -1,6 +1,6 @@
 package codechicken.wirelessredstone.command;
 
-import codechicken.core.commands.CoreCommand;
+import codechicken.lib.command.CoreCommand;
 import net.minecraft.command.ICommandSender;
 
 import java.util.Arrays;

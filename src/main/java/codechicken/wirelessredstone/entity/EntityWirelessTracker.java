@@ -14,6 +14,7 @@ import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -64,13 +65,13 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     
     public void onEntityUpdate()
     {
-        if((attachmentCounter < -6000 && !attached) || (!worldObj.isRemote && attachedInOtherDimension()))
+        if((attachmentCounter < -6000 && !attached) || (!world.isRemote && attachedInOtherDimension()))
         {
             setDead();
             return;
         }
         
-        if(!loaded && !worldObj.isRemote)
+        if(!loaded && !world.isRemote)
         {
             loaded = true;
             RedstoneEtherAddons.server().addTracker(this);
@@ -87,34 +88,34 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         
         if(attached && attachedEntity == null)
         {
-            if(!worldObj.isRemote)
+            if(!world.isRemote)
                 findAttachedEntity();
         }
         else if(isAttachedToEntity())
         {
             trackEntity();
             
-            if(!worldObj.isRemote)
+            if(!world.isRemote)
                 checkDetachment();
         }
         else
         {
             applyPhysics();
             moveEntityWithBounce(1);
-            if(!worldObj.isRemote)
+            if(!world.isRemote)
                 attachToNearbyEntities();
         }
         
         if(item && attachmentCounter == 0)
         {
             item = false;
-            if(!worldObj.isRemote)
+            if(!world.isRemote)
                 RedstoneEtherAddons.server().updateTracker(this);
         }
         if(isBurning())
         {
             extinguish();
-            if(!worldObj.isRemote)
+            if(!world.isRemote)
                 RedstoneEtherAddons.server().updateTracker(this);
             item = true;
             attachmentCounter = 1200;//1 min
@@ -127,7 +128,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     @Override
     public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
     {
-        if(par1DamageSource == DamageSource.lava || par1DamageSource == DamageSource.outOfWorld)
+        if(par1DamageSource == DamageSource.LAVA || par1DamageSource == DamageSource.OUT_OF_WORLD)
         {
             setDead();
             return true;
@@ -140,7 +141,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     {
         super.setDead();
         
-        if(!worldObj.isRemote)
+        if(!world.isRemote)
         {
             RedstoneEther.server().removeTransmittingDevice(this);
             RedstoneEtherAddons.server().removeTracker(this);
@@ -150,10 +151,10 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        if (!this.worldObj.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.itemTracker, 1, freq)))
+        if (!this.world.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.itemTracker, 1, freq)))
         {
             //TODO SoundCat for this.
-            this.worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            this.world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             par1EntityPlayer.onItemPickup(this, 1);
             setDead();
         }
@@ -191,11 +192,11 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     public boolean isRetractingStickyPistonFacing(int x, int y, int z, int facing)
     {
         BlockPos pos = new BlockPos(x,y,z);
-        IBlockState state = worldObj.getBlockState(pos);
+        IBlockState state = world.getBlockState(pos);
         if(state.getBlock() != Blocks.PISTON_EXTENSION)
             return false;
         
-        TileEntity t = worldObj.getTileEntity(pos);
+        TileEntity t = world.getTileEntity(pos);
         if(!(t instanceof TileEntityPiston))
             return false;
         
@@ -248,7 +249,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         if(isAttachedToEntity() || item || attachmentCounter > 0)
             return;
         
-        for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
+        for(Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
         {            
             AxisAlignedBB bb = entity.getEntityBoundingBox();
             if(bb != null && 
@@ -343,7 +344,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         double dx = motionX;
         double dz = motionZ;
         
-        moveEntity(motionX, motionY, motionZ);
+        move(MoverType.SELF, motionX, motionY, motionZ);
         setPosition(posX, posY, posZ);
         
         boolean isCollidedX = motionX != dx;
@@ -388,7 +389,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         }
         else
         {
-            for(Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
+            for(Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
             {
                 if(tryAttach(entity, 0.4, 0.2))
                 {
@@ -419,7 +420,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     
     public void onChunkUnload()
     {        
-        if(!worldObj.isRemote)
+        if(!world.isRemote)
         {
             RedstoneEther.server().removeTransmittingDevice(this);
             RedstoneEtherAddons.server().removeTracker(this);
@@ -495,7 +496,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         
         copy.setPosition(attachedEntity.posX, attachedEntity.posY, attachedEntity.posZ);//make sure we spawn in the right chunk :D
         
-        otherWorld.spawnEntityInWorld(copy);
+        otherWorld.spawnEntity(copy);
     }
     
     @Override
@@ -515,7 +516,7 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
     @Override
     public int getDimension()
     {
-        return CommonUtils.getDimension(worldObj);
+        return CommonUtils.getDimension(world);
     }
 
     @Override

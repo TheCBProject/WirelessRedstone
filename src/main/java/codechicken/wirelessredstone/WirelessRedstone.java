@@ -1,12 +1,12 @@
 package codechicken.wirelessredstone;
 
+import codechicken.lib.CodeChickenLib;
 import codechicken.lib.gui.SimpleCreativeTab;
 import codechicken.wirelessredstone.command.CommandFreq;
 import codechicken.wirelessredstone.handler.WREventHandler;
 import codechicken.wirelessredstone.init.PartFactory;
 import codechicken.wirelessredstone.manager.SaveManager;
-import codechicken.wirelessredstone.proxy.CommonProxy;
-import codechicken.wirelessredstone.reference.Reference;
+import codechicken.wirelessredstone.proxy.Proxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,21 +20,32 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
+import static codechicken.lib.CodeChickenLib.MC_VERSION;
+import static codechicken.lib.CodeChickenLib.MC_VERSION_DEP;
+import static codechicken.wirelessredstone.WirelessRedstone.*;
+
 /**
  * Created by covers1624 on 23/01/2017.
  */
-@Mod (modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.MOD_DEPENDENCIES)
+@Mod (modid = MOD_ID, name = MOD_NAME, version = MOD_VERSION, dependencies = MOD_DEPENDENCIES, acceptedMinecraftVersions = MC_VERSION_DEP, certificateFingerprint = "f1850c39b2516232a2108a7bd84d1cb5df93b261", updateJSON = UPDATE_URL)
 public class WirelessRedstone {
 
     public static final String NET_CHANNEL = "WRCBE";
 
-    @SidedProxy (clientSide = "codechicken.wirelessredstone.proxy.ClientProxy", serverSide = "codechicken.wirelessredstone.proxy.CommonProxy")
-    public static CommonProxy proxy;
+    public static final String MOD_ID = "wrcbe";
+    public static final String MOD_NAME = "WirelessRedstone-CBE";
+    public static final String MOD_VERSION = "${mod_version}";
+    public static final String MOD_DEPENDENCIES = "required-after:codechickenlib@[" + CodeChickenLib.MOD_VERSION + ",);required-after:forgemultipartcbe";
+    static final String UPDATE_URL = "http://chickenbones.net/Files/notification/version.php?query=forge&version=" + MC_VERSION + "&file=WR-CBE";
 
-    @Instance(Reference.MOD_ID)
+
+    @SidedProxy (clientSide = "codechicken.wirelessredstone.proxy.ProxyClient", serverSide = "codechicken.wirelessredstone.proxy.Proxy")
+    public static Proxy proxy;
+
+    @Instance(MOD_ID)
     public static WirelessRedstone instance;
 
-    public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", "wrcbe:wirelessLogic", 1);
+    public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", "wrcbe:wireless_logic", 1);
     public static DamageSource damageBolt;
 
     @Mod.EventHandler

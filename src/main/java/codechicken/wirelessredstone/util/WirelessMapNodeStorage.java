@@ -12,8 +12,8 @@ public class WirelessMapNodeStorage
         devices.clear();
     }
     
-    public TreeSet<FreqCoord> nodes = new TreeSet<FreqCoord>();
-    public TreeSet<FreqCoord> devices = new TreeSet<FreqCoord>();
+    public TreeSet<FreqCoord> nodes = new TreeSet<>();
+    public TreeSet<FreqCoord> devices = new TreeSet<>();
 }
 
 

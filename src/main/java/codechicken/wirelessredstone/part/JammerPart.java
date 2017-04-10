@@ -122,12 +122,12 @@ public class JammerPart extends WirelessPart implements ITileJammer
     public void addToEther()
     {
         if(active())
-            RedstoneEther.server().addJammer(world(), x(), y(), z());
+            RedstoneEther.server().addJammer(world(), pos());
     }
 
     public void removeFromEther()
     {
-        RedstoneEther.server().remJammer(world(), x(), y(), z());
+        RedstoneEther.server().remJammer(world(), pos());
     }
     
     @Override

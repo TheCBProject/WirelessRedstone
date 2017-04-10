@@ -134,12 +134,12 @@ public class ReceiverPart extends TransceiverPart implements ITileReceiver
     
     public void addToEther()
     {
-        RedstoneEther.server().addReceiver(world(), x(), y(), z(), currentfreq);
+        RedstoneEther.server().addReceiver(world(), pos(), currentfreq);
     }
     
     public void removeFromEther()
     {
-        RedstoneEther.server().remReceiver(world(), x(), y(), z(), currentfreq);
+        RedstoneEther.server().remReceiver(world(), pos(), currentfreq);
     }
     
     public String getGuiName()

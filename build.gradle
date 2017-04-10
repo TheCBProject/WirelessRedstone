@@ -30,6 +30,9 @@ apply plugin: 'maven'
 group = "codechicken" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "WR-CBE"
 
+targetCompatibility = "1.8"
+sourceCompatibility = "1.8"
+
 // Define properties file
 ext.configFile = file "build.properties"
 
@@ -42,7 +45,6 @@ configFile.withReader {
 
 dependencies {
     compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
-    compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:deobf"
     compile "codechicken:ForgeMultipart:${config.mc_version}-${config.fmp_version}:deobf"
 }
 
@@ -55,7 +57,6 @@ minecraft {
     mappings = config.mappings
     makeObfSourceJar = false
     replace '${mod_version}', project.config.mod_version
-    replaceIn "Reference.java"
     runDir = "run"
 }
 

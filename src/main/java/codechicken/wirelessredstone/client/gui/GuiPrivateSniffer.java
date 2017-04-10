@@ -24,9 +24,9 @@ public class GuiPrivateSniffer extends GuiWirelessSniffer
             super.mouseClicked(mousex, mousey, button);
             return;
         }
-        if(RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq) && freq > RedstoneEther.get(true).getLastPublicFrequency() && freq <= RedstoneEther.get(true).getLastSharedFrequency())
+        if(RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq) && freq > RedstoneEther.get(true).getLastPublicFrequency() && freq <= RedstoneEther.get(true).getLastSharedFrequency())
         {
-            String name = RedstoneEther.get(true).isFreqPrivate(freq) ? "" : mc.thePlayer.getName();
+            String name = RedstoneEther.get(true).isFreqPrivate(freq) ? "" : mc.player.getName();
             WRClientPH.sendSetFreqOwner(freq, name);
         }
     }
@@ -34,13 +34,13 @@ public class GuiPrivateSniffer extends GuiWirelessSniffer
     @Override
     public String getFreqTip(int freq)
     {
-        if(RedstoneEther.get(true).isPlayerJammed(mc.thePlayer))
+        if(RedstoneEther.get(true).isPlayerJammed(mc.player))
             return "Jammed "+freq;
         
         if(RedstoneEther.get(true).isFreqPrivate(freq))
-            return (RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.thePlayer.getName()) ? "Owned " : "Private ")+freq;
+            return (RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.player.getName()) ? "Owned " : "Private ")+freq;
         
-        if(!RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq))
+        if(!RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq))
             return "Jammed "+freq;
         
         if(freq <= RedstoneEther.get(true).getLastPublicFrequency())
@@ -55,10 +55,10 @@ public class GuiPrivateSniffer extends GuiWirelessSniffer
     @Override
     public Colour getColour(int freq)
     {
-        if(RedstoneEther.get(true).isPlayerJammed(mc.thePlayer) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq))
+        if(RedstoneEther.get(true).isPlayerJammed(mc.player) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq))
             return colourJammed;
 
-        if(RedstoneEther.get(true).isFreqPrivate(freq) && RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.thePlayer.getName()))
+        if(RedstoneEther.get(true).isFreqPrivate(freq) && RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.player.getName()))
             return colourPOff.copy().interpolate(colourPOn, brightness[freq-1] / 64F);
             
         Colour colour = colourOff.copy().interpolate(colourOn, brightness[freq-1] / 64F);
@@ -71,10 +71,10 @@ public class GuiPrivateSniffer extends GuiWirelessSniffer
     @Override
     public Colour getBorder(int freq)
     {
-        if(RedstoneEther.get(true).isPlayerJammed(mc.thePlayer) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.thePlayer, freq))
+        if(RedstoneEther.get(true).isPlayerJammed(mc.player) || !RedstoneEther.get(true).canBroadcastOnFrequency(mc.player, freq))
             return borderJammed;
         
-        if(RedstoneEther.get(true).isFreqPrivate(freq) && RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.thePlayer.getName()))
+        if(RedstoneEther.get(true).isFreqPrivate(freq) && RedstoneEther.get(true).getFreqOwner(freq).equalsIgnoreCase(mc.player.getName()))
             return borderPOff.copy().interpolate(borderPOn, brightness[freq-1] / 64F);
         
         Colour border;

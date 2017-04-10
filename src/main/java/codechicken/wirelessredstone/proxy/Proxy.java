@@ -12,6 +12,7 @@ import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.init.ModRecipes;
 import codechicken.wirelessredstone.manager.SaveManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import static codechicken.wirelessredstone.WirelessRedstone.NET_CHANNEL;
@@ -19,14 +20,14 @@ import static codechicken.wirelessredstone.WirelessRedstone.NET_CHANNEL;
 /**
  * Created by covers1624 on 23/01/2017.
  */
-public class CommonProxy {
+public class Proxy {
 
     public void preInit() {
         ModItems.init();
         PacketCustom.assignHandler(NET_CHANNEL, new WRServerPH());
         ConfigTag coreconfig = SaveManager.config().getTag("core").useBraces().setPosition(10);
         WirelessBolt.init(coreconfig);
-        EntityRegistry.registerModEntity(EntityWirelessTracker.class, "tracker", 0, WirelessRedstone.instance, 64, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("wrcbe:tracker"), EntityWirelessTracker.class, "tracker", 0, WirelessRedstone.instance, 64, 1, true);
     }
 
     public void init(){

@@ -19,14 +19,15 @@ public class ItemREP extends Item
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (world.isRemote)
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 
         if (RedstoneEtherAddons.server().detonateREP(player))
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 
-        RedstoneEtherAddons.server().throwREP(itemStack, world, player);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+        RedstoneEtherAddons.server().throwREP(stack, world, player);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 }

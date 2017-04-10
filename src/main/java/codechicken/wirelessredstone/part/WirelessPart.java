@@ -255,7 +255,7 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     public double getFloating() {
 
         if (tile() != null) {
-            return RedstoneEther.getSineWave(ClientUtils.getRenderTime() + x() * 3 + y() * 5 + z() * 9, 7);
+            return RedstoneEther.getSineWave(ClientUtils.getRenderTime() + pos().getX() * 3 + pos().getY() * 5 + pos().getZ() * 9, 7);
         } else {// Part not in the world? Too bad, Lets have a bob anyway!
             return RedstoneEther.getSineWave(ClientUtils.getRenderTime(), 7);
         }

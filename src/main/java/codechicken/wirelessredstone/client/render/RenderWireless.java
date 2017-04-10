@@ -52,7 +52,7 @@ public class RenderWireless implements IIconRegister {
     //@formatter:on
 
     static {
-        Map<String, CCModel> modelMap = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe", "models/logic.obj"), 7, null);
+        Map<String, CCModel> modelMap = OBJParser.parseModels(new ResourceLocation("wrcbe", "models/logic.obj"), 7, null);
         CCModel tstand = setTex(modelMap.get("TStand"), 2);
         CCModel jstand = setTex(tstand.copy(), 1);
         CCModel rstand = setTex(modelMap.get("RStand"), 2);
@@ -126,7 +126,7 @@ public class RenderWireless implements IIconRegister {
         ccrs.reset();
         ccrs.setBrightness(p.world(), p.pos());
 
-        Transformation t = new Translation(p.x(), p.y(), p.z());
+        Transformation t = new Translation(p.pos());
         ccrs.setPipeline(p.rotationT().at(center).with(t), base_icont[p.textureSet()], rlm);
         BlockRenderer.renderCuboid(ccrs, p.baseRenderBounds, p.baseRenderMask);
         models[p.modelId()][p.side() << 2 | p.rotation()].render(ccrs, t, model_icont);

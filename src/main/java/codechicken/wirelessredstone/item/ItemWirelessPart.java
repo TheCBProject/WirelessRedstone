@@ -1,6 +1,5 @@
 package codechicken.wirelessredstone.item;
 
-import java.util.List;
 
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.JItemMultiPart;
@@ -10,6 +9,7 @@ import codechicken.wirelessredstone.part.ReceiverPart;
 import codechicken.wirelessredstone.part.TransmitterPart;
 import codechicken.wirelessredstone.part.WirelessPart;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,7 +51,7 @@ public class ItemWirelessPart extends JItemMultiPart
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int d = 0; d < 3; d++)
             list.add(new ItemStack(item, 1, d));
     }

@@ -31,7 +31,7 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
         currentfreq = newfreq;
         addToEther();
         if (disabled())
-            RedstoneEther.server().jamNode(world(), x(), y(), z(), newfreq);
+            RedstoneEther.server().jamNode(world(), pos(), newfreq);
         updateChange();
     }
 

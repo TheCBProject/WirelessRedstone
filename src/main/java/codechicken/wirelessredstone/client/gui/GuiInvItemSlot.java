@@ -4,7 +4,7 @@ import codechicken.wirelessredstone.network.WRClientPH;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 
-import codechicken.core.gui.GuiWidget;
+import codechicken.lib.gui.GuiWidget;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -87,15 +87,15 @@ public class GuiInvItemSlot extends GuiWidget
         }
 
         int slot = invslotnumbers[selecteditem];
-        if(inv.player.worldObj.isRemote)
+        if(inv.player.world.isRemote)
             WRClientPH.sendDecrementSlot(slot);
         
         ItemStack item = invitems[selecteditem];
-        item.stackSize -= 1;
+        item.shrink(1);
         
-        if(item.stackSize == 0)
+        if(item.getCount() == 0)
         {
-            inv.mainInventory[slot] = null;
+            inv.mainInventory.set(slot, ItemStack.EMPTY);
             searchInventoryItems();
             selectItem(selecteditem);
         }
@@ -157,7 +157,7 @@ public class GuiInvItemSlot extends GuiWidget
         {
             invitems[i] = null;
             invslotnumbers[i] = -1;
-            for(int j = 0; j < inv.mainInventory.length; j++)
+            for(int j = 0; j < inv.mainInventory.size(); j++)
             {
                 ItemStack invstack = inv.getStackInSlot(j);
                 if(invstack == null)

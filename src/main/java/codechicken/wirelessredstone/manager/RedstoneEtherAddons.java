@@ -21,8 +21,8 @@ public abstract class RedstoneEtherAddons
         EntityREP activeREP;
         int REPThrowTimeout;
         WirelessMapNodeStorage mapNodes = new WirelessMapNodeStorage();
-        HashSet<Integer> triangSet = new HashSet<Integer>();
-        HashSet<Integer> mapInfoSet = new HashSet<Integer>();
+        HashSet<Integer> triangSet = new HashSet<>();
+        HashSet<Integer> mapInfoSet = new HashSet<>();
     }
     
     private static RedstoneEtherClientAddons clientManager;

@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.item;
 
-import codechicken.lib.model.blockbakery.IBakeryItem;
-import codechicken.lib.model.blockbakery.IItemBakery;
+import codechicken.lib.model.bakery.IBakeryProvider;
+import codechicken.lib.model.bakery.generation.IBakery;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.client.bakery.WirelessRemoteBakery;
@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem {
+public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryProvider {
     public ItemWirelessRemote() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:remote");
@@ -30,7 +30,8 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (!player.isSneaking() && stack.getItemDamage() <= 5000 && stack.getItemDamage() > 0)//not sneaking, off and valid freq
         {
             TileEntity tile = world.getTileEntity(pos);
@@ -40,21 +41,22 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
                 return EnumActionResult.SUCCESS;
             }
         }
-        onItemRightClick(stack, world, player, hand);
+        onItemRightClick(world, player, hand);
         return EnumActionResult.PASS;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (player.isSneaking()) {
-            return super.onItemRightClick(itemStack, world, player, hand);
+            return super.onItemRightClick(world, player, hand);
         }
 
-        if (!getTransmitting(itemStack) && itemStack.getItemDamage() != 0) {
+        if (!getTransmitting(stack) && stack.getItemDamage() != 0) {
             RedstoneEtherAddons.get(world.isRemote).activateRemote(world, player);
         }
 
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override
@@ -93,31 +95,12 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
         stack.getTagCompound().setBoolean("on", on);
     }
 
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public IIcon getIcon(ItemStack stack, int pass) {
-    //    return getIconIndex(stack);
-    //}
-
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public IIcon getIconIndex(ItemStack stack) {
-    //    int freq = stack.getItemDamage();
-    //    if (freq <= 0 || freq > RedstoneEther.numfreqs)
-    //        return RemoteTexManager.getIcon(-1, false);
-    //    return RemoteTexManager.getIcon(RedstoneEther.get(true).getFreqColourId(freq), getTransmitting(stack));
-    //}
-
     @Override
     @SideOnly (Side.CLIENT)
     public String getItemStackDisplayName(ItemStack itemstack) {
         return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("item.wrcbe.remote.short"), itemstack.getItemDamage());
     }
 
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister par1IconRegister) {
-    //}
 
     @Override
     public String getGuiName() {
@@ -126,7 +109,7 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryItem 
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IItemBakery getBakery() {
+    public IBakery getBakery() {
         return WirelessRemoteBakery.INSTANCE;
     }
 }

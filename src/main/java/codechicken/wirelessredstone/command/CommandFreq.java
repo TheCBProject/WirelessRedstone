@@ -2,12 +2,12 @@ package codechicken.wirelessredstone.command;
 
 import java.util.LinkedList;
 
-import codechicken.core.commands.CoreCommand;
+import codechicken.lib.command.CoreCommand;
 import net.minecraft.command.ICommandSender;
 
 public class CommandFreq extends CoreCommand
 {    
-    public static LinkedList<FreqParam> paramHandlers = new LinkedList<FreqParam>();
+    public static LinkedList<FreqParam> paramHandlers = new LinkedList<>();
     
     static
     {
@@ -20,7 +20,7 @@ public class CommandFreq extends CoreCommand
     }
     
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "freq";
     }

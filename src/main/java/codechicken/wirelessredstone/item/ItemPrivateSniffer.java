@@ -21,12 +21,13 @@ public class ItemPrivateSniffer extends Item {
 
     @Override
     @SideOnly (Side.CLIENT)
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack itemStack = player.getHeldItem(hand);
         if (world.isRemote) {
             WirelessRedstone.proxy.openPSnifferGui(player);
             RedstoneEtherAddons.client().addSniffer(player);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+            return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+        return new ActionResult<>(EnumActionResult.PASS, itemStack);
     }
 }

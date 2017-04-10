@@ -1,8 +1,8 @@
 package codechicken.wirelessredstone.client.bakery;
 
+import codechicken.lib.model.ItemQuadBakery;
 import codechicken.lib.model.PerspectiveAwareModelProperties;
-import codechicken.lib.model.bakery.ItemModelBakery;
-import codechicken.lib.model.blockbakery.IItemBakery;
+import codechicken.lib.model.bakery.generation.IItemBakery;
 import codechicken.wirelessredstone.client.texture.RemoteTexManager;
 import codechicken.wirelessredstone.item.ItemWirelessRemote;
 import codechicken.wirelessredstone.manager.RedstoneEther;
@@ -30,7 +30,7 @@ public class WirelessRemoteBakery implements IItemBakery {
         } else {
             sprite = RemoteTexManager.getIcon(RedstoneEther.get(true).getFreqColourId(freq), ItemWirelessRemote.getTransmitting(stack));
         }
-        return ItemModelBakery.bakeItem(ImmutableList.of(sprite));
+        return ItemQuadBakery.bakeItem(ImmutableList.of(sprite));
     }
 
     @Override

@@ -45,7 +45,7 @@ public class TransmitterPart extends TransceiverPart
         setActive(on);
         if (!disabled() || !on) {
             changeSpinState(on);
-            RedstoneEther.server().setTransmitter(world(), x(), y(), z(), currentfreq, active());
+            RedstoneEther.server().setTransmitter(world(), pos(), currentfreq, active());
         }
         updateChange();
     }
@@ -118,12 +118,12 @@ public class TransmitterPart extends TransceiverPart
     public void addToEther() {
         resetRotation();
         updateChange();
-        RedstoneEther.server().setTransmitter(world(), x(), y(), z(), currentfreq, active() && !disabled());
+        RedstoneEther.server().setTransmitter(world(), pos(), currentfreq, active() && !disabled());
     }
 
     @Override
     public void removeFromEther() {
-        RedstoneEther.server().remTransmitter(world(), x(), y(), z(), currentfreq);
+        RedstoneEther.server().remTransmitter(world(), pos(), currentfreq);
     }
 
     @Override

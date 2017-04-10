@@ -1,7 +1,7 @@
 package codechicken.wirelessredstone.network;
 
+import codechicken.lib.packet.ICustomPacketHandler.IClientPacketHandler;
 import codechicken.lib.packet.PacketCustom;
-import codechicken.lib.packet.PacketCustom.IClientPacketHandler;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.entity.EntityREP;
@@ -31,7 +31,7 @@ public class WRClientPH implements IClientPacketHandler
 
     @Override
     public void handlePacket(PacketCustom packet, Minecraft mc, INetHandlerPlayClient handler) {
-        handlePacket(mc.theWorld, mc.thePlayer, packet);
+        handlePacket(mc.world, mc.player, packet);
     }
 
     private void handlePacket(WorldClient world, EntityPlayer player, PacketCustom packet) {
@@ -260,7 +260,7 @@ public class WRClientPH implements IClientPacketHandler
             return;
 
         GuiWirelessSniffer sniffergui = ((GuiWirelessSniffer) currentscreen);
-        sniffergui.setEtherCopy(packet.readByteArray(packet.readUShort()));
+        sniffergui.setEtherCopy(packet.readArray(packet.readUShort()));
     }
 
     private static void processMapUpdate(World world, EntityPlayer player, PacketCustom packet) {

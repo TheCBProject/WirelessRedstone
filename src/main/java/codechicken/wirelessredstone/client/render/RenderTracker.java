@@ -45,7 +45,7 @@ public class RenderTracker extends RenderEntity
     
     static
     {
-        model = CCOBJParser.parseObjModels(new ResourceLocation("wrcbe", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
+        model = OBJParser.parseModels(new ResourceLocation("wrcbe", "models/tracker.obj"), 7, new SwapYZ()).get("Tracker");
         model.apply(new Translation(0, 0.1875, 0));
     }
 
@@ -100,7 +100,7 @@ public class RenderTracker extends RenderEntity
                     tracker.attachedEntity.lastTickPosY + (tracker.attachedEntity.posY - tracker.attachedEntity.lastTickPosY)*f1 + tracker.attachedEntity.height/2 - tracker.attachedEntity.getEyeHeight() - tracker.height,
                     tracker.attachedEntity.lastTickPosZ + (tracker.attachedEntity.posZ - tracker.attachedEntity.lastTickPosZ)*f1);
             RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-            pos.add(relVec).add(-manager.renderPosX, -manager.renderPosY, -manager.renderPosZ);
+            pos.add(relVec).add(-manager.renderPosX, -manager.renderPosY, -manager.renderPosZ);//TODO these are just interpolated player positions, Create helper, rule the world.
 
             GlStateManager.translate(pos.x, pos.y, pos.z);
 

@@ -25,24 +25,25 @@ public class ItemWirelessTracker extends ItemWirelessFreq
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack itemStack = player.getHeldItem(hand);
         if (player.isSneaking()) {
-            return super.onItemRightClick(itemStack, world, player, hand);
+            return super.onItemRightClick(world, player, hand);
         }
 
         if (getItemFreq(itemStack) == 0)
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+            return new ActionResult<>(EnumActionResult.PASS, itemStack);
 
         if (!player.capabilities.isCreativeMode) {
-            itemStack.stackSize--;
+            itemStack.shrink(1);
         }
         if (!world.isRemote) {
             world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
             EntityWirelessTracker tracker = new EntityWirelessTracker(world, getItemFreq(itemStack), player);
-            world.spawnEntityInWorld(tracker);
+            world.spawnEntity(tracker);
             WRServerPH.sendThrowTracker(tracker, player);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }
 
 
@@ -63,9 +64,4 @@ public class ItemWirelessTracker extends ItemWirelessFreq
     public String getGuiName() {
         return I18n.translateToLocal("item.wrcbe:tracker.name");
     }
-
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister par1IconRegister) {
-    //}
 }

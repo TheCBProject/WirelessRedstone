@@ -1,6 +1,6 @@
 package codechicken.wirelessredstone.command;
 
-import codechicken.core.commands.CoreCommand;
+import codechicken.lib.command.CoreCommand;
 import codechicken.lib.util.ServerUtils;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.command.ICommandSender;

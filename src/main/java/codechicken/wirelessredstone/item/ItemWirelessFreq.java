@@ -16,7 +16,7 @@ public abstract class ItemWirelessFreq extends Item
 {
 
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (!player.isSneaking())
             return EnumActionResult.PASS;
 
@@ -25,17 +25,17 @@ public abstract class ItemWirelessFreq extends Item
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
             WirelessRedstone.proxy.openItemWirelessGui(player);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+            return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
         }
 
-        return super.onItemRightClick(itemStack, world, player, hand);
+        return super.onItemRightClick(world, player, hand);
     }
 
     public final void setFreq(EntityPlayer player, int slot, ItemStack stack, int freq) {
-        if (player.worldObj.isRemote)
+        if (player.world.isRemote)
             WRClientPH.sendSetItemFreq(slot, freq);
         else
             stack.setItemDamage(freq);

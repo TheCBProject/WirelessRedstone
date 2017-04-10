@@ -1,8 +1,8 @@
 package codechicken.wirelessredstone.client.bakery;
 
+import codechicken.lib.model.ItemQuadBakery;
 import codechicken.lib.model.PerspectiveAwareModelProperties;
-import codechicken.lib.model.bakery.ItemModelBakery;
-import codechicken.lib.model.blockbakery.IItemBakery;
+import codechicken.lib.model.bakery.generation.IItemBakery;
 import codechicken.wirelessredstone.client.texture.TriangTexManager;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import com.google.common.collect.ImmutableList;
@@ -27,7 +27,7 @@ public class WirelessTriangulatorBakery implements IItemBakery {
             damage = 0;
         }
 
-        return ItemModelBakery.bakeItem(ImmutableList.of(TriangTexManager.getIconFromDamage(damage)));
+        return ItemQuadBakery.bakeItem(ImmutableList.of(TriangTexManager.getIconFromDamage(damage)));
     }
 
     @Override

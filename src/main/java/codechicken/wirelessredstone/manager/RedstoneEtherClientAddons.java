@@ -30,14 +30,14 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
     private boolean wasmousedown;
     private Remote remote;
     private TriangFreqManager[] triangFreqs;
-    private HashMap<Short, ClientMapInfo> clientMapInfoSet = new HashMap<Short, ClientMapInfo>();
+    private HashMap<Short, ClientMapInfo> clientMapInfoSet = new HashMap<>();
     private WirelessMapNodeStorage wirelessmapnodes;
     private EntityREP activeREP;
     private int REPThrowTimeout;
     private int ticksInGui;
 
     public RedstoneEtherClientAddons() {
-        clientMapInfoSet = new HashMap<Short, ClientMapInfo>();
+        clientMapInfoSet = new HashMap<>();
         triangFreqs = new TriangFreqManager[RedstoneEther.numfreqs + 1];
         for (int freq = 1; freq <= RedstoneEther.numfreqs; freq++) {
             triangFreqs[freq] = new TriangFreqManager(freq);
@@ -178,9 +178,9 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         Minecraft mc = Minecraft.getMinecraft();
 
         checkClicks();
-        updateTriangulators(mc.thePlayer);
-        openItemGui(mc.thePlayer);
-        processRemote(mc.theWorld, mc.thePlayer, mc.currentScreen, mc.objectMouseOver);
+        updateTriangulators(mc.player);
+        openItemGui(mc.player);
+        processRemote(mc.world, mc.player, mc.currentScreen, mc.objectMouseOver);
 
         if (REPThrowTimeout > 0)
             REPThrowTimeout--;
@@ -210,11 +210,11 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         }
 
         if (!player.capabilities.isCreativeMode) {
-            itemstack.stackSize--;
+            itemstack.shrink(1);
         }
         world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL,  0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
         activeREP = new EntityREP(world, player);
-        world.spawnEntityInWorld(activeREP);
+        world.spawnEntity(activeREP);
         REPThrowTimeout = 40;
     }
 
