@@ -1,0 +1,117 @@
+#Items
+item.wrcbe:material.obsidian_stick.name=Graveto de Obsidiana
+item.wrcbe:material.stone_bowl.name=Bacia de pedra
+item.wrcbe:material.rether_pearl.name=Pérola REther
+item.wrcbe:material.wireless_transceiver.name=Transceptor sem-fio
+item.wrcbe:material.blaze_transceiver.name=Transceptor de Blaze
+item.wrcbe:material.receiver_dish.name=Antena Receptora
+item.wrcbe:material.blaze_receiver_dish.name=Antena Receptora de Blaze
+item.wrcbe:sniffer.name=Sniffer sem-fio
+item.wrcbe:private_sniffer.name=Sniffer privado
+item.wrcbe:empty_map.name=Mapa sem-fio vazio
+item.wrcbe:map.name=Mapa sem-fio
+item.wrcbe:rep.name=REP
+item.wrcbe:triangulator.name=Triangularizador sem fio
+item.wrcbe:remote.name=Controle sem-fio
+item.wrcbe:tracker.name=Rastreador sem-fio
+item.wrcbe:wireless_part|0.name=Transmissor sem-fio
+item.wrcbe:wireless_part|1.name=Receptor sem-fio
+item.wrcbe:wireless_part|2.name=Jammer sem-fio
+
+#Misc
+death.attack.wrcbe:bolt=%1$s foi morto pelo raio REther.
+itemGroup.wrcbe=Redstone sem-fio CBE
+item.wrcbe.triangulator.short=Triangularizador
+item.wrcbe.remote.short=Remoto
+item.wrcbe.tracker.short=Rastreador
+
+#Gui
+wrcbe.button.simple=Simples
+wrcbe.button.advanced=Avançado
+wrcbe.button.set=definir
+wrcbe.button.colour=Mudança de fase
+wrcbe.button.setname=Definir Nome
+wrcbe.button.remname=Remover
+wrcbe.label.value=Valor
+wrcbe.label.name=Nome da frequência
+wrcbe.label.colour=Espectro
+wrcbe.label.freq=Freqência
+
+#Command
+wrcbe.command.usage=Gerenciamento WR-CBE REther. Uso: freq [parâmetros...]
+wrcbe.command.usage1=parâmetros: %s
+wrcbe.command.usage2=use /freq help [parâmetros] para mais informações
+
+wrcbe.param.invalidno=Número inválido de parâmetros
+wrcbe.param.invalid=Parâmetro inválido
+wrcbe.param.missing=Faltando parâmentro
+wrcbe.param.invalidfreq=Frequência inválida
+wrcbe.param.invalidfreqrange=Extensão de frequência inválida
+
+wrcbe.param.get.usage=Uso: freq get [public | shared | private]
+wrcbe.param.get.usage1=Ex. freq get public. Retorna a zona de frequência pública
+wrcbe.param.get.usage2=Ex. freq get shared. Retorna a zona de frequência compartilhada
+wrcbe.param.get.usage3=Ex. freq get private. Retorna o número de frequências privadas que cada jogador pode ter
+wrcbe.param.get.public=Frequências 1-%d são públicas
+wrcbe.param.get.shared=Frequências %d-%d são compartilhadas
+wrcbe.param.get.shared0=Não há frequências compartilhadas
+wrcbe.param.get.private=Para todos os players são permitidos %d frequências privadas
+
+wrcbe.param.private.usage=Uso: freq private [params...]
+wrcbe.param.private.usage1=Ex. freq private [username | all]. Retorna as frequências que o dono é [username]
+wrcbe.param.private.usage2=Ex. freq private [username] [freq]. Define o dono de [freq] para [username]
+wrcbe.param.private.usage3=Ex. freq private [freq]. Retorna o dono de [freq]
+wrcbe.param.private.usage4=Ex. freq private clear [freq | username | all]. Remove o dono de [freq]
+wrcbe.param.private.none=Não há frequências privadas
+wrcbe.param.private.list=As seguintes frequências são prviadas: %s
+wrcbe.param.private.ispublic=%d é pública
+wrcbe.param.private.publicanyway=%d é pública de qualquer jeito
+wrcbe.param.private.notprivate=%d não é priada
+wrcbe.param.private.noneowned=%s não tem nenhuma frequência
+wrcbe.param.private.nowshared=%d agora é compartilhada
+wrcbe.param.private.nowshared2=As seguintes frequências agora são compartilhadas: %s
+wrcbe.param.private.ownedby=%d é possuída por %s
+wrcbe.param.private.owns=%s possui estas seguintes frequências: %s
+wrcbe.param.private.notshared=%d não está na zona compartilhada
+wrcbe.param.private.nowownedby=%d agora é de %s
+wrcbe.param.private.limit=%s já tem %d frequências
+
+wrcbe.param.scan.usage=Usage: freq scan [nome de jogador]
+wrcbe.param.scan.usage1=Reporta as frequências que [playername] pode difundir e ser dono
+wrcbe.param.scan.usage2=Ex. freq scan codechicken
+wrcbe.param.scan.usage3=Ex. freq scan
+wrcbe.param.scan.list=%s pode difundir em: %s
+wrcbe.param.scan.onlypublic=%s pode difundir somente em frequências públicas
+
+wrcbe.param.set.usage=Usage: freq set [public | shared | private] [valor]
+wrcbe.param.set.usage1=Ex. freq set public. Define frequências 1 para [value] como pública
+wrcbe.param.set.usage2=Ex. freq set shared. Define frequências [public+1] para [value] como compartilhada
+wrcbe.param.set.usage3=Ex. freq set private. Dá a cada player [value] frequências privadas
+wrcbe.param.set.invalidnum=Número inválido
+wrcbe.param.set.invalidqty=Quantidade inválida
+wrcbe.param.set.nowpublic=%s: Frequências 1-%d agora são públicas
+wrcbe.param.set.sharedpublic=%s: A zona de frequências compartilhadas foi feita pública
+wrcbe.param.set.nowshared=%s: Frequências %d-%d são agora compartilhadas
+wrcbe.param.set.sharedremoved=%s: A zona de frequências compartilhadas foi removida
+wrcbe.param.set.privateno=%s: Para todos os jogadores agora são permitidas %d frequências privadas
+
+wrcbe.param.jam.usage=Uso: freq jam [playername] [zona de frequência | all | default]
+wrcbe.param.jam.usage1=Jam [nome de jogador] from [zona de frequência]
+wrcbe.param.jam.usage2=Ex. freq %s codechicken 100-250
+wrcbe.param.jam.usage3=Ex. freq %s codechicken all
+wrcbe.param.jam.usage4=Ex. freq %s codechicken default
+wrcbe.param.jam.usage5=Ex. freq %s 100-250
+wrcbe.param.jam.usage6=Ex. freq %s codechicken 500
+wrcbe.param.jam.noplayer=Nenhum jogador
+wrcbe.param.jam.errpublic=Você não pode obstruir uma frequência pública de alguém
+wrcbe.param.jam.jammed=Você foi obstruído da frequência %d
+wrcbe.param.jam.jammed2=Você foi obstruído das frequências %s
+wrcbe.param.jam.opjammed=%s: %s foi obstruído da frequência %d
+wrcbe.param.jam.opjammed2=%s: %s foi obstruído das frequências %s
+
+wrcbe.param.open.usage=Usage: freq open [nome de jogador] [zona de freqência | all | default]
+wrcbe.param.open.usage1=Unjam [nome de jogador] from [zona de frequência]
+wrcbe.param.open.jammed=Foi garantida a frequência %d para você
+wrcbe.param.open.jammed2=Foram garantidas as frequências %s para você
+wrcbe.param.open.opjammed=%s:Para %s foi garantida a frequência %d
+wrcbe.param.open.opjammed2=%s:Para %s foram garantidas as frequências %s
