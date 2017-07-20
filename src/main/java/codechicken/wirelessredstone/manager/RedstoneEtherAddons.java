@@ -41,6 +41,9 @@ public abstract class RedstoneEtherAddons
     @SideOnly(Side.CLIENT)
     public static RedstoneEtherClientAddons client()
     {
+        if (clientManager == null) {
+            loadClientManager();
+        }
         return clientManager;
     }
 

@@ -16,6 +16,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,7 +32,7 @@ import static net.minecraft.client.renderer.block.model.ItemCameraTransforms.Tra
 /**
  * Created by covers1624 on 15/02/2017.
  */
-public class RenderItemTracker implements IItemRenderer, IPerspectiveAwareModel {
+public class RenderItemTracker implements IItemRenderer {
 
     private static final CCModelState MODEL_STATE;
 
@@ -50,13 +52,8 @@ public class RenderItemTracker implements IItemRenderer, IPerspectiveAwareModel 
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-        return MapWrapper.handlePerspective(this, MODEL_STATE, cameraTransformType);
+    public IModelState getTransforms() {
+        return MODEL_STATE;
     }
 
     @Override
@@ -70,27 +67,7 @@ public class RenderItemTracker implements IItemRenderer, IPerspectiveAwareModel 
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
-        return true;
-    }
-
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return null;
-    }
-
-    @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
-
-    @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.NONE;
-    }
-
-    @Override
-    public void renderItem(ItemStack item) {
+    public void renderItem(ItemStack item, TransformType transformType) {
         RenderTracker.renderTracker(item.getItemDamage());
     }
 }

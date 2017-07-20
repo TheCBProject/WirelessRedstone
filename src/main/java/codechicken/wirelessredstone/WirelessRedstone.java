@@ -4,10 +4,12 @@ import codechicken.lib.CodeChickenLib;
 import codechicken.lib.gui.SimpleCreativeTab;
 import codechicken.wirelessredstone.command.CommandFreq;
 import codechicken.wirelessredstone.handler.WREventHandler;
+import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.init.PartFactory;
 import codechicken.wirelessredstone.manager.SaveManager;
 import codechicken.wirelessredstone.proxy.Proxy;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -45,7 +47,7 @@ public class WirelessRedstone {
     @Instance(MOD_ID)
     public static WirelessRedstone instance;
 
-    public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", "wrcbe:wireless_logic", 1);
+    public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", () -> new ItemStack(ModItems.itemWireless, 1, 1));
     public static DamageSource damageBolt;
 
     @Mod.EventHandler

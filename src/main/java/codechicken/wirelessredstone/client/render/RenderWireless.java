@@ -56,12 +56,7 @@ public class RenderWireless implements IIconRegister {
         CCModel tstand = setTex(modelMap.get("TStand"), 2);
         CCModel jstand = setTex(tstand.copy(), 1);
         CCModel rstand = setTex(modelMap.get("RStand"), 2);
-        CCModel rdish = modelMap.get("RDish");
-
-        Vertex5[] verts = rdish.getVertices();
-        for (int vertexIndex = 64; vertexIndex < 96; vertexIndex++) {
-            verts[vertexIndex].uv.set(0, 0.9);
-        }
+        CCModel rdish = modelMap.get("RDish").shrinkUVs(0.0005);
 
         models[0][0] = tstand;
         models[1][0] = CCModel.combine(Arrays.asList(rstand, rdish));
