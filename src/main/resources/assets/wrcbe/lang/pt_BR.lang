@@ -1,28 +1,28 @@
 #Items
 item.wrcbe:material.obsidian_stick.name=Graveto de Obsidiana
-item.wrcbe:material.stone_bowl.name=Bacia de pedra
+item.wrcbe:material.stone_bowl.name=Bacia de Pedra
 item.wrcbe:material.rether_pearl.name=Pérola REther
-item.wrcbe:material.wireless_transceiver.name=Transceptor sem-fio
+item.wrcbe:material.wireless_transceiver.name=Transceptor Sem-fio
 item.wrcbe:material.blaze_transceiver.name=Transceptor de Blaze
 item.wrcbe:material.receiver_dish.name=Antena Receptora
 item.wrcbe:material.blaze_receiver_dish.name=Antena Receptora de Blaze
-item.wrcbe:sniffer.name=Sniffer sem-fio
-item.wrcbe:private_sniffer.name=Sniffer privado
-item.wrcbe:empty_map.name=Mapa sem-fio vazio
-item.wrcbe:map.name=Mapa sem-fio
+item.wrcbe:sniffer.name=Sniffer Sem-fio
+item.wrcbe:private_sniffer.name=Sniffer Privado
+item.wrcbe:empty_map.name=Mapa Sem-fio Vazio
+item.wrcbe:map.name=Mapa Sem-fio
 item.wrcbe:rep.name=REP
-item.wrcbe:triangulator.name=Triangularizador sem fio
-item.wrcbe:remote.name=Controle sem-fio
-item.wrcbe:tracker.name=Rastreador sem-fio
-item.wrcbe:wireless_part|0.name=Transmissor sem-fio
-item.wrcbe:wireless_part|1.name=Receptor sem-fio
-item.wrcbe:wireless_part|2.name=Jammer sem-fio
+item.wrcbe:triangulator.name=Triangularizador Sem-fio
+item.wrcbe:remote.name=Controle Remoto Sem-fio
+item.wrcbe:tracker.name=Rastreador Sem-fio
+item.wrcbe:wireless_part|0.name=Transmissor Sem-fio
+item.wrcbe:wireless_part|1.name=Receptor Sem-fio
+item.wrcbe:wireless_part|2.name=Jammer Sem-fio
 
 #Misc
 death.attack.wrcbe:bolt=%1$s foi morto pelo raio REther.
-itemGroup.wrcbe=Redstone sem-fio CBE
+itemGroup.wrcbe=Redstone Sem-fio CBE
 item.wrcbe.triangulator.short=Triangularizador
-item.wrcbe.remote.short=Remoto
+item.wrcbe.remote.short=Controle remoto
 item.wrcbe.tracker.short=Rastreador
 
 #Gui
@@ -35,7 +35,7 @@ wrcbe.button.remname=Remover
 wrcbe.label.value=Valor
 wrcbe.label.name=Nome da frequência
 wrcbe.label.colour=Espectro
-wrcbe.label.freq=Freqência
+wrcbe.label.freq=Frequência
 
 #Command
 wrcbe.command.usage=Gerenciamento WR-CBE REther. Uso: freq [parâmetros...]
