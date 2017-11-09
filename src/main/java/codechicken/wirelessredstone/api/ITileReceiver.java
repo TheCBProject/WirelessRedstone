@@ -1,10 +1,12 @@
 package codechicken.wirelessredstone.api;
 
-public interface ITileReceiver extends ITileWireless
-{
+public interface ITileReceiver extends ITileWireless {
+
     public void setActive(boolean on);
-    
+
     public double m1();
+
     public double m2(double d);
+
     public void m3(double d);
 }

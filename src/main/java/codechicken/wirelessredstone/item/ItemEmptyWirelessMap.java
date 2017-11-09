@@ -18,7 +18,6 @@ public class ItemEmptyWirelessMap extends ItemMapBase {
         setCreativeTab(WirelessRedstone.creativeTab);
     }
 
-
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
@@ -28,20 +27,16 @@ public class ItemEmptyWirelessMap extends ItemMapBase {
         worldIn.setData(s, mapdata);
         mapdata.scale = 0;
         int i = 128 * (1 << mapdata.scale);
-        mapdata.xCenter = (int)(Math.round(playerIn.posX / (double)i) * (long)i);
-        mapdata.zCenter = (int)(Math.round(playerIn.posZ / (double)i) * (long)i);
+        mapdata.xCenter = (int) (Math.round(playerIn.posX / (double) i) * (long) i);
+        mapdata.zCenter = (int) (Math.round(playerIn.posZ / (double) i) * (long) i);
         mapdata.dimension = worldIn.provider.getDimension();
         mapdata.markDirty();
         itemStackIn.shrink(1);
 
-        if (itemStackIn.getCount() <= 0)
-        {
+        if (itemStackIn.getCount() <= 0) {
             return new ActionResult<>(EnumActionResult.SUCCESS, itemstack1);
-        }
-        else
-        {
-            if (!playerIn.inventory.addItemStackToInventory(itemstack1.copy()))
-            {
+        } else {
+            if (!playerIn.inventory.addItemStackToInventory(itemstack1.copy())) {
                 playerIn.dropItem(itemstack1, false);
             }
 

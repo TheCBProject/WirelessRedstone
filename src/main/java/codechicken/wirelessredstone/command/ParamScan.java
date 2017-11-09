@@ -5,13 +5,13 @@ import codechicken.lib.util.ServerUtils;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.command.ICommandSender;
 
-public class ParamScan extends FreqParam
-{
+public class ParamScan extends FreqParam {
+
     @Override
     public void printHelp(ICommandSender listener) {
-        CoreCommand.chatT(listener,"wrcbe.param.scan.usage");
-        CoreCommand.chatT(listener,"wrcbe.param.scan.usage1");
-        CoreCommand.chatT(listener,"wrcbe.param.scan.usage" + (rand.nextInt(2) + 2));
+        CoreCommand.chatT(listener, "wrcbe.param.scan.usage");
+        CoreCommand.chatT(listener, "wrcbe.param.scan.usage1");
+        CoreCommand.chatT(listener, "wrcbe.param.scan.usage" + (rand.nextInt(2) + 2));
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ParamScan extends FreqParam
         RedstoneEther ether = RedstoneEther.get(false);
 
         if (subArray.length == 1 && ServerUtils.getPlayer(playername) == null) {
-            CoreCommand.chatT(listener,"wrcbe.param.invalidno");
+            CoreCommand.chatT(listener, "wrcbe.param.invalidno");
             return;
         }
 
@@ -42,13 +42,15 @@ public class ParamScan extends FreqParam
                 break;
             }
 
-            if (ranges != 0)
+            if (ranges != 0) {
                 freqs.append(", ");
+            }
 
-            if (startfreq == endfreq)
+            if (startfreq == endfreq) {
                 freqs.append(startfreq);
-            else
+            } else {
                 freqs.append(startfreq).append("-").append(endfreq);
+            }
 
             ranges++;
 
@@ -57,10 +59,11 @@ public class ParamScan extends FreqParam
             }
         }
 
-        if (ranges == 0)
-            CoreCommand.chatT(listener,"wrcbe.param.scan.onlypublic", scanPlayer);
-        else
-            CoreCommand.chatT(listener,"wrcbe.param.scan.list", scanPlayer, freqs);
+        if (ranges == 0) {
+            CoreCommand.chatT(listener, "wrcbe.param.scan.onlypublic", scanPlayer);
+        } else {
+            CoreCommand.chatT(listener, "wrcbe.param.scan.list", scanPlayer, freqs);
+        }
     }
 
 }

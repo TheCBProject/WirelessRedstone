@@ -12,13 +12,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class ItemWirelessFreq extends Item
-{
+public abstract class ItemWirelessFreq extends Item {
 
     @Override
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        if (!player.isSneaking())
+        if (!player.isSneaking()) {
             return EnumActionResult.PASS;
+        }
 
         WirelessRedstone.proxy.openItemWirelessGui(player);
         return EnumActionResult.SUCCESS;
@@ -35,10 +35,11 @@ public abstract class ItemWirelessFreq extends Item
     }
 
     public final void setFreq(EntityPlayer player, int slot, ItemStack stack, int freq) {
-        if (player.world.isRemote)
+        if (player.world.isRemote) {
             WRClientPH.sendSetItemFreq(slot, freq);
-        else
+        } else {
             stack.setItemDamage(freq);
+        }
     }
 
     public abstract int getItemFreq(ItemStack itemstack);

@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemPrivateSniffer extends Item {
+
     public ItemPrivateSniffer() {
         setMaxStackSize(1);
         setCreativeTab(WirelessRedstone.creativeTab);

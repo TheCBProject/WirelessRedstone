@@ -11,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemWirelessSniffer extends Item {
+
     public ItemWirelessSniffer() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:sniffer");

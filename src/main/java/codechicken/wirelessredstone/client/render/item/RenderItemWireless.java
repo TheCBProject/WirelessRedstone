@@ -6,24 +6,9 @@ import codechicken.lib.util.TransformUtils;
 import codechicken.wirelessredstone.client.render.RenderWireless;
 import codechicken.wirelessredstone.item.ItemWirelessPart;
 import codechicken.wirelessredstone.part.WirelessPart;
-import com.google.common.collect.ImmutableList;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelState;
-import org.apache.commons.lang3.tuple.Pair;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
-import java.util.List;
 
 public class RenderItemWireless implements IItemRenderer {
 

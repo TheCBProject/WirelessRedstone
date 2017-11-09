@@ -4,30 +4,29 @@ import codechicken.lib.packet.ICustomPacketHandler.IClientPacketHandler;
 import codechicken.lib.packet.PacketCustom;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.WirelessRedstone;
-import codechicken.wirelessredstone.entity.EntityREP;
-import codechicken.wirelessredstone.entity.EntityWirelessTracker;
-import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
-import codechicken.wirelessredstone.util.WirelessMapNodeStorage;
 import codechicken.wirelessredstone.api.ClientMapInfo;
 import codechicken.wirelessredstone.api.FreqCoord;
 import codechicken.wirelessredstone.client.gui.GuiWirelessSniffer;
+import codechicken.wirelessredstone.entity.EntityREP;
+import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.entity.WirelessBolt;
 import codechicken.wirelessredstone.manager.RedstoneEther;
+import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
+import codechicken.wirelessredstone.util.WirelessMapNodeStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class WRClientPH implements IClientPacketHandler
-{
+public class WRClientPH implements IClientPacketHandler {
 
     @Override
     public void handlePacket(PacketCustom packet, Minecraft mc, INetHandlerPlayClient handler) {
@@ -52,10 +51,7 @@ public class WRClientPH implements IClientPacketHandler
                 RedstoneEther.client().jamEntity(player, packet.readBoolean());
                 break;
             case 8:
-                WirelessBolt bolt = new WirelessBolt(world,
-                        new Vector3(packet.readFloat(), packet.readFloat(), packet.readFloat()),
-                        new Vector3(packet.readFloat(), packet.readFloat(), packet.readFloat()),
-                        packet.readLong());
+                WirelessBolt bolt = new WirelessBolt(world, new Vector3(packet.readFloat(), packet.readFloat(), packet.readFloat()), new Vector3(packet.readFloat(), packet.readFloat(), packet.readFloat()), packet.readLong());
 
                 bolt.defaultFractal();
                 bolt.finalizeBolt();
@@ -82,33 +78,37 @@ public class WRClientPH implements IClientPacketHandler
                 processMapUpdate(world, player, packet);
                 break;
             case 59:
-                if (packet.readBoolean())
+                if (packet.readBoolean()) {
                     throwREP(packet.readInt(), packet.readInt(), world, player);
-                else
+                } else {
                     world.removeEntityFromWorld(packet.readInt());
+                }
                 break;
             case 60:
                 processTrackerUpdate(packet, world, player);
                 break;
             case 61:
-                if (packet.readBoolean())
+                if (packet.readBoolean()) {
                     throwTracker(world, player, packet.readInt(), packet.readInt(), packet.readUShort());
-                else
+                } else {
                     world.removeEntityFromWorld(packet.readInt());
+                }
                 break;
         }
     }
 
     private void handleFreqOwnerList(PacketCustom packet) {
         int numFreqs = packet.readUShort();
-        for (int i = 0; i < numFreqs; i++)
+        for (int i = 0; i < numFreqs; i++) {
             RedstoneEther.get(true).setFreqOwner(packet.readShort(), packet.readString());
+        }
     }
 
     private void handleFreqInfoList(PacketCustom packet) {
         int numFreqs = packet.readUShort();
-        for (int i = 0; i < numFreqs; i++)
+        for (int i = 0; i < numFreqs; i++) {
             handleFreqInfo(packet);
+        }
     }
 
     private void handleFreqInfo(PacketCustom packet) {
@@ -165,8 +165,9 @@ public class WRClientPH implements IClientPacketHandler
 
     private void throwTracker(WorldClient world, EntityPlayer player, int entityID, int throwerID, int freq) {
         Entity thrower = world.getEntityByID(throwerID);
-        if (throwerID == player.getEntityId())
+        if (throwerID == player.getEntityId()) {
             thrower = player;
+        }
 
         if (thrower != null && thrower instanceof EntityLiving) {
             EntityWirelessTracker tracker = new EntityWirelessTracker(world, 0, (EntityLiving) thrower);
@@ -182,12 +183,14 @@ public class WRClientPH implements IClientPacketHandler
         boolean attached = packet.readBoolean();
 
         Entity e = world.getEntityByID(entityID);
-        if (e != null && e.isDead)
+        if (e != null && e.isDead) {
             e = null;
+        }
 
         if (!(e instanceof EntityWirelessTracker)) {
-            if (e != null)
+            if (e != null) {
                 throw new IllegalStateException("EntityID mapped to non tracker");
+            }
 
             e = new EntityWirelessTracker(world, freq);
             e.setEntityId(entityID);
@@ -199,10 +202,11 @@ public class WRClientPH implements IClientPacketHandler
             int attachedEntityID = packet.readInt();
 
             Entity attachedEntity;
-            if (attachedEntityID == player.getEntityId())
+            if (attachedEntityID == player.getEntityId()) {
                 attachedEntity = player;
-            else
+            } else {
                 attachedEntity = world.getEntityByID(attachedEntityID);
+            }
 
             if (attachedEntity == null) {
                 return;
@@ -235,8 +239,9 @@ public class WRClientPH implements IClientPacketHandler
 
     private void throwREP(int entityID, int throwerID, WorldClient world, EntityPlayer player) {
         Entity thrower = world.getEntityByID(throwerID);
-        if (throwerID == player.getEntityId())
+        if (throwerID == player.getEntityId()) {
             thrower = player;
+        }
 
         if (thrower != null && thrower instanceof EntityLivingBase) {
             EntityREP rep = new EntityREP(world, (EntityLivingBase) thrower);
@@ -247,8 +252,9 @@ public class WRClientPH implements IClientPacketHandler
 
     private static void processSnifferFreqUpdate(PacketCustom packet) {
         GuiScreen currentscreen = Minecraft.getMinecraft().currentScreen;
-        if (currentscreen == null || !(currentscreen instanceof GuiWirelessSniffer))
+        if (currentscreen == null || !(currentscreen instanceof GuiWirelessSniffer)) {
             return;
+        }
 
         GuiWirelessSniffer sniffergui = ((GuiWirelessSniffer) currentscreen);
         sniffergui.setEtherFreq(packet.readUShort(), packet.readBoolean());
@@ -256,8 +262,9 @@ public class WRClientPH implements IClientPacketHandler
 
     private static void processSnifferEtherCopy(PacketCustom packet) {
         GuiScreen currentscreen = Minecraft.getMinecraft().currentScreen;
-        if (currentscreen == null || !(currentscreen instanceof GuiWirelessSniffer))
+        if (currentscreen == null || !(currentscreen instanceof GuiWirelessSniffer)) {
             return;
+        }
 
         GuiWirelessSniffer sniffergui = ((GuiWirelessSniffer) currentscreen);
         sniffergui.setEtherCopy(packet.readArray(packet.readUShort()));

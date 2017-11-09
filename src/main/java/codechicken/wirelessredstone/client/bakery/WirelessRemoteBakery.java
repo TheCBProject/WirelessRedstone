@@ -1,7 +1,6 @@
 package codechicken.wirelessredstone.client.bakery;
 
 import codechicken.lib.model.ItemQuadBakery;
-import codechicken.lib.model.PerspectiveAwareModelProperties;
 import codechicken.lib.model.bakery.generation.IItemBakery;
 import codechicken.wirelessredstone.client.texture.RemoteTexManager;
 import codechicken.wirelessredstone.item.ItemWirelessRemote;
@@ -31,10 +30,5 @@ public class WirelessRemoteBakery implements IItemBakery {
             sprite = RemoteTexManager.getIcon(RedstoneEther.get(true).getFreqColourId(freq), ItemWirelessRemote.getTransmitting(stack));
         }
         return ItemQuadBakery.bakeItem(ImmutableList.of(sprite));
-    }
-
-    @Override
-    public PerspectiveAwareModelProperties getModelProperties(ItemStack stack) {
-        return PerspectiveAwareModelProperties.DEFAULT_ITEM;
     }
 }

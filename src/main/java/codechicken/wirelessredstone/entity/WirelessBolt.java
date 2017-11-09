@@ -1,20 +1,14 @@
 package codechicken.wirelessredstone.entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
+import codechicken.lib.config.ConfigTag;
 import codechicken.lib.util.CommonUtils;
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.api.ITileJammer;
 import codechicken.wirelessredstone.api.ITileWireless;
-import codechicken.wirelessredstone.network.WRServerPH;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import codechicken.wirelessredstone.manager.RedstoneEtherServer;
+import codechicken.wirelessredstone.network.WRServerPH;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,13 +21,12 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import codechicken.lib.config.ConfigTag;
-import codechicken.lib.vec.Vector3;
+import java.util.*;
 
-public class WirelessBolt
-{
-    public class BoltPoint
-    {
+public class WirelessBolt {
+
+    public class BoltPoint {
+
         public BoltPoint(Vector3 basepoint, Vector3 offsetvec) {
             this.point = basepoint.copy().add(offsetvec);
             this.basepoint = basepoint;
@@ -45,24 +38,28 @@ public class WirelessBolt
         Vector3 offsetvec;
     }
 
-    public class SegmentSorter implements Comparator<Segment>
-    {
+    public class SegmentSorter implements Comparator<Segment> {
+
         public int compare(Segment o1, Segment o2) {
-            if (o1.splitno != o2.splitno) return o1.splitno < o2.splitno ? -1 : 1;
-            if (o1.segmentno != o2.segmentno) return o1.segmentno < o2.segmentno ? -1 : 1;
+            if (o1.splitno != o2.splitno) {
+                return o1.splitno < o2.splitno ? -1 : 1;
+            }
+            if (o1.segmentno != o2.segmentno) {
+                return o1.segmentno < o2.segmentno ? -1 : 1;
+            }
             return 0;
         }
     }
 
-    public class SegmentLightSorter implements Comparator<Segment>
-    {
+    public class SegmentLightSorter implements Comparator<Segment> {
+
         public int compare(Segment o1, Segment o2) {
             return o1.light != o2.light ? o1.light < o2.light ? -1 : 1 : 0;
         }
     }
 
-    public class Segment
-    {
+    public class Segment {
+
         public Segment(BoltPoint start, BoltPoint end, float light, int segmentnumber, int splitnumber) {
             this.startpoint = start;
             this.endpoint = end;
@@ -175,9 +172,7 @@ public class WirelessBolt
         particleMaxAge = fadetime + rand.nextInt(fadetime) - (fadetime / 2);
         particleAge = -(int) (length * speed);
 
-        boundingBox = new AxisAlignedBB(Math.min(start.x, end.x), Math.min(start.y, end.y), Math.min(start.z, end.z),
-                Math.max(start.x, end.x), Math.max(start.y, end.y), Math.max(start.z, end.z))
-                .expand(length / 2, length / 2, length / 2);
+        boundingBox = new AxisAlignedBB(Math.min(start.x, end.x), Math.min(start.y, end.y), Math.min(start.z, end.z), Math.max(start.x, end.x), Math.max(start.y, end.y), Math.max(start.z, end.z)).expand(length / 2, length / 2, length / 2);
 
         segments.add(new Segment(start, end));
     }
@@ -273,13 +268,15 @@ public class WirelessBolt
     private float rayTraceResistance(Vector3 start, Vector3 end, float prevresistance) {
         RayTraceResult hit = world.rayTraceBlocks(start.vec3(), end.vec3());
 
-        if (hit == null)
+        if (hit == null) {
             return prevresistance;
+        }
 
         if (hit.typeOfHit == Type.BLOCK) {
             IBlockState state = world.getBlockState(hit.getBlockPos());
-            if (state.getBlock().isAir(state, world, hit.getBlockPos()))
+            if (state.getBlock().isAir(state, world, hit.getBlockPos())) {
                 return prevresistance;
+            }
             
             /*if(Block.blocksList[blockID] instanceof ISpecialResistance) 
             {
@@ -301,12 +298,12 @@ public class WirelessBolt
 
         for (Iterator<Entity> iterator = entitylist.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
-            if (entity instanceof EntityLivingBase &&
-                    (entity.getEntityBoundingBox().isVecInside(start3D) || entity.getEntityBoundingBox().isVecInside(end3D))) {
-                if (entity instanceof EntityPlayer)
+            if (entity instanceof EntityLivingBase && (entity.getEntityBoundingBox().contains(start3D) || entity.getEntityBoundingBox().contains(end3D))) {
+                if (entity instanceof EntityPlayer) {
                     entity.attackEntityFrom(WirelessRedstone.damageBolt, playerdamage);
-                else
+                } else {
                     entity.attackEntityFrom(WirelessRedstone.damageBolt, entitydamage);
+                }
 
                 ether.jamEntity((EntityLivingBase) entity, true);
             }
@@ -314,14 +311,16 @@ public class WirelessBolt
     }
 
     private void bbTestEntityDamage() {
-        if (world.isRemote)
+        if (world.isRemote) {
             return;
+        }
 
         int newestsegment = (int) ((particleAge + (int) (length * speed)) / (float) (int) (length * speed) * numsegments0);
 
         List<Entity> nearentities = world.getEntitiesWithinAABBExcludingEntity(wrapper, boundingBox);
-        if (nearentities.size() == 0)
+        if (nearentities.size() == 0) {
             return;
+        }
 
         for (Iterator<Segment> iterator = segments.iterator(); iterator.hasNext(); ) {
             Segment segment = iterator.next();
@@ -392,17 +391,18 @@ public class WirelessBolt
 
         Collections.sort(segments, new SegmentLightSorter());
 
-        if (world.isRemote)
+        if (world.isRemote) {
             clientboltlist.add(this);
-        else {
+        } else {
             serverboltlist.add(this);
             WRServerPH.sendWirelessBolt(this);
         }
     }
 
     private void jamTile() {
-        if (world.isRemote || target == null)
+        if (world.isRemote || target == null) {
             return;
+        }
 
         RedstoneEtherServer ether = (RedstoneEtherServer) this.ether;
         if (canhittarget) {

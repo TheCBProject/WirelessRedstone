@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryProvider {
+
     public ItemWirelessRemote() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:remote");
@@ -101,14 +102,13 @@ public class ItemWirelessRemote extends ItemWirelessFreq implements IBakeryProvi
         return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("item.wrcbe.remote.short"), itemstack.getItemDamage());
     }
 
-
     @Override
     public String getGuiName() {
         return I18n.translateToLocal("item.wrcbe:remote.name");
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public IBakery getBakery() {
         return WirelessRemoteBakery.INSTANCE;
     }

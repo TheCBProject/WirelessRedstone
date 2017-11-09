@@ -10,8 +10,8 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBakeryProvider
-{
+public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBakeryProvider {
+
     public ItemWirelessTriangulator() {
         setCreativeTab(WirelessRedstone.creativeTab);
         setUnlocalizedName("wrcbe:triangulator");
@@ -22,12 +22,10 @@ public class ItemWirelessTriangulator extends ItemWirelessFreq implements IBaker
         return itemstack.getItemDamage();
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
-        return RedstoneEtherAddons.localizeWirelessItem(
-                I18n.translateToLocal("item.wrcbe.triangulator.short"),
-                itemstack.getItemDamage());
+        return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("item.wrcbe.triangulator.short"), itemstack.getItemDamage());
     }
 
     public String getGuiName() {

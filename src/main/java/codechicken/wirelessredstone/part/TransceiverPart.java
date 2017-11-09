@@ -1,22 +1,23 @@
 package codechicken.wirelessredstone.part;
 
+import codechicken.lib.data.MCDataInput;
+import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.WirelessRedstone;
+import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.client.render.RenderWireless;
+import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import codechicken.lib.data.MCDataInput;
-import codechicken.lib.data.MCDataOutput;
-import codechicken.lib.vec.Vector3;
-import codechicken.wirelessredstone.api.ITileWireless;
-import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TransceiverPart extends WirelessPart implements ITileWireless//, IPeripheral
 {
+
     public byte deadmap;
     public int currentfreq;
 
@@ -30,8 +31,9 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
         removeFromEther();
         currentfreq = newfreq;
         addToEther();
-        if (disabled())
+        if (disabled()) {
             RedstoneEther.server().jamNode(world(), pos(), newfreq);
+        }
         updateChange();
     }
 
@@ -81,8 +83,9 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
     public void scheduledTick() {
         if (deadmap != 0) {
             deadmap = (byte) ((deadmap & 0xFF) >> 1);
-            if (deadmap != 0)
+            if (deadmap != 0) {
                 scheduleTick(3);
+            }
 
             updateChange();
         }
@@ -90,22 +93,25 @@ public abstract class TransceiverPart extends WirelessPart implements ITileWirel
 
     @Override
     public boolean activate(EntityPlayer player, CuboidRayTraceResult hit, ItemStack held, EnumHand hand) {
-        if (super.activate(player, hit, held, hand))
+        if (super.activate(player, hit, held, hand)) {
             return true;
+        }
 
         if (hit.sideHit.ordinal() == (side() ^ 1) && !player.isSneaking()) {
-            if (world().isRemote)
+            if (world().isRemote) {
                 WirelessRedstone.proxy.openTileWirelessGui(player, (ITileWireless) tile());
+            }
             return true;
         }
         return false;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void renderDynamic(Vector3 pos, int pass, float frame) {
         super.renderDynamic(pos, pass, frame);
-        if (pass == 0)
+        if (pass == 0) {
             RenderWireless.renderFreq(pos, this);
+        }
     }
 }

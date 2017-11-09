@@ -1,22 +1,23 @@
 package codechicken.wirelessredstone.client.gui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import codechicken.lib.gui.GuiScrollSlot;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class GuiNameSlot extends GuiScrollSlot
-{
-    public class NameSlotComparator implements Comparator<String>
-    {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class GuiNameSlot extends GuiScrollSlot {
+
+    public class NameSlotComparator implements Comparator<String> {
+
         public int compare(String s1, String s2) {
             boolean match1 = doesNameMatch(s1, match);
             boolean match2 = doesNameMatch(s2, match);
-            if (match1 == match2)
+            if (match1 == match2) {
                 return s1.compareToIgnoreCase(s2);
+            }
 
             return match1 ? -1 : 1;
         }
@@ -48,22 +49,24 @@ public class GuiNameSlot extends GuiScrollSlot
     protected void drawSlot(int slot, int x, int y, int mx, int my, float frame) {
         String name = names.get(slot);
         int colour;
-        if (selectedslot == slot)
+        if (selectedslot == slot) {
             colour = 0xF0F0F0;
-        else if (!doesNameMatch(name, match))
+        } else if (!doesNameMatch(name, match)) {
             colour = 0x707070;
-        else
+        } else {
             colour = 0xA0A0A0;
+        }
 
         fontRenderer.drawString(name, x, y, colour);
     }
 
     @Override
     protected void slotClicked(int slot, int button, int mx, int my, int count) {
-        if (count == 2)
+        if (count == 2) {
             sendAction(actionCommand);
-        else
+        } else {
             selectedslot = slot;
+        }
     }
 
     @Override

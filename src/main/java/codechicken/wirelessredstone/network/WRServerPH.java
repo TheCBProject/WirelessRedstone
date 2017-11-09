@@ -1,19 +1,16 @@
 package codechicken.wirelessredstone.network;
 
-import java.util.ArrayList;
-import java.util.TreeSet;
-
 import codechicken.lib.packet.ICustomPacketHandler.IServerPacketHandler;
 import codechicken.lib.packet.PacketCustom;
 import codechicken.wirelessredstone.WirelessRedstone;
-import codechicken.wirelessredstone.entity.EntityREP;
-import codechicken.wirelessredstone.entity.EntityWirelessTracker;
-import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import codechicken.wirelessredstone.api.FreqCoord;
 import codechicken.wirelessredstone.api.ITileWireless;
+import codechicken.wirelessredstone.entity.EntityREP;
+import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.entity.WirelessBolt;
 import codechicken.wirelessredstone.item.ItemWirelessFreq;
 import codechicken.wirelessredstone.manager.RedstoneEther;
+import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -24,8 +21,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapData;
 
-public class WRServerPH implements IServerPacketHandler
-{
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+public class WRServerPH implements IServerPacketHandler {
 
     @Override
     public void handlePacket(PacketCustom packet, EntityPlayerMP sender, INetHandlerPlayServer handler) {
@@ -50,16 +49,18 @@ public class WRServerPH implements IServerPacketHandler
                 RedstoneEther.get(false).setFreqOwner(packet.readShort(), packet.readString());
                 break;
             case 50:
-                if (packet.readBoolean())
+                if (packet.readBoolean()) {
                     RedstoneEtherAddons.server().addSniffer(player);
-                else
+                } else {
                     RedstoneEtherAddons.server().remSniffer(player);
+                }
                 break;
             case 51:
-                if (packet.readBoolean())
+                if (packet.readBoolean()) {
                     RedstoneEtherAddons.server().activateRemote(world, player);
-                else
+                } else {
                     RedstoneEtherAddons.server().deactivateRemote(world, player);
+                }
                 break;
             case 52:
                 RedstoneEtherAddons.server().setTriangRequired(player, packet.readUShort(), packet.readBoolean());
@@ -78,7 +79,8 @@ public class WRServerPH implements IServerPacketHandler
             if (item.getCount() == 0) {
                 player.inventory.mainInventory.set(slot, ItemStack.EMPTY);
             }
-        } catch (ArrayIndexOutOfBoundsException e) {}
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
     }
 
     private void setItemFreq(EntityPlayerMP sender, int slot, int freq) {
@@ -93,8 +95,9 @@ public class WRServerPH implements IServerPacketHandler
     private void setTileFreq(EntityPlayer sender, World world, BlockPos pos, int freq) {
         if (RedstoneEther.get(false).canBroadcastOnFrequency(sender, freq)) {
             TileEntity tile = RedstoneEther.getTile(world, pos);
-            if (tile instanceof ITileWireless)
+            if (tile instanceof ITileWireless) {
                 RedstoneEther.get(false).setFreq((ITileWireless) tile, freq);
+            }
         }
     }
 
@@ -167,8 +170,9 @@ public class WRServerPH implements IServerPacketHandler
     }
 
     public static void sendFreqInfoTo(EntityPlayer player, ArrayList<Integer> freqsWithInfo) {
-        if (freqsWithInfo.size() == 0)
+        if (freqsWithInfo.size() == 0) {
             return;
+        }
 
         PacketCustom packet = new PacketCustom(WirelessRedstone.NET_CHANNEL, 1);
         packet.writeShort(freqsWithInfo.size());
@@ -181,8 +185,9 @@ public class WRServerPH implements IServerPacketHandler
     }
 
     public static void sendFreqOwnerTo(EntityPlayer player, ArrayList<Integer> freqsWithOwners) {
-        if (freqsWithOwners.size() == 0)
+        if (freqsWithOwners.size() == 0) {
             return;
+        }
 
         PacketCustom packet = new PacketCustom(WirelessRedstone.NET_CHANNEL, 10);
         packet.writeShort(freqsWithOwners.size());
@@ -200,6 +205,7 @@ public class WRServerPH implements IServerPacketHandler
 
         packet.sendToClients();
     }
+
     public static void sendUpdateSnifferTo(EntityPlayer player, int freq, boolean on) {
         PacketCustom packet = new PacketCustom(WirelessRedstone.NET_CHANNEL, 53);
         packet.writeShort((short) freq);

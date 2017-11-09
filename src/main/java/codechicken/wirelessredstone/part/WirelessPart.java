@@ -1,8 +1,5 @@
 package codechicken.wirelessredstone.part;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
@@ -10,40 +7,40 @@ import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.render.BlockRenderer;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.util.ClientUtils;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.RedundantTransformation;
-import codechicken.lib.vec.Rotation;
-import codechicken.lib.vec.Transformation;
-import codechicken.lib.vec.Vector3;
+import codechicken.lib.vec.*;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.microblock.FaceMicroFactory;
 import codechicken.microblock.JMicroShrinkRender;
 import codechicken.microblock.MicroOcclusion;
 import codechicken.multipart.*;
-import codechicken.wirelessredstone.manager.RedstoneEther;
 import codechicken.wirelessredstone.client.render.RenderWireless;
+import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static codechicken.lib.vec.Rotation.*;
-import static codechicken.lib.vec.Vector3.*;
+import static codechicken.lib.vec.Vector3.center;
 
-public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TFacePart, TIconHitEffectsPart, IFaceRedstonePart, TNormalOcclusionPart, TPartialOcclusionPart, JMicroShrinkRender
-{
+public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TFacePart, TIconHitEffectsPart, IFaceRedstonePart, TNormalOcclusionPart, TPartialOcclusionPart, JMicroShrinkRender {
+
     private static Cuboid6[] nBoxes = new Cuboid6[6];
 
     static {
         Cuboid6 base = new Cuboid6(1 / 8D, 0, 1 / 8D, 7 / 8D, 1 / 8D, 7 / 8D);
-        for (int s = 0; s < 6; s++)
+        for (int s = 0; s < 6; s++) {
             nBoxes[s] = base.copy().apply(sideRotations[s].at(center));
+        }
     }
 
     public byte state;
@@ -85,8 +82,9 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
 
     public void setActive(boolean active) {
         state &= 0xDF;
-        if (active)
+        if (active) {
             state |= 0x20;
+        }
     }
 
     public boolean disabled() {
@@ -95,15 +93,17 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
 
     public void setDisabled(boolean disabled) {
         state &= 0xBF;
-        if (disabled)
+        if (disabled) {
             state |= 0x40;
+        }
     }
 
     public int getPoweringLevel() {
         int s = RedstoneInteractions.getPowerTo(this, Rotation.rotateSide(side(), rotation()));
         int i = getInternalPower();
-        if (i > s)
+        if (i > s) {
             s = i;
+        }
 
         return s;
     }
@@ -125,15 +125,17 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     @Override
     public void load(NBTTagCompound tag) {
         state = tag.getByte("state");
-        if (tag.hasKey("owner"))
+        if (tag.hasKey("owner")) {
             owner = tag.getString("owner");
+        }
     }
 
     @Override
     public void save(NBTTagCompound tag) {
         tag.setByte("state", state);
-        if (owner != null)
+        if (owner != null) {
             tag.setString("owner", owner);
+        }
     }
 
     @Override
@@ -154,14 +156,16 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
 
     @Override
     public void onWorldJoin() {
-        if (!world().isRemote)
+        if (!world().isRemote) {
             addToEther();
+        }
     }
 
     @Override
     public void onWorldSeparate() {
-        if (!world().isRemote)
+        if (!world().isRemote) {
             removeFromEther();
+        }
     }
 
     @Override
@@ -312,8 +316,9 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
 
     @Override
     public void renderDynamic(Vector3 pos, int pass, float frame) {
-        if (pass == 0)
+        if (pass == 0) {
             RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
+        }
     }
 
     @Override
@@ -328,8 +333,9 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     @Override
     public void onAdded() {
         super.onAdded();
-        if (world().isRemote)
+        if (world().isRemote) {
             recalcBounds();
+        }
     }
 
     public void recalcBounds() {
@@ -410,19 +416,19 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void addHitEffects(CuboidRayTraceResult hit, ParticleManager effectRenderer) {
         IconHitEffects.addHitEffects(this, hit, effectRenderer);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public TextureAtlasSprite getBreakingIcon(CuboidRayTraceResult hit) {
         return getBrokenIcon(hit.sideHit.ordinal());
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public TextureAtlasSprite getBrokenIcon(int side) {
         return RenderWireless.getBreakingIcon(textureSet());
     }

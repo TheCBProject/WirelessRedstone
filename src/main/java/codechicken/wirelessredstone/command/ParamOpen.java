@@ -5,8 +5,8 @@ import net.minecraft.command.ICommandSender;
 
 import java.util.Arrays;
 
-public class ParamOpen extends FreqParam
-{
+public class ParamOpen extends FreqParam {
+
     @Override
     public void printHelp(ICommandSender listener) {
         CoreCommand.chatT(listener, "wrcbe.param.open.usage");

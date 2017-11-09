@@ -40,11 +40,10 @@ public class WirelessRedstone {
     public static final String MOD_DEPENDENCIES = "required-after:codechickenlib@[" + CodeChickenLib.MOD_VERSION + ",);required-after:forgemultipartcbe";
     static final String UPDATE_URL = "http://chickenbones.net/Files/notification/version.php?query=forge&version=" + MC_VERSION + "&file=WR-CBE";
 
-
     @SidedProxy (clientSide = "codechicken.wirelessredstone.proxy.ProxyClient", serverSide = "codechicken.wirelessredstone.proxy.Proxy")
     public static Proxy proxy;
 
-    @Instance(MOD_ID)
+    @Instance (MOD_ID)
     public static WirelessRedstone instance;
 
     public static CreativeTabs creativeTab = new SimpleCreativeTab("wrcbe", () -> new ItemStack(ModItems.itemWireless, 1, 1));

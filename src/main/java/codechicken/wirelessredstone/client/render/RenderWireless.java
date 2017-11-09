@@ -28,6 +28,7 @@ import static codechicken.lib.vec.Vector3.center;
 import static codechicken.lib.vec.Vector3.zero;
 
 public class RenderWireless implements IIconRegister {
+
     private static MultiIconTransformation model_icont;
     private static MultiIconTransformation base_icont[] = new MultiIconTransformation[2];
     private static CCModel[][] models = new CCModel[3][24];
@@ -149,7 +150,7 @@ public class RenderWireless implements IIconRegister {
         GlStateManager.translate(0, -5 / 16D, 0.374);
         GlStateManager.scale(scale, scale, scale);
 
-        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer font = Minecraft.getMinecraft().fontRenderer;
         String s = Integer.toString(freq);
         GlStateManager.depthMask(false);
         font.drawString(s, -font.getStringWidth(s) / 2, 0, 0);

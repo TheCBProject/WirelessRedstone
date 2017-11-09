@@ -1,31 +1,30 @@
 package codechicken.wirelessredstone.manager;
 
-import java.util.HashMap;
-
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.api.ClientMapInfo;
+import codechicken.wirelessredstone.api.IGuiRemoteUseable;
 import codechicken.wirelessredstone.device.Remote;
 import codechicken.wirelessredstone.entity.EntityREP;
 import codechicken.wirelessredstone.init.ModItems;
+import codechicken.wirelessredstone.item.ItemWirelessFreq;
 import codechicken.wirelessredstone.item.ItemWirelessRemote;
 import codechicken.wirelessredstone.network.WRClientPH;
 import codechicken.wirelessredstone.util.WirelessMapNodeStorage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.MapData;
 import org.lwjgl.input.Mouse;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.MapData;
-import net.minecraft.world.World;
-import codechicken.wirelessredstone.api.IGuiRemoteUseable;
-import codechicken.wirelessredstone.item.ItemWirelessFreq;
+import java.util.HashMap;
 
-public class RedstoneEtherClientAddons extends RedstoneEtherAddons
-{
+public class RedstoneEtherClientAddons extends RedstoneEtherAddons {
+
     private boolean mousedown;
     private boolean wasmousedown;
     private Remote remote;
@@ -97,14 +96,14 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
             deactivateRemote(world, player);
         }
 
-        if (mouseClicked() &&
-                remote == null && //not already using a remote
+        if (mouseClicked() && remote == null && //not already using a remote
                 player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() == ModItems.itemRemote && //holding a remote
                 (currentscreen != null && (currentscreen instanceof IGuiRemoteUseable) && !player.isSneaking()) && //in a remote active gui where onItemRight click won't take it
                 ticksInGui > 0 && !jammed) {
             ItemStack stack = player.inventory.getCurrentItem();
-            if (stack.getItemDamage() == 0 || ItemWirelessRemote.getTransmitting(stack))
+            if (stack.getItemDamage() == 0 || ItemWirelessRemote.getTransmitting(stack)) {
                 return;
+            }
 
             activateRemote(world, player);
         }
@@ -112,13 +111,15 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
 
     public void activateRemote(World world, EntityPlayer player) {
         if (remote != null) {
-            if (remote.isBeingHeld())
+            if (remote.isBeingHeld()) {
                 return;
+            }
 
             deactivateRemote(world, player);
         }
-        if (RedstoneEther.client().isPlayerJammed(player))
+        if (RedstoneEther.client().isPlayerJammed(player)) {
             return;
+        }
 
         remote = new Remote(player);
         remote.metaOn();
@@ -126,8 +127,9 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
     }
 
     public boolean deactivateRemote(World world, EntityPlayer player) {
-        if (remote == null)
+        if (remote == null) {
             return false;
+        }
 
         remote.metaOff();
         remote = null;
@@ -182,13 +184,15 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         openItemGui(mc.player);
         processRemote(mc.world, mc.player, mc.currentScreen, mc.objectMouseOver);
 
-        if (REPThrowTimeout > 0)
+        if (REPThrowTimeout > 0) {
             REPThrowTimeout--;
+        }
 
-        if (mc.currentScreen == null)
+        if (mc.currentScreen == null) {
             ticksInGui = 0;
-        else
+        } else {
             ticksInGui++;
+        }
     }
 
     public boolean detonateREP(EntityPlayer player) {
@@ -212,7 +216,7 @@ public class RedstoneEtherClientAddons extends RedstoneEtherAddons
         if (!player.capabilities.isCreativeMode) {
             itemstack.shrink(1);
         }
-        world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL,  0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+        world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
         activeREP = new EntityREP(world, player);
         world.spawnEntity(activeREP);
         REPThrowTimeout = 40;

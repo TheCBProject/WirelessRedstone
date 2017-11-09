@@ -1,6 +1,8 @@
 package codechicken.wirelessredstone.part;
 
 import codechicken.lib.util.ClientUtils;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.api.ITileJammer;
 import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.entity.WirelessBolt;
@@ -8,45 +10,38 @@ import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
+import net.minecraft.util.ResourceLocation;
 
-public class JammerPart extends WirelessPart implements ITileJammer
-{
+public class JammerPart extends WirelessPart implements ITileJammer {
+
     int randfreqspeed;
-    
-    public JammerPart()
-    {
+
+    public JammerPart() {
         setActive(true);
     }
-    
+
     @Override
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         return new ItemStack(ModItems.itemWireless, 1, 2);
     }
-    
+
     @Override
-    public int textureSet()
-    {
+    public int textureSet() {
         return active() ? 0 : 1;
     }
-    
+
     @Override
-    public void onNeighborChanged()
-    {
-        if(dropIfCantStay())
+    public void onNeighborChanged() {
+        if (dropIfCantStay()) {
             return;
-        
+        }
+
         int gettingPowered = getPoweringLevel();
-        if(active() && gettingPowered > 0)
-        {
+        if (active() && gettingPowered > 0) {
             setActive(false);
             removeFromEther();
             updateChange();
-        }
-        else if(!active() && gettingPowered == 0)
-        {
+        } else if (!active() && gettingPowered == 0) {
             setActive(true);
             addToEther();
             updateChange();
@@ -54,97 +49,86 @@ public class JammerPart extends WirelessPart implements ITileJammer
     }
 
     @Override
-    public Vector3 getPearlPos()
-    {
-        return new Vector3(0.5, 0.74+getFloating()*0.04, 5/16D);
+    public Vector3 getPearlPos() {
+        return new Vector3(0.5, 0.74 + getFloating() * 0.04, 5 / 16D);
     }
-    
+
     @Override
-    public double getPearlSpin()
-    {
-        if(world().rand.nextInt(100) == 0 || randfreqspeed == 0)
+    public double getPearlSpin() {
+        if (world().rand.nextInt(100) == 0 || randfreqspeed == 0) {
             randfreqspeed = world().rand.nextInt(5000) + 1;
-        
-        if(!active())
+        }
+
+        if (!active()) {
             return 0;
+        }
 
         return RedstoneEther.getRotation(ClientUtils.getRenderTime(), randfreqspeed);
     }
-    
-    public float getPearlLight()
-    {
+
+    public float getPearlLight() {
         float light = world().getLightBrightness(pos());
-        if(active())
+        if (active()) {
             light = (light + 1) * 0.5F;
-        else
+        } else {
             light *= 0.75F;
+        }
 
         return light;
     }
 
     @Override
-    public void onWorldJoin()
-    {
-        if(!world().isRemote && active())
+    public void onWorldJoin() {
+        if (!world().isRemote && active()) {
             addToEther();
-    }
-    
-    @Override
-    public void onWorldSeparate()
-    {
-        if(!world().isRemote && active())
-            removeFromEther();
+        }
     }
 
-    public Vector3 getFocalPoint()
-    {
+    @Override
+    public void onWorldSeparate() {
+        if (!world().isRemote && active()) {
+            removeFromEther();
+        }
+    }
+
+    public Vector3 getFocalPoint() {
         return new Vector3(0.3125, 0.24, 0).apply(rotationT());
     }
-    
-    public void jamTile(ITileWireless tile)
-    {
-        WirelessBolt bolt = new WirelessBolt(world(),
-                WirelessBolt.getFocalPoint((ITileJammer)tile()), 
-                tile, world().rand.nextLong());
+
+    public void jamTile(ITileWireless tile) {
+        WirelessBolt bolt = new WirelessBolt(world(), WirelessBolt.getFocalPoint((ITileJammer) tile()), tile, world().rand.nextLong());
         bolt.defaultFractal();
         bolt.finalizeBolt();
     }
 
-    public void jamEntity(Entity entity)
-    {
-        WirelessBolt bolt = new WirelessBolt(world(),
-                WirelessBolt.getFocalPoint((ITileJammer)tile()), 
-                Vector3.fromEntity(entity), world().rand.nextLong());
+    public void jamEntity(Entity entity) {
+        WirelessBolt bolt = new WirelessBolt(world(), WirelessBolt.getFocalPoint((ITileJammer) tile()), Vector3.fromEntity(entity), world().rand.nextLong());
         bolt.defaultFractal();
         bolt.finalizeBolt();
     }
-    
-    public void addToEther()
-    {
-        if(active())
+
+    public void addToEther() {
+        if (active()) {
             RedstoneEther.server().addJammer(world(), pos());
+        }
     }
 
-    public void removeFromEther()
-    {
+    public void removeFromEther() {
         RedstoneEther.server().remJammer(world(), pos());
     }
-    
+
     @Override
-    public String getType()
-    {
-        return "wrcbe-jamm";
+    public ResourceLocation getType() {
+        return new ResourceLocation("wrcbe:jammer");
     }
-    
+
     @Override
-    public Cuboid6 getExtensionBB()
-    {
+    public Cuboid6 getExtensionBB() {
         return TransmitterPart.extensionBB[shape()];
     }
-    
+
     @Override
-    public int modelId()
-    {
+    public int modelId() {
         return 2;
     }
 }

@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWirelessMap extends ItemMap {
 
-
     public ItemWirelessMap() {
         setUnlocalizedName("wrcbe:map");
         setCreativeTab(WirelessRedstone.creativeTab);

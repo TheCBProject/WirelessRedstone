@@ -1,16 +1,14 @@
 package codechicken.wirelessredstone.entity;
 
-import java.util.List;
-
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.util.CommonUtils;
 import codechicken.lib.util.ServerUtils;
 import codechicken.lib.vec.Quat;
 import codechicken.lib.vec.Vector3;
-import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
+import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
 import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.manager.RedstoneEther;
-import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
+import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -29,22 +27,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-public class EntityWirelessTracker extends Entity implements WirelessTransmittingDevice
-{
-    public EntityWirelessTracker(World world)
-    {
+public class EntityWirelessTracker extends Entity implements WirelessTransmittingDevice {
+
+    public EntityWirelessTracker(World world) {
         super(world);
         setSize(0.25F, 0.25F);
     }
-    
-    public EntityWirelessTracker(World world, int freq)
-    {
+
+    public EntityWirelessTracker(World world, int freq) {
         this(world);
         this.freq = freq;
     }
 
-    public EntityWirelessTracker(World world, int freq, EntityLivingBase entityliving)
-    {
+    public EntityWirelessTracker(World world, int freq, EntityLivingBase entityliving) {
         this(world, freq);
         setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
         float speed = 1.3F;
@@ -54,158 +49,136 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         this.freq = freq;
     }
 
-    protected void entityInit()
-    {
+    protected void entityInit() {
     }
 
-    public boolean isInRangeToRenderDist(double d)
-    {
+    public boolean isInRangeToRenderDist(double d) {
         return true;
     }
-    
-    public void onEntityUpdate()
-    {
-        if((attachmentCounter < -6000 && !attached) || (!world.isRemote && attachedInOtherDimension()))
-        {
+
+    public void onEntityUpdate() {
+        if ((attachmentCounter < -6000 && !attached) || (!world.isRemote && attachedInOtherDimension())) {
             setDead();
             return;
         }
-        
-        if(!loaded && !world.isRemote)
-        {
+
+        if (!loaded && !world.isRemote) {
             loaded = true;
             RedstoneEtherAddons.server().addTracker(this);
-            
-            if(!attachedToLogout())
-            {
+
+            if (!attachedToLogout()) {
                 RedstoneEther.server().addTransmittingDevice(this);
             }
         }
-        
-        setEntityBoundingBox(getEntityBoundingBox().expand(0,0.2,0));//so we actually consist of something decent for material tests
+
+        setEntityBoundingBox(getEntityBoundingBox().expand(0, 0.2, 0));//so we actually consist of something decent for material tests
         super.onEntityUpdate();
-        setEntityBoundingBox(getEntityBoundingBox().expand(0,-0.2,0));
-        
-        if(attached && attachedEntity == null)
-        {
-            if(!world.isRemote)
+        setEntityBoundingBox(getEntityBoundingBox().expand(0, -0.2, 0));
+
+        if (attached && attachedEntity == null) {
+            if (!world.isRemote) {
                 findAttachedEntity();
-        }
-        else if(isAttachedToEntity())
-        {
+            }
+        } else if (isAttachedToEntity()) {
             trackEntity();
-            
-            if(!world.isRemote)
+
+            if (!world.isRemote) {
                 checkDetachment();
-        }
-        else
-        {
+            }
+        } else {
             applyPhysics();
             moveEntityWithBounce(1);
-            if(!world.isRemote)
+            if (!world.isRemote) {
                 attachToNearbyEntities();
+            }
         }
-        
-        if(item && attachmentCounter == 0)
-        {
+
+        if (item && attachmentCounter == 0) {
             item = false;
-            if(!world.isRemote)
+            if (!world.isRemote) {
                 RedstoneEtherAddons.server().updateTracker(this);
+            }
         }
-        if(isBurning())
-        {
+        if (isBurning()) {
             extinguish();
-            if(!world.isRemote)
+            if (!world.isRemote) {
                 RedstoneEtherAddons.server().updateTracker(this);
+            }
             item = true;
             attachmentCounter = 1200;//1 min
         }
-        
-        if(!attachedToLogout())
+
+        if (!attachedToLogout()) {
             attachmentCounter--;
+        }
     }
-    
+
     @Override
-    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
-    {
-        if(par1DamageSource == DamageSource.LAVA || par1DamageSource == DamageSource.OUT_OF_WORLD)
-        {
+    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
+        if (par1DamageSource == DamageSource.LAVA || par1DamageSource == DamageSource.OUT_OF_WORLD) {
             setDead();
             return true;
         }
         return false;
     }
-    
+
     @Override
-    public void setDead()
-    {
+    public void setDead() {
         super.setDead();
-        
-        if(!world.isRemote)
-        {
+
+        if (!world.isRemote) {
             RedstoneEther.server().removeTransmittingDevice(this);
             RedstoneEtherAddons.server().removeTracker(this);
         }
     }
-    
+
     @Override
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
-    {
-        if (!this.world.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.itemTracker, 1, freq)))
-        {
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
+        if (!this.world.isRemote && item && par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.itemTracker, 1, freq))) {
             //TODO SoundCat for this.
             this.world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             par1EntityPlayer.onItemPickup(this, 1);
             setDead();
         }
     }
-    
-    private void checkDetachment()
-    {
-        if(attachedEntity.isDead && attachedPlayerName != null)
-        {
+
+    private void checkDetachment() {
+        if (attachedEntity.isDead && attachedPlayerName != null) {
             attachedEntity = null;//just invalidate and hide :)
             RedstoneEther.server().removeTransmittingDevice(this);
             return;
         }
-        
-        if(attachedEntity.isBurning() || attachedEntity.isDead)
-        {
+
+        if (attachedEntity.isBurning() || attachedEntity.isDead) {
             detachFromEntity();
         }
-        
+
         int x = MathHelper.floor(posX);
-        int y = MathHelper.floor(posY+height/2);
+        int y = MathHelper.floor(posY + height / 2);
         int z = MathHelper.floor(posZ);
-        
-        if(isRetractingStickyPistonFacing(x, y + 2, z, 0) ||
-            isRetractingStickyPistonFacing(x, y - 2, z, 1) ||
-            isRetractingStickyPistonFacing(x, y, z + 2, 2) ||
-            isRetractingStickyPistonFacing(x, y, z - 2, 3) ||
-            isRetractingStickyPistonFacing(x + 2, y, z, 4) ||
-            isRetractingStickyPistonFacing(x - 2, y, z, 5))
-        {
+
+        if (isRetractingStickyPistonFacing(x, y + 2, z, 0) || isRetractingStickyPistonFacing(x, y - 2, z, 1) || isRetractingStickyPistonFacing(x, y, z + 2, 2) || isRetractingStickyPistonFacing(x, y, z - 2, 3) || isRetractingStickyPistonFacing(x + 2, y, z, 4) || isRetractingStickyPistonFacing(x - 2, y, z, 5)) {
             detachFromEntity();
         }
     }
 
-    public boolean isRetractingStickyPistonFacing(int x, int y, int z, int facing)
-    {
-        BlockPos pos = new BlockPos(x,y,z);
+    public boolean isRetractingStickyPistonFacing(int x, int y, int z, int facing) {
+        BlockPos pos = new BlockPos(x, y, z);
         IBlockState state = world.getBlockState(pos);
-        if(state.getBlock() != Blocks.PISTON_EXTENSION)
+        if (state.getBlock() != Blocks.PISTON_EXTENSION) {
             return false;
-        
+        }
+
         TileEntity t = world.getTileEntity(pos);
-        if(!(t instanceof TileEntityPiston))
+        if (!(t instanceof TileEntityPiston)) {
             return false;
-        
-        TileEntityPiston tep = (TileEntityPiston)t;
+        }
+
+        TileEntityPiston tep = (TileEntityPiston) t;
         return tep.getFacing().ordinal() == facing && !tep.isExtending() && tep.getPistonState().getBlock() == Blocks.STICKY_PISTON;
     }
 
-    private void detachFromEntity()
-    {
+    private void detachFromEntity() {
         attachedEntity = null;
         attached = false;
         attachedX = 0;
@@ -213,118 +186,106 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         attachedZ = 0;
         attachedYaw = 0;
         attachmentCounter = 5;
-        
+
         attachedPlayerName = null;
 
-        motionX = rand.nextFloat()-0.5;
-        motionY = rand.nextFloat()-0.5;
-        motionZ = rand.nextFloat()-0.5;
-        
+        motionX = rand.nextFloat() - 0.5;
+        motionY = rand.nextFloat() - 0.5;
+        motionZ = rand.nextFloat() - 0.5;
+
         RedstoneEtherAddons.server().updateTracker(this);
     }
 
-    private void trackEntity()
-    {        
+    private void trackEntity() {
         Vector3 relPos = getRotatedAttachment();
-        setPosition(attachedEntity.posX + relPos.x, 
-                attachedEntity.posY + attachedEntity.height/2 - attachedEntity.getEyeHeight() + relPos.y - height,
-                attachedEntity.posZ + relPos.z);
+        setPosition(attachedEntity.posX + relPos.x, attachedEntity.posY + attachedEntity.height / 2 - attachedEntity.getEyeHeight() + relPos.y - height, attachedEntity.posZ + relPos.z);
     }
 
-    private void applyPhysics()
-    {
+    private void applyPhysics() {
         motionY -= 0.05D;//gravity
-        
-        if(onGround)//ground drag
+
+        if (onGround)//ground drag
         {
             motionX *= 0.8;
             motionZ *= 0.8;
         }
 
-        pushOutOfBlocks(posX, posY+height/2, posZ);
+        pushOutOfBlocks(posX, posY + height / 2, posZ);
     }
 
-    private void attachToNearbyEntities()
-    {
-        if(isAttachedToEntity() || item || attachmentCounter > 0)
+    private void attachToNearbyEntities() {
+        if (isAttachedToEntity() || item || attachmentCounter > 0) {
             return;
-        
-        for(Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
-        {            
+        }
+
+        for (Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ))) {
             AxisAlignedBB bb = entity.getEntityBoundingBox();
-            if(bb != null && 
-                    entity.width >= 0.3)
-            {
-                if(tryAttach(entity, 0.4, 0.2))
+            if (bb != null && entity.width >= 0.3) {
+                if (tryAttach(entity, 0.4, 0.2)) {
                     return;
+                }
             }
         }
     }
 
-    private boolean tryAttach(Entity entity, double extraw, double extrah)
-    {
+    private boolean tryAttach(Entity entity, double extraw, double extrah) {
         Vector3 evec = Vector3.fromEntityCenter(entity);
         Vector3 posVec = new Vector3(posX, posY + height / 2, posZ);
         Vector3 lastPosVec = new Vector3(lastTickPosX, lastTickPosY + height / 2, lastTickPosZ);
         Vector3 diffVec = lastPosVec.copy().subtract(posVec);
         double distanceBetweenTicks = diffVec.mag();
-        
-        double width = entity.width+extraw;
-        double height = entity.height+extrah;
-        
-        for(double d = 0; d <= distanceBetweenTicks; d+=0.05)
-        {
+
+        double width = entity.width + extraw;
+        double height = entity.height + extrah;
+
+        for (double d = 0; d <= distanceBetweenTicks; d += 0.05) {
             Vector3 interpVec = diffVec.copy().normalize().multiply(d).add(lastPosVec);
 
             double xDiff = Math.abs(evec.x - interpVec.x);
             double yDiff = Math.abs(evec.y - interpVec.y);
             double zDiff = Math.abs(evec.z - interpVec.z);
-            
-            if(yDiff <= height / 2 && xDiff <= width / 2 && zDiff <= width / 2)
-            {
-                attachToEntity(interpVec, entity);                
+
+            if (yDiff <= height / 2 && xDiff <= width / 2 && zDiff <= width / 2) {
+                attachToEntity(interpVec, entity);
                 return true;
             }
         }
-        return false;        
+        return false;
     }
-    
-    public void attachToEntity(Vector3 pos, Entity e)
-    {
+
+    public void attachToEntity(Vector3 pos, Entity e) {
         attached = true;
         attachedEntity = e;
         attachedX = (float) (pos.x - e.posX);
-        attachedY = (float) (pos.y + height/2 - (e.posY - e.getEyeHeight() + e.height/2));
+        attachedY = (float) (pos.y + height / 2 - (e.posY - e.getEyeHeight() + e.height / 2));
         attachedZ = (float) (pos.z - e.posZ);
         attachedYaw = getEntityRotation();
-        
-        if(attachedEntity instanceof EntityPlayer)
+
+        if (attachedEntity instanceof EntityPlayer) {
             attachedPlayerName = attachedEntity.getName();
+        }
 
         moveToEntityExterior();
         RedstoneEtherAddons.server().updateTracker(this);
     }
 
-    private void moveToEntityExterior()
-    {
+    private void moveToEntityExterior() {
         Vector3 attachPosVec2 = getRotatedAttachment().normalize().multiply(Math.max(attachedEntity.width, attachedEntity.height));
-        
+
         Vector3 diffVec = attachPosVec2.copy().negate();
         double distanceBetweenTicks = diffVec.mag();
-        
+
         double width = attachedEntity.width;
         double height = attachedEntity.height;
-        
-        for(double d = 0; d <= distanceBetweenTicks; d+=0.05)
-        {
+
+        for (double d = 0; d <= distanceBetweenTicks; d += 0.05) {
             Vector3 interpVec = diffVec.copy().normalize().multiply(d).add(attachPosVec2);
 
             double xDiff = Math.abs(interpVec.x);
             double yDiff = Math.abs(interpVec.y);
             double zDiff = Math.abs(interpVec.z);
-            
-            if(yDiff <= height / 2 && xDiff <= width / 2 && zDiff <= width / 2)
-            {
+
+            if (yDiff <= height / 2 && xDiff <= width / 2 && zDiff <= width / 2) {
                 attachedYaw = getEntityRotation();
                 attachedX = (float) (interpVec.x);
                 attachedY = (float) (interpVec.y);
@@ -334,82 +295,68 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         }
     }
 
-    public boolean isAttachedToEntity()
-    {
+    public boolean isAttachedToEntity() {
         return attachedEntity != null;
     }
 
-    public void moveEntityWithBounce(double bounceFactor)
-    {
+    public void moveEntityWithBounce(double bounceFactor) {
         double dx = motionX;
         double dz = motionZ;
-        
+
         move(MoverType.SELF, motionX, motionY, motionZ);
         setPosition(posX, posY, posZ);
-        
+
         boolean isCollidedX = motionX != dx;
         boolean isCollidedZ = motionZ != dz;
-        
+
         motionX = dx;
         motionZ = dz;
-                
-        if(isCollidedX)
-        {
+
+        if (isCollidedX) {
             motionX *= -bounceFactor;
-            posX += Math.signum(motionX)*0.1;
+            posX += Math.signum(motionX) * 0.1;
         }
-        if(isCollidedZ)
-        {
+        if (isCollidedZ) {
             motionZ *= -bounceFactor;
-            posZ += Math.signum(motionZ)*0.1;
+            posZ += Math.signum(motionZ) * 0.1;
         }
 
         pushOutOfBlocks(posX, posY + height / 2, posZ);
     }
 
-    private void findAttachedEntity()
-    {
-        if(attachmentCounter == 0)
-        {
+    private void findAttachedEntity() {
+        if (attachmentCounter == 0) {
             detachFromEntity();
             return;
         }
-        
-        if(attachedPlayerName != null)
-        {
+
+        if (attachedPlayerName != null) {
             EntityPlayer player = ServerUtils.getPlayer(attachedPlayerName);
-            if(player != null)
-            {
+            if (player != null) {
                 attachedEntity = player;
                 moveToEntityExterior();
                 RedstoneEther.server().addTransmittingDevice(this);
                 attachmentCounter = 0;
                 return;
             }
-        }
-        else
-        {
-            for(Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ)))
-            {
-                if(tryAttach(entity, 0.4, 0.2))
-                {
+        } else {
+            for (Entity entity : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(-10, -10, -10, 10, 10, 10).offset(posX, posY, posZ))) {
+                if (tryAttach(entity, 0.4, 0.2)) {
                     attachmentCounter = 0;
                     return;
                 }
             }
-            
+
             attachmentCounter--;
         }
     }
 
-    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
-    {        
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         nbttagcompound.setBoolean("attached", attached);
         nbttagcompound.setShort("attachCount", (short) attachmentCounter);
         nbttagcompound.setBoolean("item", item);
         nbttagcompound.setShort("freq", (short) freq);
-        if(attachedPlayerName != null)
-        {
+        if (attachedPlayerName != null) {
             nbttagcompound.setString("player", attachedPlayerName);
             nbttagcompound.setFloat("attachedX", attachedX);
             nbttagcompound.setFloat("attachedY", attachedY);
@@ -417,74 +364,65 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
             nbttagcompound.setFloat("attachedYaw", attachedYaw);
         }
     }
-    
-    public void onChunkUnload()
-    {        
-        if(!world.isRemote)
-        {
+
+    public void onChunkUnload() {
+        if (!world.isRemote) {
             RedstoneEther.server().removeTransmittingDevice(this);
             RedstoneEtherAddons.server().removeTracker(this);
         }
     }
 
-    public boolean attachedInOtherDimension()
-    {
-        return (attachedEntity instanceof EntityPlayer) && ((EntityPlayer)attachedEntity).dimension != getDimension();
+    public boolean attachedInOtherDimension() {
+        return (attachedEntity instanceof EntityPlayer) && ((EntityPlayer) attachedEntity).dimension != getDimension();
     }
 
-    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
-    {
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
         attached = nbttagcompound.getBoolean("attached");
         attachmentCounter = nbttagcompound.getShort("attachCount");
         freq = nbttagcompound.getShort("freq");
         item = nbttagcompound.getBoolean("item");
-        if(nbttagcompound.hasKey("player"))
-        {
+        if (nbttagcompound.hasKey("player")) {
             attachedPlayerName = nbttagcompound.getString("player");
             attachedX = nbttagcompound.getFloat("attachedX");
             attachedY = nbttagcompound.getFloat("attachedY");
             attachedZ = nbttagcompound.getFloat("attachedZ");
             attachedYaw = nbttagcompound.getFloat("attachedYaw");
         }
-        
-        if(attached)
+
+        if (attached) {
             attachmentCounter = 5;
+        }
     }
 
-    public float getShadowSize()
-    {
+    public float getShadowSize() {
         return 0.0F;
     }
-    
+
     @Override
-    protected boolean canTriggerWalking()
-    {
+    protected boolean canTriggerWalking() {
         return false;
     }
-    
-    public Vector3 getRotatedAttachment()
-    {
+
+    public Vector3 getRotatedAttachment() {
         Vector3 relPos = new Vector3(attachedX, attachedY, attachedZ);
-        Quat rot = Quat.aroundAxis(0, 1, 0, (getEntityRotation()-attachedYaw)*torad);
+        Quat rot = Quat.aroundAxis(0, 1, 0, (getEntityRotation() - attachedYaw) * torad);
         rot.rotate(relPos);
         return relPos;
     }
-    
-    public float getEntityRotation()
-    {
-        if(attachedEntity instanceof EntityLivingBase)
-            return -((EntityLivingBase)attachedEntity).renderYawOffset;
-        
+
+    public float getEntityRotation() {
+        if (attachedEntity instanceof EntityLivingBase) {
+            return -((EntityLivingBase) attachedEntity).renderYawOffset;
+        }
+
         return attachedEntity.rotationYaw;
     }
-    
-    public boolean attachedToLogout()
-    {
+
+    public boolean attachedToLogout() {
         return attached && attachedEntity == null && attachedPlayerName != null;
     }
-    
-    public void copyToDimension(int dimension)
-    {
+
+    public void copyToDimension(int dimension) {
         World otherWorld = DimensionManager.getWorld(dimension);
         EntityWirelessTracker copy = new EntityWirelessTracker(otherWorld, freq);
         copy.attached = true;
@@ -493,40 +431,37 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
         copy.attachedY = attachedY;
         copy.attachedZ = attachedZ;
         copy.attachedYaw = attachedYaw;
-        
+
         copy.setPosition(attachedEntity.posX, attachedEntity.posY, attachedEntity.posZ);//make sure we spawn in the right chunk :D
-        
+
         otherWorld.spawnEntity(copy);
     }
-    
+
     @Override
-    public EntityLivingBase getAttachedEntity()
-    {
-        if(attachedEntity instanceof EntityLivingBase)
+    public EntityLivingBase getAttachedEntity() {
+        if (attachedEntity instanceof EntityLivingBase) {
             return (EntityLivingBase) attachedEntity;
+        }
         return null;
     }
 
     @Override
-    public Vector3 getTransmitPos()
-    {
+    public Vector3 getTransmitPos() {
         return Vector3.fromEntityCenter(this);
     }
 
     @Override
-    public int getDimension()
-    {
+    public int getDimension() {
         return CommonUtils.getDimension(world);
     }
 
     @Override
-    public int getFreq()
-    {
+    public int getFreq() {
         return freq;
     }
-    
+
     public String attachedPlayerName;
-    
+
     public boolean attached;
     public boolean item;
     public float attachedX;
@@ -542,10 +477,10 @@ public class EntityWirelessTracker extends Entity implements WirelessTransmittin
      */
     public int attachmentCounter = 2;
     public int freq;
-    
+
     boolean loaded;
     public Entity attachedEntity;
-    
+
     public static final double torad = 0.017453;
     public static final double todeg = 57.295779;
 }

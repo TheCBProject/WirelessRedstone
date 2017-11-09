@@ -1,12 +1,17 @@
 package codechicken.wirelessredstone.init;
 
-import codechicken.multipart.IPartFactory;
 import codechicken.multipart.MultiPartRegistry;
 import codechicken.multipart.MultipartGenerator;
 import codechicken.multipart.TMultiPart;
+import codechicken.multipart.api.IPartFactory;
 import codechicken.wirelessredstone.part.JammerPart;
 import codechicken.wirelessredstone.part.ReceiverPart;
 import codechicken.wirelessredstone.part.TransmitterPart;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Created by covers1624 on 24/01/2017.
@@ -14,29 +19,27 @@ import codechicken.wirelessredstone.part.TransmitterPart;
 public class PartFactory implements IPartFactory {
 
     public static PartFactory instance = new PartFactory();
+    private static final Map<ResourceLocation, Supplier<TMultiPart>> parts = new HashMap<>();
 
+    static {
+        parts.put(new ResourceLocation("wrcbe:transmitter"), TransmitterPart::new);
+        parts.put(new ResourceLocation("wrcbe:receiver"), ReceiverPart::new);
+        parts.put(new ResourceLocation("wrcbe:jammer"), JammerPart::new);
+    }
 
     public static void init() {
-        MultiPartRegistry.registerParts(instance, new String[]{
-                "wrcbe-tran",
-                "wrcbe-recv",
-                "wrcbe-jamm"
-        });
+        MultiPartRegistry.registerParts(instance, parts.keySet().toArray(new ResourceLocation[0]));
 
         MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileWireless");
         MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileReceiver");
         MultipartGenerator.registerPassThroughInterface("codechicken.wirelessredstone.api.ITileJammer");
     }
 
-
     @Override
-    public TMultiPart createPart(String name, boolean client) {
-        if(name.equals("wrcbe-tran"))
-            return new TransmitterPart();
-        if(name.equals("wrcbe-recv"))
-            return new ReceiverPart();
-        if(name.equals("wrcbe-jamm"))
-            return new JammerPart();
+    public TMultiPart createPart(ResourceLocation name, boolean client) {
+        if (parts.containsKey(name)) {
+            return parts.get(name).get();
+        }
         return null;
     }
 }

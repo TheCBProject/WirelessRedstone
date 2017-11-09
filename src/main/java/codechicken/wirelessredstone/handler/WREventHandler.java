@@ -15,7 +15,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkEvent.Unload;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
@@ -82,16 +81,18 @@ public class WREventHandler {
         if (RedstoneEther.server() != null)//new world
         {
             RedstoneEther.loadServerWorld(event.getWorld());
-            RedstoneEther.server().verifyChunkTransmitters(event.getWorld(), event.getChunk().xPosition, event.getChunk().zPosition);
+            RedstoneEther.server().verifyChunkTransmitters(event.getWorld(), event.getChunk().x, event.getChunk().z);
         }
     }
+
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
         Chunk chunk = event.getChunk();
         for (int i = 0; i < chunk.getEntityLists().length; ++i) {
             for (Object o : chunk.getEntityLists()[i]) {
-                if (o instanceof EntityWirelessTracker)
+                if (o instanceof EntityWirelessTracker) {
                     ((EntityWirelessTracker) o).onChunkUnload();
+                }
             }
         }
     }
@@ -164,14 +165,14 @@ public class WREventHandler {
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void onTextureLoad(TextureStitchEvent.Pre event) {
         //RemoteTexManager.load(event.getMap());
         //TriangTexManager.loadTextures();
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void onTextureLoadPost(TextureStitchEvent.Post event) {
         RenderWireless.postRegisterIcons();
     }

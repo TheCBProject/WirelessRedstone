@@ -1,28 +1,18 @@
 package codechicken.wirelessredstone.manager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
-
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.util.CommonUtils;
 import codechicken.lib.util.ServerUtils;
 import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.api.FreqCoord;
+import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
 import codechicken.wirelessredstone.device.Remote;
 import codechicken.wirelessredstone.device.Sniffer;
 import codechicken.wirelessredstone.entity.EntityREP;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.init.ModItems;
-import codechicken.wirelessredstone.manager.RedstoneEther.TXNodeInfo;
-import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
-
 import codechicken.wirelessredstone.item.ItemWirelessMap;
+import codechicken.wirelessredstone.manager.RedstoneEther.TXNodeInfo;
 import codechicken.wirelessredstone.network.WRServerPH;
 import codechicken.wirelessredstone.util.WirelessMapNodeStorage;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,11 +22,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.storage.MapData;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.MapData;
 
-public class RedstoneEtherServerAddons extends RedstoneEtherAddons
-{
+import java.util.*;
+import java.util.Map.Entry;
+
+public class RedstoneEtherServerAddons extends RedstoneEtherAddons {
+
     private HashMap<String, AddonPlayerInfo> playerInfos = new HashMap<>();
     /**
      * A list of trackers and the players who are 'tracking' them on their clients.
@@ -49,10 +42,11 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
 
     public void setTriangRequired(EntityPlayer player, int freq, boolean required) {
         AddonPlayerInfo info = getPlayerInfo(player);
-        if (required)
+        if (required) {
             info.triangSet.add(freq);
-        else
+        } else {
             info.triangSet.remove(freq);
+        }
     }
 
     private AddonPlayerInfo getPlayerInfo(EntityPlayer player) {
@@ -81,8 +75,9 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
             }
             deactivateRemote(world, player);
         }
-        if (RedstoneEther.server().isPlayerJammed(player))
+        if (RedstoneEther.server().isPlayerJammed(player)) {
             return;
+        }
         info.remote = new Remote(player);
         info.remote.metaOn();
         RedstoneEther.server().addTransmittingDevice(info.remote);
@@ -90,8 +85,9 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
 
     public boolean deactivateRemote(World world, EntityPlayer player) {
         AddonPlayerInfo info = getPlayerInfo(player);
-        if (info.remote == null)
+        if (info.remote == null) {
             return false;
+        }
 
         info.remote.metaOff();
         RedstoneEther.server().removeTransmittingDevice(info.remote);
@@ -286,11 +282,13 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         for (Iterator<WirelessTransmittingDevice> iterator = RedstoneEther.server().getTransmittingDevicesOnFreq(freq).iterator(); iterator.hasNext(); ) {
             WirelessTransmittingDevice device = iterator.next();
 
-            if (device.getAttachedEntity() == player)
+            if (device.getAttachedEntity() == player) {
                 return null;
+            }
 
-            if (device.getDimension() != player.dimension)
+            if (device.getDimension() != player.dimension) {
                 continue;
+            }
 
             Vector3 vecTransmitter = device.getTransmitPos();
             vecTransmitter.y = 0;
@@ -298,8 +296,9 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
             vecAmplitude.add(vecTransmitter.multiply(1 / distancePow2));
         }
 
-        if (vecAmplitude.isZero())
+        if (vecAmplitude.isZero()) {
             return null;
+        }
 
         return vecAmplitude;
     }
@@ -307,8 +306,9 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
     public void addTracker(EntityWirelessTracker tracker) {
         trackerPlayerMap.put(tracker, new HashSet<>());
 
-        if (tracker.attachedPlayerName != null)
+        if (tracker.attachedPlayerName != null) {
             playerTrackers.add(tracker);
+        }
     }
 
     public void removeTracker(EntityWirelessTracker tracker) {
@@ -323,23 +323,26 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
         if (tracker.attachedInOtherDimension()) {
             //removed as player has left dimension...
             //keep this tracker in the playerTrackers list, to be notified of the dimension change
-        } else
+        } else {
             playerTrackers.remove(tracker);
+        }
     }
 
     public void updateTracker(EntityWirelessTracker tracker) {
         HashSet<EntityPlayerMP> trackedPlayers = trackerPlayerMap.get(tracker);
-        if (trackedPlayers == null)
+        if (trackedPlayers == null) {
             trackerPlayerMap.put(tracker, trackedPlayers = new HashSet<>());
+        }
 
         for (EntityPlayerMP player : trackedPlayers) {
             WRServerPH.sendTrackerUpdatePacketTo(player, tracker);
         }
 
-        if (tracker.attachedPlayerName != null)
+        if (tracker.attachedPlayerName != null) {
             playerTrackers.add(tracker);
-        else
+        } else {
             playerTrackers.remove(tracker);
+        }
     }
 
     int trackerTicks = 0;
@@ -402,8 +405,9 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons
 
     public void invalidateREP(EntityPlayer player) {
         AddonPlayerInfo info = getPlayerInfo(player);
-        if (info != null)
+        if (info != null) {
             info.activeREP = null;
+        }
     }
 
     public void updateREPTimeouts() {

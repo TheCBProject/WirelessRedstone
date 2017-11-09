@@ -1,27 +1,29 @@
 package codechicken.wirelessredstone.part;
 
+import codechicken.lib.data.MCDataInput;
 import codechicken.lib.util.ClientUtils;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.manager.RedstoneEther;
 import net.minecraft.item.ItemStack;
-
-import codechicken.lib.data.MCDataInput;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
-import static codechicken.lib.vec.Rotation.*;
-import static codechicken.lib.vec.Vector3.*;
+import static codechicken.lib.vec.Rotation.sideOrientation;
+import static codechicken.lib.vec.Vector3.center;
 
-public class TransmitterPart extends TransceiverPart
-{
+public class TransmitterPart extends TransceiverPart {
+
     public static Cuboid6[] extensionBB = new Cuboid6[24];
 
     static {
         Cuboid6 base = new Cuboid6(7 / 16D, 1 / 8D, 2 / 8D, 9 / 16D, 7 / 8D, 3 / 8D);
-        for (int s = 0; s < 6; s++)
-            for (int r = 0; r < 4; r++)
+        for (int s = 0; s < 6; s++) {
+            for (int r = 0; r < 4; r++) {
                 extensionBB[s << 2 | r] = base.copy().apply(sideOrientation(s, r).at(center));
+            }
+        }
     }
 
     @Override
@@ -31,14 +33,16 @@ public class TransmitterPart extends TransceiverPart
 
     @Override
     public void onNeighborChanged() {
-        if (dropIfCantStay())
+        if (dropIfCantStay()) {
             return;
+        }
 
         int gettingPowered = getPoweringLevel();
-        if (!active() && gettingPowered > 0)
+        if (!active() && gettingPowered > 0) {
             trySetState(true);
-        else if (active() && gettingPowered == 0)
+        } else if (active() && gettingPowered == 0) {
             trySetState(false);
+        }
     }
 
     private void trySetState(boolean on) {
@@ -87,8 +91,9 @@ public class TransmitterPart extends TransceiverPart
 
     @Override
     public double getPearlSpin() {
-        if (spinoffset < 0)
+        if (spinoffset < 0) {
             return RedstoneEther.getRotation(-spinoffset, currentfreq);
+        }
 
         return RedstoneEther.getRotation(ClientUtils.getRenderTime() - spinoffset, currentfreq);
     }
@@ -132,8 +137,8 @@ public class TransmitterPart extends TransceiverPart
     }
 
     @Override
-    public String getType() {
-        return "wrcbe-tran";
+    public ResourceLocation getType() {
+        return new ResourceLocation("wrcbe:transmitter");
     }
 
     @Override

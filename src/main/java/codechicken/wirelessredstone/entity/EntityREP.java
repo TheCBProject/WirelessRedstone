@@ -1,14 +1,11 @@
 package codechicken.wirelessredstone.entity;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.util.CommonUtils;
-import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.manager.RedstoneEther;
+import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import codechicken.wirelessredstone.network.WRServerPH;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -22,10 +19,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import codechicken.lib.vec.Vector3;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
-public class EntityREP extends Entity
-{
+public class EntityREP extends Entity {
+
     public EntityREP(World world) {
         super(world);
         xTileREP = -1;
@@ -34,7 +33,8 @@ public class EntityREP extends Entity
         setSize(0.25F, 0.25F);
     }
 
-    protected void entityInit() {}
+    protected void entityInit() {
+    }
 
     public boolean isInRangeToRenderDist(double d) {
         return true;
@@ -68,8 +68,7 @@ public class EntityREP extends Entity
         setPosition(d, d1, d2);
     }
 
-    public void setREPHeading(double d, double d1, double d2, float f,
-                              float f1) {
+    public void setREPHeading(double d, double d1, double d2, float f, float f1) {
         float f2 = MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
         d /= f2;
         d1 /= f2;
@@ -132,22 +131,25 @@ public class EntityREP extends Entity
         RayTraceResult hit = world.rayTraceBlocks(vec3d, vec3d1);
         vec3d = new Vec3d(posX, posY, posZ);
         vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-        if (hit != null)
-            vec3d1 = new Vec3d(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+        if (hit != null) {
+            vec3d1 = new Vec3d(hit.hitVec.x, hit.hitVec.y, hit.hitVec.z);
+        }
 
         if (!world.isRemote) {
             Entity entity = null;
-            List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
             double d = 0.0D;
             for (Entity entity1 : list) {
-                if (!entity1.canBeCollidedWith() || entity1 == shootingEntity && ticksInAirREP < 5)
+                if (!entity1.canBeCollidedWith() || entity1 == shootingEntity && ticksInAirREP < 5) {
                     continue;
+                }
 
                 float f4 = 0.3F;
                 AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expand(f4, f4, f4);
                 RayTraceResult hit1 = axisalignedbb.calculateIntercept(vec3d, vec3d1);
-                if (hit1 == null)
+                if (hit1 == null) {
                     continue;
+                }
 
                 double d1 = vec3d.distanceTo(hit1.hitVec);
                 if (d1 < d || d == 0.0D) {
@@ -169,10 +171,14 @@ public class EntityREP extends Entity
         posZ += motionZ;
         float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
         rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-        for (rotationPitch = (float) ((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D); rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F) { }
-        for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F) { }
-        for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F) { }
-        for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F) { }
+        for (rotationPitch = (float) ((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D); rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F) {
+        }
+        for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F) {
+        }
+        for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F) {
+        }
+        for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F) {
+        }
         rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
         rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
         float f1 = 0.99F;
@@ -193,8 +199,9 @@ public class EntityREP extends Entity
     }
 
     public void detonate() {
-        if (world.isRemote)
+        if (world.isRemote) {
             return;
+        }
 
         int boltsgen = 0;
         List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(posX - 10, posY - 10, posZ - 10, posX + 10, posY + 10, posZ + 10));
@@ -235,10 +242,7 @@ public class EntityREP extends Entity
             if (boltsgen > maxbolts) {
                 break;
             }
-            WirelessBolt bolt = new WirelessBolt(world, Vector3.fromEntity(this), new Vector3(
-                    posX + 20 * world.rand.nextFloat() - 10,
-                    posY + 20 * world.rand.nextFloat() - 10,
-                    posZ + 20 * world.rand.nextFloat() - 10), world.rand.nextLong());
+            WirelessBolt bolt = new WirelessBolt(world, Vector3.fromEntity(this), new Vector3(posX + 20 * world.rand.nextFloat() - 10, posY + 20 * world.rand.nextFloat() - 10, posZ + 20 * world.rand.nextFloat() - 10), world.rand.nextLong());
             bolt.defaultFractal();
             bolt.finalizeBolt();
             boltsgen++;
@@ -249,8 +253,9 @@ public class EntityREP extends Entity
     public void setDead() {
         super.setDead();
         RedstoneEtherAddons.get(world.isRemote).invalidateREP((EntityPlayer) shootingEntity);
-        if (!world.isRemote)
+        if (!world.isRemote) {
             WRServerPH.sendKillREP(this);
+        }
     }
 
     public void writeEntityToNBT(NBTTagCompound tag) {

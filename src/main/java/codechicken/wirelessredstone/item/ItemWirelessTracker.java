@@ -4,20 +4,20 @@ import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import codechicken.wirelessredstone.network.WRServerPH;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
-public class ItemWirelessTracker extends ItemWirelessFreq
-{
+public class ItemWirelessTracker extends ItemWirelessFreq {
+
     public ItemWirelessTracker() {
         setMaxStackSize(1);
         setUnlocalizedName("wrcbe:tracker");
@@ -31,8 +31,9 @@ public class ItemWirelessTracker extends ItemWirelessFreq
             return super.onItemRightClick(world, player, hand);
         }
 
-        if (getItemFreq(itemStack) == 0)
+        if (getItemFreq(itemStack) == 0) {
             return new ActionResult<>(EnumActionResult.PASS, itemStack);
+        }
 
         if (!player.capabilities.isCreativeMode) {
             itemStack.shrink(1);
@@ -46,18 +47,15 @@ public class ItemWirelessTracker extends ItemWirelessFreq
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }
 
-
     @Override
     public int getItemFreq(ItemStack itemstack) {
         return itemstack.getItemDamage();
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     @Override
     public String getItemStackDisplayName(ItemStack itemstack) {
-        return RedstoneEtherAddons.localizeWirelessItem(
-                I18n.translateToLocal("item.wrcbe.tracker.short"),
-                itemstack.getItemDamage());
+        return RedstoneEtherAddons.localizeWirelessItem(I18n.translateToLocal("item.wrcbe.tracker.short"), itemstack.getItemDamage());
     }
 
     @Override

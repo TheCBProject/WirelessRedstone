@@ -1,15 +1,15 @@
 package codechicken.wirelessredstone.device;
 
+import codechicken.lib.vec.Vector3;
 import codechicken.wirelessredstone.api.WirelessTransmittingDevice;
 import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.item.ItemWirelessRemote;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import codechicken.lib.vec.Vector3;
 
-public class Remote implements WirelessTransmittingDevice
-{
+public class Remote implements WirelessTransmittingDevice {
+
     public Remote(EntityPlayer owner) {
         this.owner = owner;
         freq = owner.inventory.getCurrentItem().getItemDamage() & 0x1FFF;
@@ -46,8 +46,9 @@ public class Remote implements WirelessTransmittingDevice
 
     public void metaOff() {
         ItemStack stack = owner.inventory.getStackInSlot(slot);
-        if (stack != null)
+        if (stack != null) {
             ItemWirelessRemote.setOn(stack, false);
+        }
     }
 
     public void metaOn() {

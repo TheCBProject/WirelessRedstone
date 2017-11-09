@@ -10,8 +10,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class ItemREP extends Item
-{
+public class ItemREP extends Item {
+
     public ItemREP() {
         setMaxStackSize(16);
         setUnlocalizedName("wrcbe:rep");
@@ -21,11 +21,13 @@ public class ItemREP extends Item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (world.isRemote)
+        if (world.isRemote) {
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        }
 
-        if (RedstoneEtherAddons.server().detonateREP(player))
+        if (RedstoneEtherAddons.server().detonateREP(player)) {
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        }
 
         RedstoneEtherAddons.server().throwREP(stack, world, player);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);

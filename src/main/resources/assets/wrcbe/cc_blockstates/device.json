@@ -3,6 +3,13 @@
 	"variant_sets": [
 		"type"
 	],
+	"defaults": {
+		"model": "builtin/generated",
+		"textures": {
+			"layer0": "blocks/dirt"
+		},
+		"transform": "ccl:default-item"
+	},
 	"texture_domain": "wrcbe",
 	"variants": {
 		"type": {
@@ -13,32 +20,24 @@
 				"model": "ccl:bakery"
 			},
 			"sniffer": {
-				"model": "builtin/generated",
 				"textures": {
 					"layer0": "items/sniffer"
-				},
-				"transform": "ccl:default-item"
+				}
 			},
 			"private_sniffer": {
-				"model": "builtin/generated",
 				"textures": {
 					"layer0": "items/private_sniffer"
-				},
-				"transform": "ccl:default-item"
+				}
 			},
 			"wireless_map": {
-				"model": "builtin/generated",
 				"textures": {
 					"layer0": "items/map"
-				},
-				"transform": "ccl:default-item"
+				}
 			},
 			"empty_wireless_map": {
-				"model": "builtin/generated",
 				"textures": {
 					"layer0": "items/empty_map"
-				},
-				"transform": "ccl:default-item"
+				}
 			}
 		}
 	}

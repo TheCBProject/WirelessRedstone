@@ -1,192 +1,173 @@
 package codechicken.wirelessredstone.part;
 
-import codechicken.lib.util.ClientUtils;
-import codechicken.wirelessredstone.api.ITileReceiver;
-import codechicken.wirelessredstone.init.ModItems;
-import codechicken.wirelessredstone.manager.RedstoneEther;
-import net.minecraft.item.ItemStack;
-
 import codechicken.lib.data.MCDataInput;
+import codechicken.lib.util.ClientUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Rotation;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.Vector3;
+import codechicken.wirelessredstone.api.ITileReceiver;
+import codechicken.wirelessredstone.init.ModItems;
+import codechicken.wirelessredstone.manager.RedstoneEther;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
-import static codechicken.lib.vec.Rotation.*;
-import static codechicken.lib.vec.Vector3.*;
+import static codechicken.lib.vec.Rotation.sideOrientation;
+import static codechicken.lib.vec.Vector3.center;
 
-public class ReceiverPart extends TransceiverPart implements ITileReceiver
-{
+public class ReceiverPart extends TransceiverPart implements ITileReceiver {
+
     public static Cuboid6[] extensionBB = new Cuboid6[24];
-    
-    static
-    {
-        Cuboid6 base = new Cuboid6(3/16D, 1/8D, 1/8D, 13/16D, 13/16D, 5/8D);
-        for(int s = 0; s < 6; s++)
-            for(int r = 0; r < 4; r++)
-                extensionBB[s<<2|r] = base.copy().apply(sideOrientation(s, r).at(center));
+
+    static {
+        Cuboid6 base = new Cuboid6(3 / 16D, 1 / 8D, 1 / 8D, 13 / 16D, 13 / 16D, 5 / 8D);
+        for (int s = 0; s < 6; s++) {
+            for (int r = 0; r < 4; r++) {
+                extensionBB[s << 2 | r] = base.copy().apply(sideOrientation(s, r).at(center));
+            }
+        }
     }
-    
+
     @Override
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         return new ItemStack(ModItems.itemWireless, 1, 1);
     }
-    
+
     @Override
-    public int strongPowerLevel(int side)
-    {
+    public int strongPowerLevel(int side) {
         return side == Rotation.rotateSide(side(), rotation()) && active() ? 15 : 0;
     }
 
     @Override
-    public void setActive(boolean on)
-    {
+    public void setActive(boolean on) {
         super.setActive(on);
         updateChange();
         tile().notifyNeighborChange(Rotation.rotateSide(side(), rotation()));
     }
 
     @Override
-    public void jamTile()
-    {
+    public void jamTile() {
         super.jamTile();
         changeSpinState(true);
         setActive(false);
     }
 
     @Override
-    public void unjamTile()
-    {
+    public void unjamTile() {
         super.unjamTile();
         changeSpinState(false);
         addToEther();
     }
-    
-    public void changeSpinState(boolean jam)
-    {
-        if(!jam && spinoffset < 0)//unjamming
+
+    public void changeSpinState(boolean jam) {
+        if (!jam && spinoffset < 0)//unjamming
         {
             int time = (int) (world().getTotalWorldTime() % 100000);
             spinoffset = time + spinoffset;
-        }
-        else if(jam && spinoffset >= 0)//jamming
+        } else if (jam && spinoffset >= 0)//jamming
         {
             int time = (int) ((world().getTotalWorldTime() - spinoffset) % 100000);
             spinoffset = -time;
         }
     }
-    
-    public Vector3 getFocalPoint()
-    {
+
+    public Vector3 getFocalPoint() {
         return new Vector3(0.0755, 0.255, 0).apply(rotationT());
     }
 
     @Override
-    public Vector3 getPearlPos()
-    {
-        return new Vector3(0, getFloating()*0.02, 0)
-            .apply(getPearlRotation())
-            .add(0.5, 0.755, 0.545);
+    public Vector3 getPearlPos() {
+        return new Vector3(0, getFloating() * 0.02, 0).apply(getPearlRotation()).add(0.5, 0.755, 0.545);
     }
 
     @Override
-    public Transformation getPearlRotation()
-    {
+    public Transformation getPearlRotation() {
         return new Rotation(0.7854, 1, 0, 0);
     }
 
     @Override
-    public double getPearlScale()
-    {
+    public double getPearlScale() {
         return 0.04;
     }
 
     @Override
-    public double getPearlSpin()
-    {
-        if(spinoffset < 0)
+    public double getPearlSpin() {
+        if (spinoffset < 0) {
             return RedstoneEther.getRotation(-spinoffset, currentfreq);
+        }
 
-        return RedstoneEther.getRotation(ClientUtils.getRenderTime()-spinoffset, currentfreq);
+        return RedstoneEther.getRotation(ClientUtils.getRenderTime() - spinoffset, currentfreq);
     }
-    
-    public float getPearlLight()
-    {
+
+    public float getPearlLight() {
         float light = world().getLightBrightness(pos());
-        if((deadmap & 1) == 1 || (deadmap == 0 && (disabled() || !active() || currentfreq == 0)))
+        if ((deadmap & 1) == 1 || (deadmap == 0 && (disabled() || !active() || currentfreq == 0))) {
             light = (light + 1) * 0.25F;
-        else
+        } else {
             light = (light + 1) * 0.5F;
-        
+        }
+
         return light;
-    }    
+    }
 
     @Override
-    public void setFreq(int newfreq)
-    {
+    public void setFreq(int newfreq) {
         super.setFreq(newfreq);
-        
-        if(newfreq == 0)
+
+        if (newfreq == 0) {
             setActive(false);
+        }
     }
-    
-    public void addToEther()
-    {
+
+    public void addToEther() {
         RedstoneEther.server().addReceiver(world(), pos(), currentfreq);
     }
-    
-    public void removeFromEther()
-    {
+
+    public void removeFromEther() {
         RedstoneEther.server().remReceiver(world(), pos(), currentfreq);
     }
-    
-    public String getGuiName()
-    {
+
+    public String getGuiName() {
         return I18n.translateToLocal("item.wrcbe:wireless_part|1.name");
     }
-    
+
     @Override
-    public String getType()
-    {
-        return "wrcbe-recv";
+    public ResourceLocation getType() {
+        return new ResourceLocation("wrcbe:receiver");
     }
-    
+
     @Override
-    public void read(MCDataInput packet)
-    {
+    public void read(MCDataInput packet) {
         super.read(packet);
         changeSpinState(disabled());
     }
-    
+
     @Override
-    public Cuboid6 getExtensionBB()
-    {
+    public Cuboid6 getExtensionBB() {
         return extensionBB[shape()];
     }
-    
+
     @Override
-    public int modelId()
-    {
+    public int modelId() {
         return 1;
     }
-    
+
     @Override
     public double m1() {
         // TODO Auto-generated method stub
         return 0;
     }
-    
+
     @Override
     public double m2(double d) {
         // TODO Auto-generated method stub
         return 0;
     }
-    
+
     @Override
     public void m3(double d) {
         // TODO Auto-generated method stub
-        
+
     }
 }

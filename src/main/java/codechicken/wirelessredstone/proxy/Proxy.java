@@ -2,15 +2,14 @@ package codechicken.wirelessredstone.proxy;
 
 import codechicken.lib.config.ConfigTag;
 import codechicken.lib.packet.PacketCustom;
-import codechicken.lib.util.CommonUtils;
 import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
-import codechicken.wirelessredstone.network.WRServerPH;
 import codechicken.wirelessredstone.entity.WirelessBolt;
 import codechicken.wirelessredstone.init.ModItems;
 import codechicken.wirelessredstone.init.ModRecipes;
 import codechicken.wirelessredstone.manager.SaveManager;
+import codechicken.wirelessredstone.network.WRServerPH;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -30,11 +29,11 @@ public class Proxy {
         EntityRegistry.registerModEntity(new ResourceLocation("wrcbe:tracker"), EntityWirelessTracker.class, "tracker", 0, WirelessRedstone.instance, 64, 1, true);
     }
 
-    public void init(){
+    public void init() {
         ModRecipes.init();
     }
 
-    public void postInit(){
+    public void postInit() {
 
     }
 
@@ -44,12 +43,10 @@ public class Proxy {
     public void openTileWirelessGui(EntityPlayer entityplayer, ITileWireless tileRPWireless) {
     }
 
-    public void openPSnifferGui(EntityPlayer player)
-    {
+    public void openPSnifferGui(EntityPlayer player) {
     }
 
-    public void openSnifferGui(EntityPlayer player)
-    {
+    public void openSnifferGui(EntityPlayer player) {
     }
 
 }

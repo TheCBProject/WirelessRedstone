@@ -1,6 +1,5 @@
 package codechicken.wirelessredstone.client.render;
 
-import codechicken.lib.render.CCModelLibrary;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.item.map.IMapRenderer;
 import codechicken.lib.texture.TextureUtils;
@@ -13,14 +12,13 @@ import codechicken.wirelessredstone.manager.RedstoneEther;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import codechicken.wirelessredstone.util.WirelessMapNodeStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.MapData;
 
 import javax.annotation.Nullable;
@@ -28,7 +26,7 @@ import javax.annotation.Nullable;
 public class WirelessMapRenderer implements IMapRenderer {
 
     private void renderPass(CCRenderState ccrs, int xCenter, int zCenter, int scale, WirelessMapNodeStorage mapstorage, float size, float alpha, float light) {
-        VertexBuffer buffer = ccrs.getBuffer();
+        BufferBuilder buffer = ccrs.getBuffer();
         float blockscale = 1 << scale;
 
         for (FreqCoord node : mapstorage.nodes) {
@@ -132,7 +130,7 @@ public class WirelessMapRenderer implements IMapRenderer {
             GlStateManager.disableLighting();
             TextureUtils.changeTexture("textures/map/map_background.png");
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
             GlStateManager.translate(-0.5F, -0.5F, 0.0F);
             GlStateManager.scale(0.0078125F, 0.0078125F, 0.0078125F);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);

@@ -6,6 +6,7 @@ import codechicken.wirelessredstone.item.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -35,13 +36,12 @@ public class ModItems {
     public static ItemStack receiverDish;
     public static ItemStack blazeReceiverDish;
 
-
     public static void init() {
         itemWireless = new ItemWirelessPart().setCreativeTab(WirelessRedstone.creativeTab);
-        GameRegistry.register(ModItems.itemWireless.setRegistryName("wireless_logic"));
+        ForgeRegistries.ITEMS.register(ModItems.itemWireless.setRegistryName("wireless_logic"));
 
         itemMaterial = new ItemMultiType(WirelessRedstone.creativeTab, "material").setUnlocalizedName("wrcbe:material");
-        GameRegistry.register(itemMaterial);
+        ForgeRegistries.ITEMS.register(itemMaterial);
 
         obsidianStick = itemMaterial.registerItem("obsidian_stick");
         stoneBowl = itemMaterial.registerItem("stone_bowl");
@@ -55,22 +55,21 @@ public class ModItems {
         OreDictionary.registerOre("stoneBowl", stoneBowl);
 
         itemTriangulator = new ItemWirelessTriangulator();
-        GameRegistry.register(itemTriangulator.setRegistryName("triangulator"));
+        ForgeRegistries.ITEMS.register(itemTriangulator.setRegistryName("triangulator"));
         itemRemote = new ItemWirelessRemote();
-        GameRegistry.register(itemRemote.setRegistryName("remote"));
+        ForgeRegistries.ITEMS.register(itemRemote.setRegistryName("remote"));
         itemSniffer = new ItemWirelessSniffer();
-        GameRegistry.register(itemSniffer.setRegistryName("sniffer"));
+        ForgeRegistries.ITEMS.register(itemSniffer.setRegistryName("sniffer"));
         itemEmptyWirelessMap = new ItemEmptyWirelessMap();
-        GameRegistry.register(itemEmptyWirelessMap.setRegistryName("empty_map"));
+        ForgeRegistries.ITEMS.register(itemEmptyWirelessMap.setRegistryName("empty_map"));
         itemWirelessMap = new ItemWirelessMap();
-        GameRegistry.register(itemWirelessMap.setRegistryName("map"));
+        ForgeRegistries.ITEMS.register(itemWirelessMap.setRegistryName("map"));
         itemTracker = new ItemWirelessTracker();
-        GameRegistry.register(itemTracker.setRegistryName("tracker"));
+        ForgeRegistries.ITEMS.register(itemTracker.setRegistryName("tracker"));
         itemRep = new ItemREP();
-        GameRegistry.register(itemRep.setRegistryName("rep"));
+        ForgeRegistries.ITEMS.register(itemRep.setRegistryName("rep"));
         itemPrivateSniffer = new ItemPrivateSniffer();
-        GameRegistry.register(itemPrivateSniffer.setRegistryName("p_sniffer"));
+        ForgeRegistries.ITEMS.register(itemPrivateSniffer.setRegistryName("p_sniffer"));
     }
-
 
 }
