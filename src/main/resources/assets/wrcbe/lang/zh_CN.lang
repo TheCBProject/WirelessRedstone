@@ -1,0 +1,117 @@
+#Items
+item.wrcbe:material.obsidian_stick.name=黑曜石棒
+item.wrcbe:material.stone_bowl.name=石碗
+item.wrcbe:material.rether_pearl.name=信号珍珠
+item.wrcbe:material.wireless_transceiver.name=收发天线
+item.wrcbe:material.blaze_transceiver.name=发光收发天线
+item.wrcbe:material.receiver_dish.name=接收盘
+item.wrcbe:material.blaze_receiver_dish.name=发光接收盘
+item.wrcbe:sniffer.name=频率探测器
+item.wrcbe:private_sniffer.name=私有频率探测器
+item.wrcbe:empty_map.name=空白信号地图
+item.wrcbe:map.name=信号地图
+item.wrcbe:rep.name=红石脉冲手雷
+item.wrcbe:triangulator.name=三角定位仪
+item.wrcbe:remote.name=信号遥控器
+item.wrcbe:tracker.name=信号追踪装置
+item.wrcbe:wireless_part|0.name=信号发射器
+item.wrcbe:wireless_part|1.name=信号接收器
+item.wrcbe:wireless_part|2.name=信号干扰器
+
+#Misc
+death.attack.wrcbe:bolt=%1$s 被信号闪电击中
+itemGroup.wrcbe=Wireless Redstone CBE
+item.wrcbe.triangulator.short=三角定位仪
+item.wrcbe.remote.short=信号遥控器
+item.wrcbe.tracker.short=信号追踪装置
+
+#Gui
+wrcbe.button.simple=简易设置
+wrcbe.button.advanced=进阶设置
+wrcbe.button.set=保存
+wrcbe.button.colour=保存颜色
+wrcbe.button.setname=保存名称
+wrcbe.button.remname=删除名称
+wrcbe.label.value=频率号码
+wrcbe.label.name=频率名称
+wrcbe.label.colour=频率颜色
+wrcbe.label.freq=频率
+
+#Command
+wrcbe.command.usage=WR-CBE 信号维度管理. 使用: freq [参数...]
+wrcbe.command.usage1=参数: %s
+wrcbe.command.usage2=使用 /freq help [参数] 来获得更多信息
+
+wrcbe.param.invalidno=参数数目无效
+wrcbe.param.invalid=无效参数
+wrcbe.param.missing=无此参数
+wrcbe.param.invalidfreq=无效频率
+wrcbe.param.invalidfreqrange=无效的频率范围
+
+wrcbe.param.get.usage=用法: freq get [public | shared | private]
+wrcbe.param.get.usage1=例如 freq get public. 恢复公共频率范围
+wrcbe.param.get.usage2=例如 freq get shared. 恢复共享频率范围
+wrcbe.param.get.usage3=例如 freq get private. 恢复每个玩家可拥有的私有频率数量
+wrcbe.param.get.public=频率 1-%d 为公共
+wrcbe.param.get.shared=频率 %d-%d 为共享
+wrcbe.param.get.shared0=没有共享频率
+wrcbe.param.get.private=所有玩家允许 %d 个专用频率
+
+wrcbe.param.private.usage=用法: freq private [params...]
+wrcbe.param.private.usage1=例如 freq private [username | all]. Returns the private freqs owned by [username]
+wrcbe.param.private.usage2=例如 freq private [username] [freq]. Sets the owner of [freq] as [username]
+wrcbe.param.private.usage3=例如 freq private [freq]. Returns the owner of [freq]
+wrcbe.param.private.usage4=例如 freq private clear [freq | username | all]. Removes the owner of [freq]
+wrcbe.param.private.none=没有私有频率
+wrcbe.param.private.list=以下频率是私有的: %s
+wrcbe.param.private.ispublic=%d 是公共的
+wrcbe.param.private.publicanyway=%d 是公共的
+wrcbe.param.private.notprivate=%d 不是私有的
+wrcbe.param.private.noneowned=%s 不拥有任何频率
+wrcbe.param.private.nowshared=%d 现在被共享
+wrcbe.param.private.nowshared2=现在共享以下频率: %s
+wrcbe.param.private.ownedby=%d 被 %s 拥有
+wrcbe.param.private.owns=%s 拥有以下频率: %s
+wrcbe.param.private.notshared=%d 不在共享范围内
+wrcbe.param.private.nowownedby=%d 现由 %s 拥有
+wrcbe.param.private.limit=%s 已经拥有 %d 个频率
+
+wrcbe.param.scan.usage=用法: freq scan [playername]
+wrcbe.param.scan.usage1=报告频率 [playername] 可以广播并拥有
+wrcbe.param.scan.usage2=频率扫描 codechicken
+wrcbe.param.scan.usage3=频率扫描
+wrcbe.param.scan.list=%s 可以广播在: %s
+wrcbe.param.scan.onlypublic=%s 只能在公共频率上广播
+
+wrcbe.param.set.usage=用法: freq set [public | shared | private] [value]
+wrcbe.param.set.usage1=例如 freq set public. Sets frequencies 1 to [value] as public
+wrcbe.param.set.usage2=例如 freq set shared. Sets frequencies [public+1] to [value] as shared
+wrcbe.param.set.usage3=例如 freq set private. Gives each player [value] private frequencies
+wrcbe.param.set.invalidnum=无效编号
+wrcbe.param.set.invalidqty=无效数量
+wrcbe.param.set.nowpublic=%s: 频率 1-%d 现在是公开的
+wrcbe.param.set.sharedpublic=%s: 共享频率范围已公开
+wrcbe.param.set.nowshared=%s: 频率 %d-%d 现在共享
+wrcbe.param.set.sharedremoved=%s: 已删除共享频率范围
+wrcbe.param.set.privateno=%s: 所有玩家现在被允许使用 %d 个私有频率
+
+wrcbe.param.jam.usage=用法: freq jam [playername] [frequency range | all | default]
+wrcbe.param.jam.usage1=Jam [playername] from [frequency range]
+wrcbe.param.jam.usage2=例如 freq %s codechicken 100-250
+wrcbe.param.jam.usage3=例如 freq %s codechicken all
+wrcbe.param.jam.usage4=例如 freq %s codechicken default
+wrcbe.param.jam.usage5=例如 freq %s 100-250
+wrcbe.param.jam.usage6=例如 freq %s codechicken 500
+wrcbe.param.jam.noplayer=没有此玩家
+wrcbe.param.jam.errpublic=你不能干扰来自公共频道的频率
+wrcbe.param.jam.jammed=你被频率 %d 干扰了
+wrcbe.param.jam.jammed2=你被频率 %s 干扰了
+wrcbe.param.jam.opjammed=%s: %s 被频率 %d 干扰
+wrcbe.param.jam.opjammed2=%s: %s 被频率 %s 干扰
+
+wrcbe.param.open.usage=用法: freq open [playername] [frequency range | all | default]
+wrcbe.param.open.usage1=unjam [playername] form [frequency range]
+wrcbe.param.open.jammed=您已被授予频率 %d
+wrcbe.param.open.jammed2=你被授予频率 %s
+wrcbe.param.open.opjammed=%s: %s 被授予频率 %d
+wrcbe.param.open.opjammed2=%s: %s 被授予频率 %s
