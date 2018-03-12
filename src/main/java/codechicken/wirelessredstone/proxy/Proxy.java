@@ -7,7 +7,6 @@ import codechicken.wirelessredstone.api.ITileWireless;
 import codechicken.wirelessredstone.entity.EntityWirelessTracker;
 import codechicken.wirelessredstone.entity.WirelessBolt;
 import codechicken.wirelessredstone.init.ModItems;
-import codechicken.wirelessredstone.init.ModRecipes;
 import codechicken.wirelessredstone.manager.SaveManager;
 import codechicken.wirelessredstone.network.WRServerPH;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +29,7 @@ public class Proxy {
     }
 
     public void init() {
-        ModRecipes.init();
+
     }
 
     public void postInit() {

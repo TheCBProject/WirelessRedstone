@@ -426,18 +426,18 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
         return RenderWireless.getBreakingIcon(textureSet());
     }
 
-	@Override
-	public boolean canRenderDynamic(int pass) {
-		return pass == 0;
-	}
+    @Override
+    public boolean canRenderDynamic(int pass) {
+        return pass == 0;
+    }
 
-	@Override
-	public void renderDynamic(Vector3 pos, int pass, float frameDelta) {
-		RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
-	}
+    @Override
+    public void renderDynamic(Vector3 pos, int pass, float frameDelta) {
+        RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
+    }
 
-	@Override
-	public Cuboid6 getRenderBounds() {
-		return Cuboid6.full;
-	}
+    @Override
+    public Cuboid6 getRenderBounds() {
+        return Cuboid6.full;
+    }
 }

@@ -21,8 +21,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.MapData;
 
-import javax.annotation.Nullable;
-
 public class WirelessMapRenderer implements IMapRenderer {
 
     private void renderPass(CCRenderState ccrs, int xCenter, int zCenter, int scale, WirelessMapNodeStorage mapstorage, float size, float alpha, float light) {

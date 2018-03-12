@@ -11,9 +11,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 
 import java.util.Optional;
 
-import static codechicken.lib.util.TransformUtils.DEFAULT_BLOCK;
-import static codechicken.lib.util.TransformUtils.create;
-import static codechicken.lib.util.TransformUtils.flipLeft;
+import static codechicken.lib.util.TransformUtils.*;
 import static net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType.*;
 
 /**

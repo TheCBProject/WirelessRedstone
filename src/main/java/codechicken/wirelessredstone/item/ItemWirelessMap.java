@@ -1,7 +1,6 @@
 package codechicken.wirelessredstone.item;
 
 import codechicken.lib.util.ClientUtils;
-import codechicken.wirelessredstone.WirelessRedstone;
 import codechicken.wirelessredstone.manager.RedstoneEtherAddons;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
