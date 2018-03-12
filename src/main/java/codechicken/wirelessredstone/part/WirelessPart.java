@@ -32,7 +32,7 @@ import java.util.Collections;
 import static codechicken.lib.vec.Rotation.*;
 import static codechicken.lib.vec.Vector3.center;
 
-public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TFacePart, TIconHitEffectsPart, IFaceRedstonePart, TNormalOcclusionPart, TPartialOcclusionPart, JMicroShrinkRender {
+public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TFacePart, TIconHitEffectsPart, IFaceRedstonePart, TNormalOcclusionPart, TPartialOcclusionPart, JMicroShrinkRender, TDynamicRenderPart {
 
     private static Cuboid6[] nBoxes = new Cuboid6[6];
 
@@ -315,13 +315,6 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     }
 
     @Override
-    public void renderDynamic(Vector3 pos, int pass, float frame) {
-        if (pass == 0) {
-            RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
-        }
-    }
-
-    @Override
     public void onPartChanged(TMultiPart part) {
         if (world().isRemote) {
             recalcBounds();
@@ -432,4 +425,19 @@ public abstract class WirelessPart extends TMultiPart implements TCuboidPart, TF
     public TextureAtlasSprite getBrokenIcon(int side) {
         return RenderWireless.getBreakingIcon(textureSet());
     }
+
+	@Override
+	public boolean canRenderDynamic(int pass) {
+		return pass == 0;
+	}
+
+	@Override
+	public void renderDynamic(Vector3 pos, int pass, float frameDelta) {
+		RenderWireless.renderPearl(CCRenderState.instance(), pos, this);
+	}
+
+	@Override
+	public Cuboid6 getRenderBounds() {
+		return Cuboid6.full;
+	}
 }

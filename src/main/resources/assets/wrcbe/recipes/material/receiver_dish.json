@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:material",
+		"data": 5,
+		"count": 1
+	},
+	"pattern": [
+		"T ",
+		"B "
+	],
+	"key": {
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 3
+		},
+		"B": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 1
+		}
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:material",
+		"data": 1,
+		"count": 1
+	},
+	"pattern": [
+		"S S",
+		" S "
+	],
+	"key": {
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "stone"
+		}
+	}
+}

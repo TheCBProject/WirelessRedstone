@@ -1,41 +1,41 @@
 #Items
-item.wrcbe:material.obsidian_stick.name=Об�?идианова�? палка
-item.wrcbe:material.stone_bowl.name=Каменна�? ми�?ка
+item.wrcbe:material.obsidian_stick.name=Об�?идианова�? палка
+item.wrcbe:material.stone_bowl.name=Каменна�? ми�?ка
 item.wrcbe:material.rether_pearl.name=REther жемчуг
-item.wrcbe:material.wireless_transceiver.name=Бе�?проводной приёмопередатчик
+item.wrcbe:material.wireless_transceiver.name=Бе�?проводной приёмопередатчик
 item.wrcbe:material.blaze_transceiver.name=Пламенный приёмопередатчик
-item.wrcbe:material.receiver_dish.name=Ми�?ка �? приёмником
-item.wrcbe:material.blaze_receiver_dish.name=Ми�?ка �? пламенным приёмником
-item.wrcbe:sniffer.name=Бе�?проводной �?нифер
-item.wrcbe:private_sniffer.name=Приватный �?нифер
+item.wrcbe:material.receiver_dish.name=Ми�?ка �? приёмником
+item.wrcbe:material.blaze_receiver_dish.name=Ми�?ка �? пламенным приёмником
+item.wrcbe:sniffer.name=Бе�?проводной �?нифер
+item.wrcbe:private_sniffer.name=Приватный �?нифер
 item.wrcbe:empty_map.name=Empty Wireless Map
-item.wrcbe:map.name=Бе�?проводна�? карта
+item.wrcbe:map.name=Бе�?проводна�? карта
 item.wrcbe:rep.name=РМИ
-item.wrcbe:triangulator.name=Бе�?проводной триангул�?тор
-item.wrcbe:remote.name=Бе�?проводной пульт
-item.wrcbe:tracker.name=Бе�?проводной ма�?чок
-item.wrcbe:wireless_part|0.name=Бе�?проводной передатчик
-item.wrcbe:wireless_part|1.name=Бе�?проводной приёмник
-item.wrcbe:wireless_part|2.name=Бе�?проводной генератор помех
+item.wrcbe:triangulator.name=Бе�?проводной триангул�?тор
+item.wrcbe:remote.name=Бе�?проводной пульт
+item.wrcbe:tracker.name=Бе�?проводной ма�?чок
+item.wrcbe:wireless_part|0.name=Бе�?проводной передатчик
+item.wrcbe:wireless_part|1.name=Бе�?проводной приёмник
+item.wrcbe:wireless_part|2.name=Бе�?проводной генератор помех
 
 #Misc
 death.attack.wrcbe:bolt=%1$s был поражён REther молнией.
 itemGroup.wrcbe=Wireless Redstone CBE
-item.wrcbe.triangulator.short=Триангул�?тор
+item.wrcbe.triangulator.short=Триангул�?тор
 item.wrcbe.remote.short=Remote
 item.wrcbe.tracker.short=Tracker
 
 #Gui
 wrcbe.button.simple=Обычные
-wrcbe.button.advanced=Ра�?ширенные
+wrcbe.button.advanced=Ра�?ширенные
 wrcbe.button.set=задать
 wrcbe.button.colour=Phase Shift
-wrcbe.button.setname=Задать им�?
+wrcbe.button.setname=Задать им�?
 wrcbe.button.remname=Убрать
 wrcbe.label.value=Значение
-wrcbe.label.name=�?азвание ча�?тоты
+wrcbe.label.name=�?азвание ча�?тоты
 wrcbe.label.colour=Spectrum
-wrcbe.label.freq=Ча�?тота
+wrcbe.label.freq=Ча�?тота
 
 #Command
 wrcbe.command.usage=WR-CBE REther management. Usage: freq [params...]

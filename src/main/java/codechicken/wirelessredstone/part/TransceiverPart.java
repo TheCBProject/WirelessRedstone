@@ -15,8 +15,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TransceiverPart extends WirelessPart implements ITileWireless//, IPeripheral
-{
+public abstract class TransceiverPart extends WirelessPart implements ITileWireless {
 
     public byte deadmap;
     public int currentfreq;

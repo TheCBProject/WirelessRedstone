@@ -2,6 +2,7 @@ package codechicken.wirelessredstone;
 
 import codechicken.lib.CodeChickenLib;
 import codechicken.lib.gui.SimpleCreativeTab;
+import codechicken.lib.internal.ModDescriptionEnhancer;
 import codechicken.wirelessredstone.command.CommandFreq;
 import codechicken.wirelessredstone.handler.WREventHandler;
 import codechicken.wirelessredstone.init.ModItems;
@@ -37,7 +38,7 @@ public class WirelessRedstone {
     public static final String MOD_ID = "wrcbe";
     public static final String MOD_NAME = "WirelessRedstone-CBE";
     public static final String MOD_VERSION = "${mod_version}";
-    public static final String MOD_DEPENDENCIES = "required-after:codechickenlib@[" + CodeChickenLib.MOD_VERSION + ",);required-after:forgemultipartcbe";
+    public static final String MOD_DEPENDENCIES = CodeChickenLib.MOD_VERSION_DEP + "required-after:forgemultipartcbe";
     static final String UPDATE_URL = "http://chickenbones.net/Files/notification/version.php?query=forge&version=" + MC_VERSION + "&file=WR-CBE";
 
     @SidedProxy (clientSide = "codechicken.wirelessredstone.proxy.ProxyClient", serverSide = "codechicken.wirelessredstone.proxy.Proxy")
@@ -56,6 +57,7 @@ public class WirelessRedstone {
         PartFactory.init();
         MinecraftForge.EVENT_BUS.register(new WREventHandler());
         damageBolt = new DamageSource("wrcbe:bolt");
+        ModDescriptionEnhancer.registerEnhancement(MOD_ID, "WR-CBE");
     }
 
     @Mod.EventHandler

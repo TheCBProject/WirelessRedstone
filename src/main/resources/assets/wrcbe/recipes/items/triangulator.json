@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:triangulator",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		" I ",
+		"ITI",
+		" I "
+	],
+	"key": {
+		"I": {
+			"type": "forge:ore_dict",
+			"ore": "ingotIron"
+		},
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 3
+		}
+	}
+}

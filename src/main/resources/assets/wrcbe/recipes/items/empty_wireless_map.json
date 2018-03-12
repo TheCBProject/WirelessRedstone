@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:empty_map",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		"PPP",
+		"PTP",
+		"PPP"
+	],
+	"key": {
+		"P": {
+			"type": "minecraft:item",
+			"item": "minecraft:paper"
+		},
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:triangulator",
+			"data": 32767
+		}
+	}
+}

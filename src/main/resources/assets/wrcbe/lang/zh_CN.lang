@@ -7,12 +7,12 @@ item.wrcbe:material.blaze_transceiver.name=Blaze Transceiver
 item.wrcbe:material.receiver_dish.name=Receiver Dish
 item.wrcbe:material.blaze_receiver_dish.name=Blaze Receiver Dish
 item.wrcbe:sniffer.name=红石嗅探器
-item.wrcbe:private_sniffer.name=�?有嗅探器
+item.wrcbe:private_sniffer.name=�?有嗅探器
 item.wrcbe:empty_map.name=空白红石地图
 item.wrcbe:map.name=红石地图
-item.wrcbe:rep.name=红石�?脉冲器
-item.wrcbe:triangulator.name=红石三角定�?器
-item.wrcbe:remote.name=红石�?�控器
+item.wrcbe:rep.name=红石�?脉冲器
+item.wrcbe:triangulator.name=红石三角定�?器
+item.wrcbe:remote.name=红石�?�控器
 item.wrcbe:tracker.name=红石追踪器
 item.wrcbe:wireless_part|0.name=无线传达器
 item.wrcbe:wireless_part|1.name=无线接收器
@@ -21,8 +21,8 @@ item.wrcbe:wireless_part|2.name=无线干扰器
 #Misc
 death.attack.wrcbe:bolt=%1$s was hit by REther Lightning.
 itemGroup.wrcbe=Wireless Redstone CBE
-item.wrcbe.triangulator.short=红石三角定�?器
-item.wrcbe.remote.short=红石�?�控器
+item.wrcbe.triangulator.short=红石三角定�?器
+item.wrcbe.remote.short=红石�?�控器
 item.wrcbe.tracker.short=红石追踪器
 
 #Gui

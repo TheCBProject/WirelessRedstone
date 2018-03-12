@@ -22,14 +22,14 @@ public class ItemEmptyWirelessMap extends ItemMapBase {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         ItemStack itemstack1 = new ItemStack(ModItems.itemWirelessMap, 1, worldIn.getUniqueDataId("map"));
-        String s = "map_" + itemstack1.getItemDamage();
+        String s = "map_" + itemstack1.getMetadata();
         MapData mapdata = new MapData(s);
         worldIn.setData(s, mapdata);
         mapdata.scale = 0;
-        int i = 128 * (1 << mapdata.scale);
-        mapdata.xCenter = (int) (Math.round(playerIn.posX / (double) i) * (long) i);
-        mapdata.zCenter = (int) (Math.round(playerIn.posZ / (double) i) * (long) i);
+        mapdata.calculateMapCenter(playerIn.posX, playerIn.posZ, mapdata.scale);
         mapdata.dimension = worldIn.provider.getDimension();
+        mapdata.trackingPosition = true;
+        mapdata.unlimitedTracking = false;
         mapdata.markDirty();
         itemStackIn.shrink(1);
 

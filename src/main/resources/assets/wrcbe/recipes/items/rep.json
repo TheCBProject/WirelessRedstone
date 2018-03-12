@@ -1,0 +1,28 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:rep",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		" OT",
+		"OPO",
+		"TO "
+	],
+	"key": {
+		"O": {
+			"type": "forge:ore_dict",
+			"ore": "obsidian"
+		},
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 4
+		},
+		"P": {
+			"type": "forge:ore_dict",
+			"ore": "enderpearl"
+		}
+	}
+}

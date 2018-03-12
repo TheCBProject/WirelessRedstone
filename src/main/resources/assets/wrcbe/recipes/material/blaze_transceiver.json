@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:material",
+		"data": 4,
+		"count": 1
+	},
+	"pattern": [
+		"R ",
+		"B "
+	],
+	"key": {
+		"R": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 2
+		},
+		"B": {
+			"type": "minecraft:item",
+			"item": "minecraft:blaze_rod",
+			"data": 0
+		}
+	}
+}

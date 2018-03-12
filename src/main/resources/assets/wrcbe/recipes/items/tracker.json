@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:tracker",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		" P ",
+		"OOO",
+		" S "
+	],
+	"key": {
+		"P": {
+			"type": "forge:ore_dict",
+			"ore": "enderpearl"
+		},
+		"O": {
+			"type": "forge:ore_dict",
+			"ore": "obsidian"
+		},
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "slimeball"
+		}
+	}
+}

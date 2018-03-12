@@ -2,10 +2,7 @@
 	{
 		"modid": "wrcbe",
 		"name": "WirelessRedstone-CBE",
-		"description": "Wireless Redstone ChickenBones Edition
-		
-		Supporters: Vizerei
-		",
+		"description": "Wireless Redstone ChickenBones Edition",
 		"version": "${version}",
 		"mcversion": "${mc_version}",
 		"url": "http://chickenbones.net/pages/Links.html",
@@ -13,7 +10,7 @@
 			"ChickenBones"
 		],
 		"dependencies": [
-			"CodeChickenLib",
+			"codechickenlib",
 			"forgemultipartcbe"
 		]
 	}

@@ -108,12 +108,13 @@ public class WirelessMapRenderer implements IMapRenderer {
     }
 
     @Override
-    public boolean shouldHandle(ItemStack stack, @Nullable MapData data, boolean inFrame) {
+    public boolean shouldHandle(ItemStack stack, boolean inFrame) {
         return stack.getItem() instanceof ItemWirelessMap;
     }
 
     @Override
-    public void renderMap(ItemStack stack, @Nullable MapData data, boolean inFrame) {
+    public void renderMap(ItemStack stack, boolean inFrame) {
+        MapData data = ((ItemWirelessMap) stack.getItem()).getMapData(stack, Minecraft.getMinecraft().world);
         if (inFrame) {
             TextureUtils.changeTexture("textures/map/map_background.png");
             GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);

@@ -1,0 +1,37 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:sniffer",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		"DTD",
+		"RBR",
+		"SSS"
+	],
+	"key": {
+		"D": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 5
+		},
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 3
+		},
+		"R": {
+			"type": "forge:ore_dict",
+			"ore": "dustRedstone"
+		},
+		"B": {
+			"type": "minecraft:item",
+			"item": "minecraft:stone_button"
+		},
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "stone"
+		}
+	}
+}

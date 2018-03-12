@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:material",
+		"data": 2,
+		"count": 1
+	},
+	"pattern": [
+		"GRG",
+		"RPR",
+		"GRG"
+	],
+	"key": {
+		"R": {
+			"type": "forge:ore_dict",
+			"ore": "dustRedstone"
+		},
+		"G": {
+			"type": "forge:ore_dict",
+			"ore": "dustGlowstone"
+		},
+		"P": {
+			"type": "forge:ore_dict",
+			"ore": "enderpearl"
+		}
+	}
+}

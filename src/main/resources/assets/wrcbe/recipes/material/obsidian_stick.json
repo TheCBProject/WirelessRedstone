@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:material",
+		"data": 0,
+		"count": 1
+	},
+	"pattern": [
+		"O ",
+		"O "
+	],
+	"key": {
+		"O": {
+			"type": "forge:ore_dict",
+			"ore": "obsidian"
+		}
+	}
+}

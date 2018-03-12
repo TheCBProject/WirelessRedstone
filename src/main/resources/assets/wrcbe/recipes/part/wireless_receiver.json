@@ -1,0 +1,33 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"result": {
+		"item": "wrcbe:wireless_logic",
+		"data": 1,
+		"count": 1
+	},
+	"pattern": [
+		"T  ",
+		"SRR",
+		"FFF"
+	],
+	"key": {
+		"T": {
+			"type": "minecraft:item",
+			"item": "wrcbe:material",
+			"data": 5
+		},
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "obsidianRod"
+		},
+		"R": {
+			"type": "forge:ore_dict",
+			"ore": "dustRedstone"
+		},
+		"F": {
+			"type": "minecraft:item",
+			"item": "minecraft:stone_slab",
+			"data": 0
+		}
+	}
+}
