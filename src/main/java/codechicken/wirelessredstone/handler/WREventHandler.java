@@ -144,17 +144,19 @@ public class WREventHandler {
 
     @SubscribeEvent
     public void serverTick(ServerTickEvent event) {
-        if (event.phase == Phase.START) {
-            WirelessBolt.update(WirelessBolt.serverboltlist);
-            RedstoneEtherAddons.server().processTrackers();
-        } else {
-            RedstoneEtherAddons.server().tickTriangs();
-            RedstoneEtherAddons.server().updateREPTimeouts();
+        if (RedstoneEtherAddons.server() != null) {
+            if (event.phase == Phase.START) {
+                WirelessBolt.update(WirelessBolt.serverboltlist);
+                RedstoneEtherAddons.server().processTrackers();
+            } else {
+                RedstoneEtherAddons.server().tickTriangs();
+                RedstoneEtherAddons.server().updateREPTimeouts();
+            }
         }
     }
 
     @SubscribeEvent
-    public void serverTick(WorldTickEvent event) {
+    public void worldTick(WorldTickEvent event) {
         if (!event.world.isRemote) {
             if (event.phase == Phase.END) {
                 RedstoneEther.server().tick(event.world);
@@ -162,13 +164,6 @@ public class WREventHandler {
                 RedstoneEtherAddons.server().processSMPMaps(event.world);
             }
         }
-    }
-
-    @SubscribeEvent
-    @SideOnly (Side.CLIENT)
-    public void onTextureLoad(TextureStitchEvent.Pre event) {
-        //RemoteTexManager.load(event.getMap());
-        //TriangTexManager.loadTextures();
     }
 
     @SubscribeEvent
