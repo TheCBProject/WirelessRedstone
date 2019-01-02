@@ -78,11 +78,56 @@ public abstract class RedstoneEther {
     public static final float maxrps = 2.98F;
     public static final double gradrps = maxrps / 5000D;
 
-    public static final String localdyenames[] = { "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange" };
+    public static final String localdyenames[] = { //
+            "red",//
+            "green",//
+            "brown",//
+            "blue",//
+            "purple",//
+            "cyan",//
+            "silver",//
+            "gray",//
+            "pink",//
+            "lime",//
+            "yellow",//
+            "lightBlue",//
+            "magenta",//
+            "orange"//
+    };
 
-    public static final String fulldyenames[] = { "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "Light Gray", "Gray", "Pink", "Lime", "Yellow", "Light Blue", "Magenta", "Orange" };
+    public static final String fulldyenames[] = { //
+            "Red",//
+            "Green",//
+            "Brown",//
+            "Blue",//
+            "Purple",//
+            "Cyan",//
+            "Light Gray",//
+            "Gray",//
+            "Pink",//
+            "Lime",//
+            "Yellow",//
+            "Light Blue",//
+            "Magenta",//
+            "Orange"//
+    };
 
-    public static final int colours[] = { 0xFFB3312C, 0xFF336600, 0xFF51301A, 0xFF253192, 0xFF7B2FBE, 0xFF287697, 0xFF848484, 0xFF434343, 0xFFD88198, 0xFF41CD34, 0xFFDECF2A, 0xFF6689D3, 0xFFC354CD, 0xFFEB8844 };
+    public static final int colours[] = {//
+            0xFFB3312C,//
+            0xFF336600,//
+            0xFF51301A,//
+            0xFF253192,//
+            0xFF7B2FBE,//
+            0xFF287697,//
+            0xFF848484,//
+            0xFF434343,//
+            0xFFD88198,//
+            0xFF41CD34,//
+            0xFFDECF2A,//
+            0xFF6689D3,//
+            0xFFC354CD,//
+            0xFFEB8844 //
+    };
 
     static {
         SaveManager.config().getTag("core.jammer").useBraces();
@@ -167,19 +212,19 @@ public abstract class RedstoneEther {
         String splitstring[] = freqstring.split("-");
         if (splitstring.length == 1) {
             try {
-                return (new int[] { Integer.parseInt(splitstring[0]), Integer.parseInt(splitstring[0]) });
+                return new int[] { Integer.parseInt(splitstring[0]), Integer.parseInt(splitstring[0]) };
             } catch (NumberFormatException numberformatexception) {
-                return (new int[] { -1, -1 });
+                return new int[] { -1, -1 };
             }
         }
         if (splitstring.length == 2) {
             try {
-                return (new int[] { Integer.parseInt(splitstring[0]), Integer.parseInt(splitstring[1]) });
+                return new int[] { Integer.parseInt(splitstring[0]), Integer.parseInt(splitstring[1]) };
             } catch (NumberFormatException numberformatexception1) {
-                return (new int[] { -1, -1 });
+                return new int[] { -1, -1 };
             }
         }
-        return (new int[] { -1, -1 });
+        return new int[] { -1, -1 };
     }
 
     public static int getRandomTimeout(Random rand) {
@@ -295,7 +340,7 @@ public abstract class RedstoneEther {
         int endfreq = publicfrequencyend;
         StringBuilder jammedfreqs = new StringBuilder();
         do {
-            int jammedrange[] = getNextFrequencyRange(username, endfreq + 1, true);
+            int[] jammedrange = getNextFrequencyRange(username, endfreq + 1, true);
             int startfreq = jammedrange[0];
             endfreq = jammedrange[1];
             if (startfreq == -1) {
@@ -318,7 +363,7 @@ public abstract class RedstoneEther {
     }
 
     public int[] getNextFrequencyRange(String username, int beginfreq, boolean jammed) {
-        boolean jammedFreqs[] = getJammedFreqs(username);
+        boolean[] jammedFreqs = getJammedFreqs(username);
         int currentfreq = beginfreq;
         int startfreq = -1;
         do {
