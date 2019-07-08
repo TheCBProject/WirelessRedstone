@@ -50,7 +50,12 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons {
     }
 
     private AddonPlayerInfo getPlayerInfo(EntityPlayer player) {
-        return playerInfos.get(player.getName());
+        AddonPlayerInfo info = getPlayerInfo(player);
+        if (info == null) {
+            this.onLogin(player);
+            info = getPlayerInfo(player);
+        }
+        return info;
     }
 
     public boolean isRemoteOn(EntityPlayer player, int freq) {
