@@ -212,8 +212,10 @@ public class RedstoneEtherServerAddons extends RedstoneEtherAddons {
     }
 
     public void onDimensionChange(EntityPlayer player) {
-        deactivateRemote(player.world, player);
-        remSniffer(player);
+        if (getPlayerInfo(player) != null) {
+            deactivateRemote(player.world, player);
+            remSniffer(player);
+        }
 
         playerInfos.put(player.getName(), new AddonPlayerInfo());
 

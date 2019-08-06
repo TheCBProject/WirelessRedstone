@@ -117,8 +117,12 @@ public class WREventHandler {
 
     @SubscribeEvent
     public void playerLogout(PlayerLoggedOutEvent event) {
-        RedstoneEther.server().removePlayer(event.player);
-        RedstoneEtherAddons.server().onLogout(event.player);
+        if (RedstoneEther.server() != null) {
+            RedstoneEther.server().removePlayer(event.player);
+        }
+        if (RedstoneEtherAddons.server() != null) {
+            RedstoneEtherAddons.server().onLogout(event.player);
+        }
     }
 
     @SubscribeEvent
@@ -159,7 +163,9 @@ public class WREventHandler {
     public void worldTick(WorldTickEvent event) {
         if (!event.world.isRemote) {
             if (event.phase == Phase.END) {
-                RedstoneEther.server().tick(event.world);
+                if (RedstoneEther.server() != null) {
+                    RedstoneEther.server().tick(event.world);
+                }
             } else {
                 RedstoneEtherAddons.server().processSMPMaps(event.world);
             }
